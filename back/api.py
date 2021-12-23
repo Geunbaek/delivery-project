@@ -1,5 +1,8 @@
 from flask import Flask, Blueprint
 from flask_restx import Resource, Api, apidoc
+import csv
+import sqlite3
+
 
 app = Flask(__name__)
 
@@ -38,7 +41,14 @@ api = Api(
 class MyResource(Resource):
    
     def get(self, id):
-        return {}
+        con = sqlite3.connect("./yogiyoDel.db") # 빈 .db파일 생성 또는 읽기
+        cur = con.cursor()
+        q = "select * from corona where id = ?"
+        r = cur.execute(q, (str(id),))
+        res = r.fetchone()
+        print(res)
+        cur.close()
+        return {"rsc": res}
 
     @api.response(403, 'Not Authorized')
     def post(self, id):
@@ -51,7 +61,10 @@ ns = api.namespace('custom', description='operations')
 #@api.route('/hello')
 class HelloWorld(Resource):
     def get(self):
-        return {'hello': 'world'}
+# id,name,categories,restaurant_type,review_avg,lat,lng,phone,address,franchise_name
+# 247821,존스가마장작로스팅,"['분식', '피자양식', '고기구이']",food,4.5,36.9529819601772,126.429312444501,050712908121,충청남도 서산시 대산읍 대산리 441-1 대산리 441-1 나동1층,
+        return {"store": "247821,존스가마장작로스팅,\"['분식', '피자양식', '고기구이']\",food,4.5,36.9529819601772,126.429312444501,050712908121,충청남도 서산시 대산읍 대산리 441-1 대산리 441-1 나동1층"}
+
 
 if __name__ == '__main__':
     app.run(debug=True)
