@@ -27,7 +27,7 @@ class Data(Resource):
 data_delivery = Namespace("delivery", description="배달건수 현황 api")
 
 
-@data_delivery.route("/deliver", methods=["GET"])
+@data_delivery.route("/deliver_cnt", methods=["GET"])
 @data_delivery.response(200, "Found")
 @data_delivery.response(404, "Not found")
 @data_delivery.response(500, "Internal Error")
