@@ -35,3 +35,20 @@ class DeliverCount(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+
+class PatientDeliver(db.Model):
+    __tablename__ = 'patientdeliver'
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    date = db.Column(db.DateTime, nullable=False)
+    gu = db.Column(db.String(20), nullable=False)
+    deliver_count = db.Column(db.Integer, nullable=False)
+    patient_count = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, date, gu, deliver_count, patient_count):
+        self.date = date
+        self.gu = gu
+        self.deliver_count = deliver_count
+        self.patient_count = patient_count
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

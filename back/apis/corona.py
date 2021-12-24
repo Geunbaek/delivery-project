@@ -23,9 +23,10 @@ class Data(Resource):
         # cur.close()
 
         patients = db.session.query(Patient).all()
-        print(patients[0])
+        p = patients[0].as_dict()
+        print(p)
 
-        return {"rsc": patients}
+        return {"rsc": p}
 
 
 data_delivery = Namespace("delivery", description="배달건수 현황 api")
