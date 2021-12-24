@@ -22,7 +22,7 @@ cur = con.cursor(pymysql.cursors.DictCursor)
 
 # csv 파일 읽기
 # 인코딩 문제시 encoding = ''에 utf-8 > euc-kr > cp949 순서로 해볼것
-with open('./models/seoul_patient_count.csv', encoding='utf-8-sig') as data :
+with open('./data_set/seoul_patient_count.csv', encoding='utf-8-sig') as data :
     records = csv.DictReader(data)
     result = []
     # pdate = datetime.strptime(c['date'], '%Y-%m-%d').date()

@@ -1,5 +1,4 @@
 import csv
-from random import randint
 from datetime import date, datetime, timedelta, timezone
 import pymysql
 
@@ -30,12 +29,6 @@ with open('./data_set/seoul_deliver_count.csv', encoding='utf-8-sig') as data :
     for c in records:
       # print(records)
       result.append([c['date'], c['gu'], c['dong'],c['deliver_count']])
-
-
-print(result[0])
-print('---')
-# print(*result[0])
-print(result[0][0])
 
 # csv 파일 MysQL에 삽입
 cur.executemany("insert into delivercount(date, gu, dong, deliver_count) values(%s, %s,%s, %s)", result)
