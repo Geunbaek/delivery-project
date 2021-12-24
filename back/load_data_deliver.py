@@ -8,9 +8,9 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 db_connection = pymysql.connect(
     user    = "root",
-    passwd  = "",
+    passwd  = "root",
     host    = "localhost",
-    port    = ,
+    port    = 33060,
     db      = 'corona_web',
     charset = 'utf8mb4'
 )
@@ -22,7 +22,7 @@ cur = con.cursor(pymysql.cursors.DictCursor)
 
 # csv 파일 읽기
 # 인코딩 문제시 encoding = ''에 utf-8 > euc-kr > cp949 순서로 해볼것
-with open('./models/seoul_deliver_count.csv', encoding='utf-8-sig') as data :
+with open('./data_set/seoul_deliver_count.csv', encoding='utf-8-sig') as data :
     records = csv.DictReader(data)
     result = []
     # pdate = datetime.strptime(c['date'], '%Y-%m-%d').date()
@@ -38,7 +38,7 @@ print('---')
 print(result[0][0])
 
 # csv 파일 MysQL에 삽입
-cur.executemany("insert into deliver(date, gu, dong, deliver_count) values(%s, %s,%s, %s)", result)
+cur.executemany("insert into delivercount(date, gu, dong, deliver_count) values(%s, %s,%s, %s)", result)
 
 
 con.commit()

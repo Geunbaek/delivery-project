@@ -24,7 +24,7 @@ class DeliverCount(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     gu = db.Column(db.String(10), nullable=False)
     dong = db.Column(db.String(12), nullable=False)
-    delivery_count = db.Column(db.Integer, nullable=False)
+    deliver_count = db.Column(db.Integer, nullable=False)
 
     def __init__(self, date, gu, dong, delivery_count):
         self.date = date

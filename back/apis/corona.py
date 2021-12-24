@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_restx import Resource, Api, Namespace, fields, apidoc
 from db_connect import db
-from models.Model import Patient
+from models.Model import Patient, DeliverCount
 
 # ns = api.namespace("data", description="코로나 발생 건수 api")
 corona_cnt = Namespace("corona_cnt", description="코로나 발생 건수 api")
@@ -27,18 +27,16 @@ class Data(Resource):
 data_delivery = Namespace("delivery", description="배달건수 현황 api")
 
 
-@data_delivery.route("/deliver/<int:id>", methods=["GET"])
+@data_delivery.route("/deliver", methods=["GET"])
 @data_delivery.response(200, "Found")
 @data_delivery.response(404, "Not found")
 @data_delivery.response(500, "Internal Error")
-@data_delivery.param("id", "해당 데이터의 ID")
 class Data(Resource):
-    def get(self, id):
-        con = sqlite3.connect("./coroanDeliverCnt.db")  # 빈 .db파일 생성 또는 읽기
-        cur = con.cursor()
-        q = "select * from corona where id = ?"
-        r = cur.execute(q, (str(id),))
-        res = r.fetchone()
-        print(res)
-        cur.close()
-        return {"rsc": res}
+    def get(self):
+        deliver_cnts = db.session.query(DeliverCount).all()
+        # http://127.0.0.1:5000/corona_cnt/cov?q=month/day?start-date=20200101&end-date=20200215
+        res = []
+        # res = [item.as_dict() for item in patients]
+        for item in deliver_cnts:
+            res.append(item.as_dict())
+        return jsonify({"data": res})
