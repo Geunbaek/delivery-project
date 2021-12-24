@@ -22,8 +22,8 @@ class Data(Resource):
         # print(res)
         # cur.close()
 
-        patients = Patient.query().all()
-        print(patients)
+        patients = db.session.query(Patient).all()
+        print(patients[0])
 
         return {"rsc": patients}
 

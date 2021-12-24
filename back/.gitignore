@@ -5,7 +5,7 @@ back/venv/
 
 
 /back/__pycache__
-/back/view/__pycache__
+/back/view/__p_ycache__
 /.vscode
 
 
@@ -37,3 +37,4 @@ back/venv/
 /front/yarn-debug.log*
 /front/yarn-error.log*
 
+/migrations

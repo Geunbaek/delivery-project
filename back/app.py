@@ -1,5 +1,3 @@
-# flask
-
 from flask import Flask
 from flask_restx import Api, apidoc
 
@@ -19,7 +17,6 @@ def create_app():
     )  # Flask 객체 선언, 파라미터로 어플리케이션 패키지의 이름을 넣어줌.
     app.config.from_object(config)
     # app.config.from_envvar('APP_CONFIG_FILE')
-
     # app.config.from_pyfile("config.py")
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -65,6 +62,7 @@ def create_app():
     api.add_namespace(test_api)
 
     return app
+
 
 
 if __name__ == "__main__":
