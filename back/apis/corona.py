@@ -30,7 +30,7 @@ data_delivery = Namespace("deliver_cnt", description="배달건수 현황 api")
 @data_delivery.response(404, "Not found")
 @data_delivery.response(500, "Internal Error")
 class Deliver(Resource):
-    def get(self, id):
+    def get(self):
         deliver = db.session.query(DeliverCount).all()
         # http://127.0.0.1:5000/corona_cnt/cov?q=moanth/day?start-date=20200101&end-date=20200215
         res = []
