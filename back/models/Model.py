@@ -13,3 +13,6 @@ class Patient(db.Model):
         self.date = date
         self.gu = gu
         self.patient_count = patient_count
+    
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
