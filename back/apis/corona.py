@@ -11,7 +11,7 @@ corona_cnt = Namespace("corona_cnt", description="코로나 발생 건수 api")
 @corona_cnt.response(404, "Not found")
 @corona_cnt.response(500, "Internal Error")
 # @corona_cnt.param("id", "해당 데이터의 ID")
-class Data(Resource):
+class Cov(Resource):
     def get(self):
         patients = db.session.query(Patient).all()
         # http://127.0.0.1:5000/corona_cnt/cov?q=month/day?start-date=20200101&end-date=20200215
@@ -24,19 +24,16 @@ class Data(Resource):
         return jsonify({"data": res})
 
 
-data_delivery = Namespace("delivery", description="배달건수 현황 api")
-
-
-@data_delivery.route("/deliver_cnt", methods=["GET"])
+data_delivery = Namespace("deliver_cnt", description="배달건수 현황 api")
+@data_delivery.route("/deliver", methods=["GET"])
 @data_delivery.response(200, "Found")
 @data_delivery.response(404, "Not found")
 @data_delivery.response(500, "Internal Error")
-class Data(Resource):
-    def get(self):
-        deliver_cnts = db.session.query(DeliverCount).all()
-        # http://127.0.0.1:5000/corona_cnt/cov?q=month/day?start-date=20200101&end-date=20200215
+class Deliver(Resource):
+    def get(self, id):
+        deliver = db.session.query(DeliverCount).all()
+        # http://127.0.0.1:5000/corona_cnt/cov?q=moanth/day?start-date=20200101&end-date=20200215
         res = []
-        # res = [item.as_dict() for item in patients]
-        for item in deliver_cnts:
+        for i, item in enumerate(deliver):
             res.append(item.as_dict())
         return jsonify({"data": res})
