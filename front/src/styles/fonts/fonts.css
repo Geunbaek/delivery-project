@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "ki";
+  font-display: fallback;
+  src: url("./BMKIRANGHAERANG-TTF.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "jua";
+  font-display: fallback;
+  src: url("./BMJUA_ttf.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
