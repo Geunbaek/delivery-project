@@ -10,5 +10,5 @@ def create_app():
 
 app = create_app()
 app.app_context().push()
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:duddlf@127.0.0.1:3306/samsicafe"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:duddlf@127.0.0.1:3306/corona_web"
 load_dcount.put_data()
