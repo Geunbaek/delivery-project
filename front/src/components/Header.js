@@ -1,10 +1,9 @@
 import { Container, Navbar, Offcanvas, Nav } from "react-bootstrap";
-import styled from "styled-components";
 
 function Header() {
   return (
-    <Navbar bg="bg-*" expand={false} fixed="top">
-      <Container fluid={false} style={{ width: "55%" }}>
+    <Navbar bg="bg-*" expand={false} fixed="top" style={{ marginTop: "30px" }}>
+      <Container fluid={false} style={{ width: "45%" }}>
         <Navbar.Brand href="#">
           <h1>오늘 뭐먹지?</h1>
         </Navbar.Brand>
