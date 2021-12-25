@@ -1,4 +1,73 @@
 # (코로나 배달 분석 웹) @삼시카페
+
+# FE 실행방법
+1. node.js 설치
+2. front 폴더에서 npm i 명령어 실행
+3. npm start 명령어 실행
+
+# 서버(REST API) 설치/실행 방법
+## 서버 설치 방법
+
+- 서버의 메인/루트 폴더는 /back 입니다.
+
+### pip를 사용하는 방법은 pip3 freeze > requirements.txt 해봤는데 제 가상 환경에 너무 많은 패키지가 깔려서 별 도움이 안됨 (죄송)
+
+서버 실행엔 [app.py](http://app.py) 와 /apis/[corona.py](http://corona.py/) 가 핵심이라 여기서 사용하는 아래의 것들을 파이썬 가상환경에 pip3/pip install 패키지명 으로 수동 설치(이런것도 도커로 번거롭고 에러나는 절차를 줄일려고 시도해 볼겁니다)
+
+- 가상환경 생성 후 가상 환경으로 변경 또는 VSCode 에서 Python select interpreter로 가상환경 선택해줌
+- 가상환경에 flask, flask_restx, flask_cors, flask_migrate, flask_sqlalchemy, 외 추후 서버 실행시 모듈 못 찾는다고 나오는 패키지들 설치
+
+### 데이터베이스 설정
+
+MariaDB  설치시  아래 계정 정보대로 설정 또는 config.py파일에서 본인의 환경에 맞게 설정
+
+user: root
+password: root
+
+port : 33060
+database: corona_web (이건 CLI를 이용하든 MySql WorkBench를 이용하든 수동으로 만드셔야 함)
+
+### Docker를 사용해서 데이터베이스를 설정하는 방법
+
+리눅스 컨테이너 관리 도구 [Docker](https://www.docker.com/products/docker-desktop) 를 사용하여 새로운 환경(새 컴퓨터/ 새 서버)에서도 통일된 환경으로 DB를 좀더 간단히 설치하는 방법을 강구 중입니다.
+
+### 데이터베이스 스키마 설정
+
+빈 데이터 베이스에 테이블을 생성합니다.
+
+```
+cd back 또는 back 디렉토리에서 아래 명령 실행(back 상단의 루트 디렉토리에서 해도 될지도 모름;;)
+flask db init
+falsk db migrate
+falsk db upgrade
+* 디비 테이블의 속성 등을 변경시 위 명령 중 migrate, upgrade 만 하면됩니다.(단, 테이블의 데이터가 없을시 가능 할 듯 함)
+```
+
+### 초기 데이터 로딩
+
+사전에 준비해둔 데이터를 채웁니다
+
+```
+cd back (back 디레토리로 이동)
+python loadData.py
+python load_data_deliver.py
+```
+
+### 서버 실행
+
+서버를 실행시킵니다.
+
+```
+cd back (back 디레토리로 이동)
+python app.py
+```
+
+
+<br><br><br><br><br>
+### 아래는 기본 템플릿 내용임
+<br><br>
+
+
 - 최종 서비스 명을 위 괄호 부분에 작성하세요.
 - 최종 서비스의 한 줄 소개를 작성하세요.
 
