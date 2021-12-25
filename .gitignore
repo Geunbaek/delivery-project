@@ -9,8 +9,8 @@ back/venv/
 /.vscode
 
 
-/config
-config.py
+# /config
+# config.py
 
 .flaskenv
 .env
