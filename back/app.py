@@ -33,10 +33,11 @@ def create_app():
     from apis.api import test_api, hello
     from apis.corona import corona_cnt, data_delivery
 
-    app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # 펼쳐짐
+    app.config.SWAGGER_UI_DOC_EXPANSION = "full"  # 펼쳐짐
     app.config.SWAGGER_UI_OPERATION_ID = True
     app.config.SWAGGER_UI_REQUEST_DURATION = True
     app.config.SWAGGER_SUPPORTED_SUBMIT_METHODS = ["get"]  # Try it out 제공
+    app.config['RESTX_MASK_SWAGGER'] = False
 
     # api_bp = Blueprint("api", __name__, url_prefix="/api")
     # api = Api(api_bp, doc='/doc/',version='2.0.3', title='삼시카페 API',
