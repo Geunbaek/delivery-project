@@ -30,10 +30,18 @@ with open('./data_set/seoul_patient_count.csv', encoding='utf-8-sig') as data :
     for c in records:
       result.append([c['date'], c['gu'], c['patient_count']])
 
-
-
 # csv 파일 MysQL에 삽입
 cur.executemany("insert into patient(date, gu, patient_count) values(%s, %s, %s)", result)
+
+
+with open('./data_set/seoul_delivery_count_with_patient.csv', encoding='utf-8-sig') as data :
+    
+    records = csv.DictReader(data)
+    result = []
+    for c in records:
+        result.append([c['date'], c['gu'], c['deliver_count'], c['patient_count']])
+
+cur.executemany("insert into patientdelivery(date, gu, deliver_count, patient_count) values(%s, %s, %s, %s)", result)
 
 
 con.commit()
