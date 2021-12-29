@@ -31,9 +31,9 @@ def create_app():
     from models.Model import Patient
 
     from apis.api import test_api, hello
-    from apis.corona import corona_cnt, data_delivery
+    from apis.corona import cov
 
-    app.config.SWAGGER_UI_DOC_EXPANSION = "full"  # 펼쳐짐
+    app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # 펼쳐짐
     app.config.SWAGGER_UI_OPERATION_ID = True
     app.config.SWAGGER_UI_REQUEST_DURATION = True
     app.config.SWAGGER_SUPPORTED_SUBMIT_METHODS = ["get"]  # Try it out 제공
@@ -56,8 +56,7 @@ def create_app():
         license_url="/test-license-3o'cafe",
     )
 
-    api.add_namespace(corona_cnt)
-    api.add_namespace(data_delivery)
+    api.add_namespace(cov)
 
     api.add_namespace(hello)
     api.add_namespace(test_api)

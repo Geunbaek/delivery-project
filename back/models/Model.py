@@ -5,7 +5,7 @@ from datetime import date, datetime
 class Patient(db.Model):
     __tablename__ = "patient"
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    date = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     gu = db.Column(db.String(20), nullable=False)
     patient_count = db.Column(db.Integer, nullable=False)
 
@@ -15,13 +15,19 @@ class Patient(db.Model):
         self.patient_count = patient_count
     
     def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        res = {}
+        for c in self.__table__.columns:
+            if c.name == 'date':
+                res[c.name] = str(getattr(self, c.name))
+            else:
+                res[c.name] = getattr(self, c.name)
+        return res
 
 
 class DeliverCount(db.Model):
     __tablename__ = 'delivercount'
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    date = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     gu = db.Column(db.String(10), nullable=False)
     dong = db.Column(db.String(12), nullable=False)
     deliver_count = db.Column(db.Integer, nullable=False)
@@ -33,13 +39,19 @@ class DeliverCount(db.Model):
         self.delivery_count = delivery_count
 
     def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        res = {}
+        for c in self.__table__.columns:
+            if c.name == 'date':
+                res[c.name] = str(getattr(self, c.name))
+            else:
+                res[c.name] = getattr(self, c.name)
+        return res
 
 
-class PatientDeliver(db.Model):
-    __tablename__ = 'patientdeliver'
+class PatientDelivery(db.Model):
+    __tablename__ = 'patientdelivery'
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    date = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     gu = db.Column(db.String(20), nullable=False)
     deliver_count = db.Column(db.Integer, nullable=False)
     patient_count = db.Column(db.Integer, nullable=False)

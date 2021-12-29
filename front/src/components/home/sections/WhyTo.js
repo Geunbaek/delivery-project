@@ -9,8 +9,8 @@ async function getData(url1, url2) {
   return [res, res2];
 }
 
-const coronaUrl = "http://localhost:5500/corona_cnt/cov";
-const deliverUrl = "http://localhost:5500/deliver_cnt/deliver";
+const coronaUrl = "http://localhost:5000/corona_cnt/cov";
+const deliverUrl = "http://localhost:5000/deliver_cnt/deliver";
 
 function WhyTo() {
   const [state, fetch] = useAsync(() => getData(coronaUrl, deliverUrl), []);
