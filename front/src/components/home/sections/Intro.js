@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Section = styled.div`
   width: 43%;
-  height: 71%;
+  height: 50%;
   display: flex;
   flex-direction: ${(props) => props.col && "column"};
   justify-content: center;
@@ -32,7 +32,7 @@ const Btn = styled.div`
   padding: 5px 20px;
   font-size: 30px;
   cursor: pointer;
-  margin-bottom: 10rem;
+  /* margin-bottom: 10rem; */
 
   &:hover {
     background: #fff0f6;

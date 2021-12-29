@@ -2,6 +2,7 @@ import axios from "axios";
 import useAsync from "../../../Hooks/useAsync";
 import { Line } from "react-chartjs-2";
 import { chartData } from "../../../data/chartData";
+import Loading from "../../loading/Loading";
 
 async function getData(url1, url2) {
   const res = await axios.get(url1);
@@ -16,17 +17,17 @@ function WhyTo() {
   const [state, fetch] = useAsync(() => getData(coronaUrl, deliverUrl), []);
   const { loading, data, error } = state;
 
-  if (loading) return <div>로딩중 ...</div>;
+  if (loading) return <Loading />;
   if (error) return <div>에러 ...</div>;
   if (!data) return null;
-  console.log(data.corona);
+
   const chartParams = chartData(
     data.label,
     Object.values(data.corona.map((el) => el[1])),
     Object.values(data.deliver.map((el) => el[1])),
     "#ffdeeb"
   );
-  console.log(chartParams);
+
   return (
     <>
       <Line data={chartParams.data} options={chartParams.options} />

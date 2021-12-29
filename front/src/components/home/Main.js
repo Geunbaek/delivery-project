@@ -1,28 +1,25 @@
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Mousewheel } from "swiper";
 import "swiper/css";
-import styled from "styled-components";
+import "swiper/css/lazy";
+import styled, { css } from "styled-components";
+import UseAnimations from "react-useanimations";
+import arrowDown from "react-useanimations/lib/arrowDown";
+import arrowUp from "react-useanimations/lib/arrowUp";
+import Header from "../Header";
 
 import Intro from "./sections/Intro";
 import WhoTo from "./sections/WhoTo";
 import WhyTo from "./sections/WhyTo";
-import { Line } from "react-chartjs-2";
 
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: ${(props) => props.color};
-  font-size: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+import { Wrapper } from "../../styles/style/GlobalStyle";
 
 const GraphSection = styled.div`
   width: 80%;
   /* height: 80%; */
   display: flex;
-  flex-direction: ${(props) => props.col && "column"};
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -32,15 +29,26 @@ const ScrollDisplay = styled.div`
   height: 5rem;
   border-radius: 5rem;
   position: absolute;
-  bottom: 5rem;
-  background-color: rgba(0, 0, 0, 0.1);
+  bottom: 3%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  ${(props) =>
+    props.up &&
+    css`
+      cursor: pointer;
+    `}
 `;
 
 SwiperCore.use([Mousewheel]);
 
 function Main() {
+  const [swiper, setSwiper] = useState();
   return (
     <>
+      <Header />
       <Swiper
         direction={"vertical"}
         slidesPerView={1}
@@ -48,29 +56,53 @@ function Main() {
         mousewheel={true}
         speed={1000}
         touchRatio={0}
-        // onSlideChange={() => console.log("slide change")}
+        lazy={true}
+        onSwiper={(swiper) => setSwiper(swiper)}
+        // onSlideChange={() => console.log(Swiper)}
         className="mainSwiper"
       >
-        <SwiperSlide>
+        <SwiperSlide key="section01">
           <Wrapper color="#ffdeeb">
             <Intro />
-            <ScrollDisplay></ScrollDisplay>
+            <ScrollDisplay>
+              <UseAnimations
+                animation={arrowDown}
+                size={56}
+                style={{ padding: 100 }}
+              />
+              <div>Scroll</div>
+            </ScrollDisplay>
           </Wrapper>
         </SwiperSlide>
-        <SwiperSlide>
+        <SwiperSlide key="section02">
           <Wrapper color="#ffdeeb">
             <GraphSection>
               <WhyTo />
             </GraphSection>
+            <ScrollDisplay>
+              <UseAnimations
+                animation={arrowDown}
+                size={56}
+                style={{ padding: 100 }}
+              />
+              <div>Scroll</div>
+            </ScrollDisplay>
           </Wrapper>
         </SwiperSlide>
-        <SwiperSlide>
+        <SwiperSlide key="section03">
           <Wrapper color="#ffdeeb">
             <WhoTo />
+            <ScrollDisplay up onClick={() => swiper.slideTo(0)}>
+              <UseAnimations
+                animation={arrowUp}
+                size={56}
+                style={{ padding: 100 }}
+              />
+              <div>맨위로</div>
+            </ScrollDisplay>
           </Wrapper>
         </SwiperSlide>
       </Swiper>
-      <ScrollDisplay></ScrollDisplay>
     </>
   );
 }

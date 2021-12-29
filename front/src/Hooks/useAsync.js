@@ -75,12 +75,15 @@ function useAsync(cb, deps = []) {
       }, {});
 
       const labels = Object.keys(deliverCnt).filter((el) => el in coronaCnt);
+      // .splice(1, 12);
       const coronaData = Object.entries(coronaCnt).filter((el) =>
         labels.includes(el[0])
       );
+      // .splice(1, 12);
       const deliverData = Object.entries(deliverCnt).filter((el) =>
         labels.includes(el[0])
       );
+      // .splice(1, 12);
 
       dispatch({
         type: "SUCCESS",

@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import "../fonts/fonts.css";
 
 export const GlobalStyle = createGlobalStyle`
@@ -50,4 +50,14 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     object-fit: cover;
   }
+`;
+
+export const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  background: ${(props) => props.color};
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

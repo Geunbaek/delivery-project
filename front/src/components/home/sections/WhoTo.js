@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import testImg from "../../../assets/1.png";
 
 const Section = styled.div`
   width: 60%;
@@ -19,11 +20,16 @@ const TextArea = styled.div`
 
 const ExtraArea = styled.div`
   width: 100%;
-  /* height: 50%; */
+  height: 100%;
   display: flex;
-  /* flex-direction: column-reverse; */
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  background-size: contain;
+  & .pic {
+    width: 20%;
+    margin: 1rem;
+  }
 `;
 
 function WhoTo() {
@@ -31,17 +37,17 @@ function WhoTo() {
     <Section>
       <TextArea>이런 분들을 위해 만들었어요!</TextArea>
       <ExtraArea>
-        <div style={{ width: "13rem", margin: "2rem" }}>
-          <img src="img/1.png" alt="대상예시" />
+        <div className="pic">
+          <img src={testImg} alt="대상예시" />
         </div>
-        <div style={{ width: "13rem", margin: "2rem" }}>
-          <img src="img/2.png" alt="대상예시" />
+        <div className="pic">
+          <img src={testImg} alt="대상예시" />
         </div>
-        <div style={{ width: "13rem", margin: "2rem" }}>
-          <img src="img/3.png" alt="대상예시" />
+        <div className="pic">
+          <img src={testImg} alt="대상예시" />
         </div>
-        <div style={{ width: "13rem", margin: "2rem" }}>
-          <img src="img/3.png" alt="대상예시" />
+        <div className="pic">
+          <img src={testImg} alt="대상예시" />
         </div>
       </ExtraArea>
     </Section>
