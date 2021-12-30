@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Main from "./components/home/Main";
 import ResultMap from "./components/result/ResultMap";
 import { GlobalStyle } from "./styles/style/GlobalStyle";

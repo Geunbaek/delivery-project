@@ -4,17 +4,22 @@ import { Line } from "react-chartjs-2";
 import { chartData } from "../../../data/chartData";
 import Loading from "../../loading/Loading";
 
-async function getData(url1, url2) {
-  const res = await axios.get(url1);
-  const res2 = await axios.get(url2);
-  return [res, res2];
+async function getData() {
+  const url = "http://localhost:5000/cov/patient-delivery";
+  const params = {
+    unit: "month",
+    startdate: "2020-01-01",
+    enddate: "2021-08-30",
+  };
+  const res = await axios.get(url, { params });
+
+  return res;
 }
 
-const coronaUrl = "http://localhost:5500/corona_cnt/cov";
-const deliverUrl = "http://localhost:5500/deliver_cnt/deliver";
+const coronaUrl = "http://localhost:5000/corona_cnt/cov";
 
 function WhyTo() {
-  const [state, fetch] = useAsync(() => getData(coronaUrl, deliverUrl), []);
+  const [state, fetch] = useAsync(() => getData(), []);
   const { loading, data, error } = state;
 
   if (loading) return <Loading />;
@@ -23,8 +28,8 @@ function WhyTo() {
 
   const chartParams = chartData(
     data.label,
-    Object.values(data.corona.map((el) => el[1])),
-    Object.values(data.deliver.map((el) => el[1])),
+    data.patient,
+    data.deliver,
     "#ffdeeb"
   );
 

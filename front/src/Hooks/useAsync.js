@@ -49,48 +49,19 @@ function useAsync(cb, deps = []) {
   const fetchData = async () => {
     dispatch({ type: "LOADING" });
     try {
-      const [res, res2] = await cb();
-      const coronaCnt = res.data.data.reduce((acc, cur) => {
-        let { date, patient_count } = cur;
-        date = date.split(" ");
-        const ym = [date[3], monthInfo[date[2]]].join();
-        return {
-          ...acc,
-          [ym]: acc[ym]
-            ? acc[ym] + parseInt(patient_count)
-            : parseInt(patient_count),
-        };
-      }, {});
-
-      const deliverCnt = res2.data.data.reduce((acc, cur) => {
-        let { date, deliver_count } = cur;
-        date = date.split(" ");
-        const ym = [date[3], monthInfo[date[2]]].join();
-        return {
-          ...acc,
-          [ym]: acc[ym]
-            ? acc[ym] + parseInt(deliver_count)
-            : parseInt(deliver_count),
-        };
-      }, {});
-
-      const labels = Object.keys(deliverCnt).filter((el) => el in coronaCnt);
-      // .splice(1, 12);
-      const coronaData = Object.entries(coronaCnt).filter((el) =>
-        labels.includes(el[0])
-      );
-      // .splice(1, 12);
-      const deliverData = Object.entries(deliverCnt).filter((el) =>
-        labels.includes(el[0])
-      );
-      // .splice(1, 12);
+      const res = await cb();
+      console.log("res", res);
 
       dispatch({
         type: "SUCCESS",
         data: {
-          label: labels,
-          corona: coronaData,
-          deliver: deliverData,
+          label: res.data.data.patients.map((patient) => patient.date),
+          patient: res.data.data.patients.map(
+            (patient) => patient.patient_count
+          ),
+          deliver: res.data.data.deliveries.map(
+            (deliver) => deliver.deliver_count
+          ),
         },
       });
     } catch (e) {
