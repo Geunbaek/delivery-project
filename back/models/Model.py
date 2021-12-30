@@ -72,14 +72,16 @@ class FoodHour(db.Model):
     day = db.Column(db.String(10), nullable=False)
     hour = db.Column(db.Integer, nullable=False)
     food = db.Column(db.String(20), nullable=False)
-    celsius = db.Column(db.Numeric(scale=1), nullable=False)
-    rain = db.Column(db.Numeric(scale=1), nullable=False)
+    count = db.Column(db.Integer, nullable=False)
+    celsius = db.Column(db.Float, nullable=False)
+    rain = db.Column(db.Float, nullable=False)
 
-    def __init__(self, date, day, hour, food, celsius, rain):
+    def __init__(self, date, day, hour, food, count, celsius, rain):
         self.date = date
         self.day = day
         self.hour = hour
         self.food = food
+        self.count = count
         self.celsius = celsius
         self.rain = rain
     

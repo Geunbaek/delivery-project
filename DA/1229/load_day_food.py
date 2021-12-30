@@ -28,10 +28,11 @@ with open('../CSVs/food_weather.csv', encoding='utf-8-sig') as data :
     # result = [ c['id'], c['date'], c['gu'], c['patient_count'] for c in records]
     for c in records:
       # print(records)
-      result.append([c['date'], c['day'], c['hour'], c['food']], c['celsius'], c['rain'])
+      print(c)
+      result.append([c['date'], c['day'], c['hour'], c['food'], c['count'], c['celsius(C)'], c['rain(mm)']])
 
 # csv 파일 MysQL에 삽입
-cur.executemany("insert into foodhour(date, day, hour, food, celsius, rain) values(%s, %s,%s, %s, %s, %s)", result)
+cur.executemany("insert into foodhour(date, day, hour, food, count, celsius, rain) values(%s, %s,%s, %s, %s, %s, %s)", result)
 
 
 con.commit()
