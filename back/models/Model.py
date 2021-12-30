@@ -64,3 +64,25 @@ class PatientDelivery(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class FoodHour(db.Model):
+    __tablename__ = "foodhour"
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    date = db.Column(db.DateTime, nullable=False)
+    day = db.Column(db.String(10), nullable=False)
+    hour = db.Column(db.Integer, nullable=False)
+    food = db.Column(db.String(20), nullable=False)
+    celsius = db.Column(db.Numeric(scale=1), nullable=False)
+    rain = db.Column(db.Numeric(scale=1), nullable=False)
+
+    def __init__(self, date, day, hour, food, celsius, rain):
+        self.date = date
+        self.day = day
+        self.hour = hour
+        self.food = food
+        self.celsius = celsius
+        self.rain = rain
+    
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
