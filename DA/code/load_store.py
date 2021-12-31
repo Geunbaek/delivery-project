@@ -33,7 +33,7 @@ with open('../CSVs/yogiyo_delivery_in_seoul.csv', encoding='utf-8-sig') as data 
       result.append([c['name'], c['categories'], c['review_avg'], c['lat'], c['lng'], c['phone'], c['address']])
 
 # csv 파일 MysQL에 삽입
-cur.executemany("insert into foodhour(name, categories, review_avg, lat, lng, phone, address) values(%s, %s,%s, %s, %s, %s, %s)", result)
+cur.executemany("insert into yogiyostore(name, categories, review_avg, lat, lng, phone, address) values(%s, %s,%s, %s, %s, %s, %s)", result)
 
 
 con.commit()

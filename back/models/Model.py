@@ -96,7 +96,7 @@ class YogiyoStore(db.Model):
     review_avg = db.Column(db.Float, nullable=False)
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
-    phone = db.Column(db.String(11), nullable=True, default='-')
+    phone = db.Column(db.String(15), nullable=True, default='-')
     address = db.Column(db.String(100), nullable=False)
 
     def __init__(self, name, categories, review_avg, lat, lng, phone, address):
