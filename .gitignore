@@ -8,7 +8,7 @@ back/venv/
 /back/__pycache__
 /back/view/__pycache__
 /.vscode
-
+/venv
 
 # /config
 # config.py
