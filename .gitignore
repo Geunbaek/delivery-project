@@ -48,6 +48,8 @@ back/venv/
 /db/data/ib_logfile*
 /db/data/ibdata*
 /db/data/multi-master.info
+/db/data/ibtmp*
+/db/data/tc.log
 # /db/data/
 /db/seoul_patient_count.csv
 /db/seoul_deliver_count.csv

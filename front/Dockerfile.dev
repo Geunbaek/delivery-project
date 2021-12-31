@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16-slim
 
 WORKDIR /app
 
@@ -8,6 +8,6 @@ RUN yarn install
 
 COPY ./ ./
 
-RUN ../bin/sh /app/dockerfs.sh
+RUN ../bin/sh /app/dockerSetForReact.sh
 
 CMD [ "yarn", "start" ]
