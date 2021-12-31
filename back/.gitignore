@@ -14,7 +14,7 @@ back/venv/
 
 .flaskenv
 .env
-
+/venv
 
 /front/node_modules
 /front/.pnp
