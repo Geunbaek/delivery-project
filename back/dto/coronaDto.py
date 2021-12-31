@@ -4,7 +4,10 @@ from flask_restx import Namespace, fields
 
 class DateFormat(fields.Raw):
     def format(self, value):
-        return date.strftime(value, "%Y-%m-%d")
+        if len(str(value)) > 7:
+          return date.strftime(value, "%Y-%m-%d")
+        else : 
+          return value
 
 
 class CovDto:
@@ -29,4 +32,9 @@ class CovDto:
             "deliver_count": fields.Integer,
         },
     )
+
+    patient_delivery_model = api.model('patient_delivery_model', {
+        'patients': fields.List(fields.Nested(patient_model)),
+        'deliveries': fields.List(fields.Nested(delivery_model)),
+    })
 

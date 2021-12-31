@@ -1,5 +1,7 @@
+import time
 from flask import jsonify, request
 from flask_restx import Resource
+from sqlalchemy import func
 from db_connect import db
 from models.Model import Patient, DeliverCount
 from dto.coronaDto import CovDto
@@ -29,44 +31,79 @@ class Delivery(Resource):
         deliveries = DeliverCount.query.all()
         return deliveries
 
+parser = cov.parser()
+#parser.add_argument('unit', type=str, help='day', location='args', default='month', required=True)
+parser.add_argument('unit', type=str, help='day, month, none', location='args', default='month')
+parser.add_argument('startdate', type=str, help='시작날짜', location='args', default='2020-01-01')
+parser.add_argument('enddate', type=str, help='종료날짜', location='args', default='2020-12-31')
 @cov.route("/patient-delivery", methods=["GET"])
+@cov.doc(parser=parser)
 @cov.response(200, "Found")
 @cov.response(404, "Not found")
 @cov.response(500, "Internal Error")
-class Patient_Delivery(Resource):
+class PatientDelivery(Resource):
+    @cov.marshal_with(CovDto.patient_delivery_model, envelope="data")
+    #@cov.expect(parser)
     def get(self):
         '''코로나 확진자 수와 배달 건수 데이터 얻기'''
         # http://127.0.0.1:5000/cov/patient-delivery?unit=month또는day?startdate=2020-01-01&enddate=2020-02-15
-        unit: str = request.args.get('unit', None)
-        startdate: str = request.args.get('startdate', None)
-        enddate: str = request.args.get('enddate', None)
+        #unit: str = request.args.get('unit', None)
+        #startdate: str = request.args.get('startdate', None)
+        #enddate: str = request.args.get('enddate', None)
+        args = parser.parse_args()
+        unit = args['unit']
+        startdate = args['startdate']
+        enddate = args['enddate']
         print(f'unit={unit}, startdate={startdate}, enddate={enddate}')
 
         
         if unit == 'day':
+            start = time.time()
+            '''
             patients_q = Patient.query.filter(Patient.date >= startdate, Patient.date <= enddate).all()
             patients = [item.as_dict() for item in patients_q]
-
             deliveries_q = DeliverCount.query.filter(DeliverCount.date >= startdate, DeliverCount.date <= enddate).all()
             deliveries = [item.as_dict() for item in deliveries_q]
+            '''
+            
+            patients_q = Patient.query.filter(Patient.date >= startdate, Patient.date <= enddate).all()
+            deliveries_q = DeliverCount.query.filter(DeliverCount.date >= startdate, DeliverCount.date <= enddate).all()
+  
+            end = time.time()
+            print(end-start)
         elif unit == "month":
+            
+            start = time.time()
+
+            '''
             patients_q = Patient.query.filter(Patient.date >= startdate, Patient.date <= enddate).all()
             patients = sumby_month(patients_q)
-
             deliveries_q = DeliverCount.query.filter(DeliverCount.date >= str(startdate), DeliverCount.date <= str(enddate)).all()
             deliveries = sumby_month(deliveries_q)
+            '''
+
+            patients_q = db.session.query(Patient.id, Patient.gu ,func.sum(Patient.patient_count).label('patient_count'), func.date_format(Patient.date,'%Y-%m').label('date')).filter(Patient.date >= startdate, Patient.date <= enddate).group_by(func.date_format(Patient.date,'%Y-%m').label('date')).all()
+            deliveries_q = db.session.query(DeliverCount.id, DeliverCount.gu,DeliverCount.dong,func.sum(DeliverCount.deliver_count).label('deliver_count'),DeliverCount.date.label('date')).filter(DeliverCount.date >= startdate, DeliverCount.date <= enddate).group_by(func.date_format(DeliverCount.date,'%Y-%m')).all()
+
+            end = time.time()
+            print(end-start)
         else: # 파라미터 없이 /cov/patient-delivery 로만 요청 받았을 때 전부 전달
+            '''
             patients_q = Patient.query.all()
             patients = [item.as_dict() for item in patients_q]
-
             deliveries_q = DeliverCount.query.all()
             deliveries = [item.as_dict() for item in deliveries_q]
-            
+            '''
+            patients_q = Patient.query.all()
+            deliveries_q = DeliverCount.query.all()
 
-        return jsonify( dict(data = dict(patients=patients, deliveries=deliveries)) )
+        #return jsonify( dict(data = dict(patients=patients, deliveries=deliveries)) )
+        res = {'patients':patients_q,'deliveries':deliveries_q}
+        return res
         
-
+"""
 def sumby_month(queryObject):
+    
     '''월별로 코로나확진자수나 배달건수 합산해주는 함수'''
     new_patient = queryObject[0].as_dict().copy()
     pre_month = new_patient['date'][:7] # '2020-01-15'에서 2020-01 월 까지만 저장
@@ -91,5 +128,6 @@ def sumby_month(queryObject):
             new_patient['date'] = cur_month
     # 범위의 마지막 달 추가
     result.append(new_patient)
-
+   
     return result
+"""
