@@ -2,10 +2,10 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 db = {
-    "user": "root",
-    "password": "root",
-    "host": "localhost",
-    "port": 33060,
+    "user": "team3",
+    "password": "team3",
+    "host": "db",
+    "port": 3306,
     "database": "corona_web",
 }
 
@@ -14,4 +14,4 @@ SQLALCHEMY_DATABASE_URI = (
     f"{db['host']}:{db['port']}/{db['database']}?charset=utf8mb4"
 )
 
-# SECRET_KEY = "dev"
+SECRET_KEY = "dev"
