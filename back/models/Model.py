@@ -88,3 +88,25 @@ class FoodHour(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+class YogiyoStore(db.Model):
+    __tablename__ = "yogiyostore"
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    name = db.Column(db.String(50), nullable=False)
+    categories = db.Column(db.String(50), nullable=False)
+    review_avg = db.Column(db.Float, nullable=False)
+    lat = db.Column(db.Float, nullable=False)
+    lng = db.Column(db.Float, nullable=False)
+    phone = db.Column(db.String(11), nullable=True, default='-')
+    address = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, name, categories, review_avg, lat, lng, phone, address):
+        self.name = name
+        self.categories = categories
+        self.review_avg = review_avg
+        self.lat = lat
+        self.lng = lng
+        self.phone = phone
+        self.address = address
+    
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
