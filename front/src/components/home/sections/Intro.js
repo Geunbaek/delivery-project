@@ -1,3 +1,4 @@
+import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Section = styled.div`
@@ -8,6 +9,7 @@ const Section = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const TextArea = styled.div`
   width: 50%;
   height: 100%;
@@ -40,6 +42,12 @@ const Btn = styled.div`
 `;
 
 function Intro() {
+  const history = useNavigate();
+
+  const onClick = (e) => {
+    e.preventDefault();
+    history("/survey");
+  };
   return (
     <Section>
       <TextArea>
@@ -48,7 +56,7 @@ function Intro() {
         <br /> 고민되시나요?
       </TextArea>
       <ExtraArea>
-        <Btn>추천받기</Btn>
+        <Btn onClick={onClick}>추천받기</Btn>
       </ExtraArea>
     </Section>
   );

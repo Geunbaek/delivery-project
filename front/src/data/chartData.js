@@ -22,6 +22,7 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
       ],
     },
     options: {
+      responsive: false,
       scales: {
         xAxes: [
           {

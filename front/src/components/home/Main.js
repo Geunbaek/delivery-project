@@ -17,7 +17,7 @@ import { Wrapper } from "../../styles/style/GlobalStyle";
 
 const GraphSection = styled.div`
   width: 80%;
-  /* height: 80%; */
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,8 +57,10 @@ function Main() {
         speed={1000}
         touchRatio={0}
         lazy={true}
-        onSwiper={(swiper) => setSwiper(swiper)}
-        // onSlideChange={() => console.log(Swiper)}
+        // onSwiper={(swiper) => {
+        //   setSwiper(swiper);
+        // }}
+        onSlideChange={(swiper) => setSwiper(swiper)}
         className="mainSwiper"
       >
         <SwiperSlide key="section01">

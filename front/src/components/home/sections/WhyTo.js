@@ -1,41 +1,45 @@
-import axios from "axios";
-import useAsync from "../../../Hooks/useAsync";
 import { Line } from "react-chartjs-2";
 import { chartData } from "../../../data/chartData";
 import Loading from "../../loading/Loading";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { getGraphData } from "../../../modules/graphData";
 
-async function getData() {
-  const url = "http://localhost:5000/cov/patient-delivery";
-  const params = {
-    unit: "month",
-    startdate: "2020-01-01",
-    enddate: "2021-08-30",
-  };
-  const res = await axios.get(url, { params });
+function WhyTo({ idx }) {
+  const { loading, data, error } = useSelector((state) => state.graphData);
+  const dispatch = useDispatch();
+  const [chartParams, setChartParams] = useState(chartData([], [], []));
 
-  return res;
-}
+  useEffect(() => {
+    dispatch(getGraphData("month", "2020-01-01", "2021-08-30"));
+  }, [dispatch]);
 
-const coronaUrl = "http://localhost:5000/corona_cnt/cov";
-
-function WhyTo() {
-  const [state, fetch] = useAsync(() => getData(), []);
-  const { loading, data, error } = state;
+  useEffect(() => {
+    if (!data) return;
+    setChartParams(
+      chartData(data.label, data.patient, data.deliver, "#ffdeeb")
+    );
+  }, [data]);
 
   if (loading) return <Loading />;
   if (error) return <div>에러 ...</div>;
   if (!data) return null;
 
-  const chartParams = chartData(
-    data.label,
-    data.patient,
-    data.deliver,
-    "#ffdeeb"
-  );
+  // const chartParams = chartData(
+  //   data.label,
+  //   data.patient,
+  //   data.deliver,
+  //   "#ffdeeb"
+  // );
 
   return (
     <>
-      <Line data={chartParams.data} options={chartParams.options} />
+      <Line
+        data={chartParams.data}
+        options={chartParams.options}
+        height={500}
+        width={1000}
+      />
     </>
   );
 }

@@ -1,18 +1,4 @@
 import { useReducer, useEffect } from "react";
-const monthInfo = {
-  Jan: 1,
-  Feb: 2,
-  Mar: 3,
-  Apr: 4,
-  May: 5,
-  Jun: 6,
-  Jul: 7,
-  Aug: 8,
-  Sep: 9,
-  Oct: 10,
-  Nov: 11,
-  Dec: 12,
-};
 
 function reducer(state, action) {
   switch (action.type) {
@@ -50,8 +36,6 @@ function useAsync(cb, deps = []) {
     dispatch({ type: "LOADING" });
     try {
       const res = await cb();
-      console.log("res", res);
-
       dispatch({
         type: "SUCCESS",
         data: {
