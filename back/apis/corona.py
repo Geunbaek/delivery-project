@@ -33,9 +33,9 @@ class Delivery(Resource):
 
 parser = cov.parser()
 #parser.add_argument('unit', type=str, help='day', location='args', default='month', required=True)
-parser.add_argument('unit', type=str, help='day, month, none', location='args', default='month')
-parser.add_argument('startdate', type=str, help='시작날짜', location='args', default='2020-01-01')
-parser.add_argument('enddate', type=str, help='종료날짜', location='args', default='2020-12-31')
+parser.add_argument('unit', type=str, help='day, month, none', location='args')
+parser.add_argument('startdate', type=str, help='시작날짜', location='args')
+parser.add_argument('enddate', type=str, help='종료날짜', location='args')
 @cov.route("/patient-delivery", methods=["GET"])
 @cov.doc(parser=parser)
 @cov.response(200, "Found")
@@ -43,7 +43,7 @@ parser.add_argument('enddate', type=str, help='종료날짜', location='args', d
 @cov.response(500, "Internal Error")
 class PatientDelivery(Resource):
     @cov.marshal_with(CovDto.patient_delivery_model, envelope="data")
-    #@cov.expect(parser)
+    @cov.expect(parser)
     def get(self):
         '''코로나 확진자 수와 배달 건수 데이터 얻기'''
         # http://127.0.0.1:5000/cov/patient-delivery?unit=month또는day?startdate=2020-01-01&enddate=2020-02-15
@@ -88,6 +88,7 @@ class PatientDelivery(Resource):
             end = time.time()
             print(end-start)
         else: # 파라미터 없이 /cov/patient-delivery 로만 요청 받았을 때 전부 전달
+
             '''
             patients_q = Patient.query.all()
             patients = [item.as_dict() for item in patients_q]
