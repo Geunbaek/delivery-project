@@ -2,6 +2,7 @@ __pycache__
 back/venv/
 .venv
 *.pyc
+.idea
 
 
 /back/__pycache__
