@@ -5,3 +5,7 @@ LOAD DATA INFILE './seoul_patient_count.csv' INTO TABLE patient FIELDS TERMINATE
 LOAD DATA INFILE './seoul_deliver_count.csv' INTO TABLE delivercount FIELDS TERMINATED BY ',' (date, gu, dong, deliver_count);
 
 LOAD DATA INFILE './seoul_delivery_count_with_patient.csv' INTO TABLE patientdelivery FIELDS TERMINATED BY ',' (date, gu, deliver_count, patient_count);
+
+LOAD DATA INFILE './food_weather.csv' INTO TABLE foodhour FIELDS TERMINATED BY ',' (date, day, hour, food, count, weather);
+
+LOAD DATA INFILE './yogiyo_delivery_in_seoul.csv' INTO TABLE yogiyostore FIELDS TERMINATED BY ',' (name, categories, review_avg, lat, lng, phone, address);
