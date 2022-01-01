@@ -15,6 +15,7 @@ back/venv/
 
 .flaskenv
 .env
+/back/config.py
 
 
 /front/node_modules
