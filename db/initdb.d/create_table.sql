@@ -52,6 +52,6 @@ CREATE TABLE yogiyostore (
   lat VARCHAR(20) NOT NULL,
   lng VARCHAR(20) NOT NULL,
   phone VARCHAR(15) DEFAULT '-',
-  address VARCHAR(100) NOT NULL
+  address VARCHAR(100) NOT NULL,
   PRIMARY KEY (id)
 );
