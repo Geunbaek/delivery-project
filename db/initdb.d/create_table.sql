@@ -39,7 +39,7 @@ CREATE TABLE foodhour (
   day VARCHAR(10) NOT NULL,
   hour INTEGER NOT NULL,
   food VARCHAR(20) NOT NULL,
-  count INTEGER NOT NULL
+  count INTEGER NOT NULL,
   weather VARCHAR(10) NOT NULL,
   PRIMARY KEY (id)
 );
