@@ -5,6 +5,7 @@ from flask_restx import Namespace, fields
 class DateFormat(fields.Raw):
     def format(self, value):
         if len(str(value)) > 7:
+          print(value)
           return date.strftime(value, "%Y-%m-%d")
         else : 
           return value
@@ -38,3 +39,23 @@ class CovDto:
         'deliveries': fields.List(fields.Nested(delivery_model)),
     })
 
+
+class RecommendStoreDto:
+    api = Namespace("store", description="음식점 api")
+    store_model = api.model(
+        "store_model",
+        {
+            "id" : fields.Integer,
+            "name" : fields.String, 
+            "categories" : fields.String, 
+            "review_avg" : fields.String, 
+            "lat" : fields.String, 
+            "lng" : fields.String, 
+            "phone" : fields.String, 
+            "address" : fields.String, 
+        },
+    )
+
+    
+
+    
