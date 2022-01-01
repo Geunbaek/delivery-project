@@ -9,9 +9,9 @@ db = {
     "database": "corona_web",
 }
 
-SQLALCHEMY_DATABASE_URI = (
+DATABASE_URI = (
     f"mysql+pymysql://{db['user']}:{db['password']}@"
     f"{db['host']}:{db['port']}/{db['database']}?charset=utf8mb4"
 )
 
-SECRET_KEY = "dev"
+SECRET_KEY = "DATeam3CovDelivery"

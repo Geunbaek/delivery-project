@@ -1,6 +1,16 @@
 # (코로나 배달 분석 웹) @삼시카페
 
-# FE 실행방법
+# 도커 컴포즈로 React, Flask, DB 한방에 설치&실행 시키기
+### (MariadDB에 테이블생성+데이터로드와 Nginx 설치&실행 포함)
+ - 사전 조건: 윈도우일때 도커+WSL2(Ubuntu 20.04)가 설치되있어야 한다.
+ - 프로젝트 루트 디렉토리를 커맨드창이나/터미널로 연다
+ - /back/config.example.py 파일을 복사해서 자신의 환경에 맞게 수정한다.
+ - 프로젝트 루트에서 docker-compose up 를 치면 설치와 실행 준비가 된다.
+
+<br><br><br><br><br><br>
+
+# 예전 코드 실행 방식
+## FE 실행방법
 1. node.js 설치
 2. front 폴더에서 npm i 명령어 실행
 3. npm start 명령어 실행
