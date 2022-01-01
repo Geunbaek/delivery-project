@@ -44,5 +44,45 @@ with open('./data_set/seoul_delivery_count_with_patient.csv', encoding='utf-8-si
 cur.executemany("insert into patientdelivery(date, gu, deliver_count, patient_count) values(%s, %s, %s, %s)", result)
 
 
+with open('./data_set/seoul_deliver_count.csv', encoding='utf-8-sig') as data :
+    records = csv.DictReader(data)
+    result = []
+    # pdate = datetime.strptime(c['date'], '%Y-%m-%d').date()
+    # result = [ c['id'], c['date'], c['gu'], c['patient_count'] for c in records]
+    for c in records:
+      # print(records)
+      result.append([c['date'], c['gu'], c['dong'],c['deliver_count']])
+
+cur.executemany("insert into delivercount(date, gu, dong, deliver_count) values(%s, %s,%s, %s)", result)
+
+
+with open('./data_set/food_weather.csv', encoding='utf-8-sig') as data :
+    records = csv.DictReader(data)
+    result = []
+    # pdate = datetime.strptime(c['date'], '%Y-%m-%d').date()
+    # result = [ c['id'], c['date'], c['gu'], c['patient_count'] for c in records]
+    for c in records:
+      # print(records)
+      print(c)
+      result.append([c['date'], c['day'], c['hour'], c['food'], c['count'], c['celsius(C)'], c['rain(mm)']])
+
+# csv 파일 MysQL에 삽입
+cur.executemany("insert into foodhour(date, day, hour, food, count, celsius, rain) values(%s, %s,%s, %s, %s, %s, %s)", result)
+
+with open('./data_set/yogiyo_delivery_in_seoul.csv', encoding='utf-8-sig') as data :
+    records = csv.DictReader(data)
+    result = []
+    # pdate = datetime.strptime(c['date'], '%Y-%m-%d').date()
+    # result = [ c['id'], c['date'], c['gu'], c['patient_count'] for c in records]
+    for c in records:
+      # print(records)
+      if c['phone'] == '':
+          c['phone'] = '-'
+      print(c)
+      result.append([c['name'], c['categories'], c['review_avg'], c['lat'], c['lng'], c['phone'], c['address']])
+
+# csv 파일 MysQL에 삽입
+cur.executemany("insert into yogiyostore(name, categories, review_avg, lat, lng, phone, address) values(%s, %s,%s, %s, %s, %s, %s)", result)
+
 con.commit()
 con.close()

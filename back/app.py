@@ -28,10 +28,10 @@ def create_app():
     # ORM
     db.init_app(app)
     migrate.init_app(app, db)
-    from models.Model import Patient
+    from models import Model
 
     from apis.api import test_api, hello
-    from apis.corona import cov
+    from apis.corona import cov, recommendStore
 
     app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # 펼쳐짐
     app.config.SWAGGER_UI_OPERATION_ID = True
@@ -57,7 +57,7 @@ def create_app():
     )
 
     api.add_namespace(cov)
-
+    api.add_namespace(recommendStore)
     api.add_namespace(hello)
     api.add_namespace(test_api)
 

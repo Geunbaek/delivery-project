@@ -1,12 +1,21 @@
+# Standard library imports
 import time
+from math import radians, cos, sin, asin, sqrt
+# Third party imports
 from flask import jsonify, request
 from flask_restx import Resource
-from sqlalchemy import func
+from flask_restx.fields import Float
+from sqlalchemy import func, Numeric
+from haversine import haversine
+
+# Local application imports
 from db_connect import db
-from models.Model import Patient, DeliverCount
-from dto.coronaDto import CovDto
+from models.Model import Patient, DeliverCount, YogiyoStore
+from dto.coronaDto import CovDto, RecommendStoreDto
+
 
 cov = CovDto.api
+recommendStore = RecommendStoreDto.api
 
 @cov.route("/patient", methods=["GET"])
 @cov.response(200, "Found")
@@ -83,7 +92,7 @@ class PatientDelivery(Resource):
             '''
 
             patients_q = db.session.query(Patient.id, Patient.gu ,func.sum(Patient.patient_count).label('patient_count'), func.date_format(Patient.date,'%Y-%m').label('date')).filter(Patient.date >= startdate, Patient.date <= enddate).group_by(func.date_format(Patient.date,'%Y-%m').label('date')).all()
-            deliveries_q = db.session.query(DeliverCount.id, DeliverCount.gu,DeliverCount.dong,func.sum(DeliverCount.deliver_count).label('deliver_count'),DeliverCount.date.label('date')).filter(DeliverCount.date >= startdate, DeliverCount.date <= enddate).group_by(func.date_format(DeliverCount.date,'%Y-%m')).all()
+            deliveries_q = db.session.query(DeliverCount.id, DeliverCount.gu,DeliverCount.dong,func.sum(DeliverCount.deliver_count).label('deliver_count'),func.date_format(DeliverCount.date,'%Y-%m').label('date')).filter(DeliverCount.date >= startdate, DeliverCount.date <= enddate).group_by(func.date_format(DeliverCount.date,'%Y-%m')).all()
 
             end = time.time()
             print(end-start)
@@ -101,7 +110,68 @@ class PatientDelivery(Resource):
         #return jsonify( dict(data = dict(patients=patients, deliveries=deliveries)) )
         res = {'patients':patients_q,'deliveries':deliveries_q}
         return res
+
+
+
+storeParser = recommendStore.parser()
+storeParser.add_argument('lat', type=float, help='위도', location='args')
+storeParser.add_argument('lng', type=float, help='경도', location='args')
+@recommendStore.route("/recommend-store", methods=["GET"])
+@recommendStore.doc(parser=storeParser)
+@recommendStore.response(200, "Found")
+@recommendStore.response(404, "Not found")
+@recommendStore.response(500, "Internal Error")
+class RecommendStore(Resource):
+    @recommendStore.marshal_with(RecommendStoreDto.store_model, envelope="data")
+    @recommendStore.expect(storeParser)
+    def get(self):
+        '''추천 음식점 데이터 얻기'''
+      
+        args = storeParser.parse_args()
+        lat = args['lat']
+        lng = args['lng']
         
+        print(f'lat={lat}, lng={lng}')
+
+        # 위경도 입력
+        
+        user_location = (lat, lng)
+        queryObject = db.session.query(YogiyoStore).all()
+        result = []
+        for i in range(0, len(queryObject)):
+          new_s = queryObject[i].as_dict().copy()
+          
+          if haversine(user_location, (float(new_s['lat']),float(new_s['lng'])), unit = 'km') <= 3:
+            print(float(new_s['lat']))
+            result.append(new_s)
+        
+        
+        return result[:20]  
+        #print(haversine(user_location, (Float("37.3453453"),Float("127.085789171262")), unit = 'km'))
+        # 거리 계산
+        
+        #return True
+        #return db.session.query(YogiyoStore).filter( YogiyoStore.cast_float(lat,lng) <= 3 ).all()
+        #return db.session.query(YogiyoStore).filter( haversine(lat,lng,YogiyoStore.lat.cast(Numeric), YogiyoStore.lng) < 5).all()
+
+'''
+def haversine(lat1, lng1, lat2, lng2):
+    print(f'lat1={lat1}, lat2={lat2}') 
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lng1, lat1, lng2, lat2 = map(radians, [lng1, lat1, lng2, lat2])
+
+    # haversine formula 
+    dlon = lng2 - lng1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r        
+'''
 """
 def sumby_month(queryObject):
     
