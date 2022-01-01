@@ -73,17 +73,16 @@ class FoodHour(db.Model):
     hour = db.Column(db.Integer, nullable=False)
     food = db.Column(db.String(20), nullable=False)
     count = db.Column(db.Integer, nullable=False)
-    celsius = db.Column(db.Float, nullable=False)
-    rain = db.Column(db.Float, nullable=False)
+    weather = db.Column(db.String(10), nullable=False)
 
-    def __init__(self, date, day, hour, food, count, celsius, rain):
+    def __init__(self, date, day, hour, food, count, weather):
         self.date = date
         self.day = day
         self.hour = hour
         self.food = food
         self.count = count
-        self.celsius = celsius
-        self.rain = rain
+        self.weather = weather
+ 
     
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -94,9 +93,9 @@ class YogiyoStore(db.Model):
     name = db.Column(db.String(50), nullable=False)
     categories = db.Column(db.String(50), nullable=False)
     review_avg = db.Column(db.Float, nullable=False)
-    lat = db.Column(db.Float, nullable=False)
-    lng = db.Column(db.Float, nullable=False)
-    phone = db.Column(db.String(11), nullable=True, default='-')
+    lat = db.Column(db.String(20), nullable=False)
+    lng = db.Column(db.String(20), nullable=False)
+    phone = db.Column(db.String(15), nullable=True, default='-')
     address = db.Column(db.String(100), nullable=False)
 
     def __init__(self, name, categories, review_avg, lat, lng, phone, address):

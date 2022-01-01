@@ -8,6 +8,9 @@ back/venv/
 /back/__pycache__
 /back/view/__pycache__
 /.vscode
+
+/bin
+/lib64
 /venv
 
 # /config
