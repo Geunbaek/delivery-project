@@ -1,11 +1,23 @@
 # (코로나 배달 분석 웹) @삼시카페
 
 # 도커 컴포즈로 React, Flask, DB 한방에 설치&실행 시키기
-### (MariadDB에 테이블생성+데이터로드와 Nginx 설치&실행 포함)
+### (MariadDB에 테이블생성+데이터로드, Nginx 설치,실행도 같이 됨)
  - 사전 조건: 윈도우일때 도커+WSL2(Ubuntu 20.04)가 설치되있어야 한다.
- - 프로젝트 루트 디렉토리를 커맨드창이나/터미널로 연다
- - /back/config.example.py 파일을 복사해서 자신의 환경에 맞게 수정한다.
+윈도우(10)에서 도커 설치는 WSL2 우분투에 하지말고 윈도우에다가 도커 설치해야 함.
+아래 링크에서 우측의 'Get Docker Desktop' 누르면 윈도우 설치파일 다운로드 됨.
+https://hub.docker.com/editions/community/docker-ce-desktop-windows
+
+ - /back/config.example.py 파일을 복사해서 /back/config.py을 만든 후 그대로 놔두시거나 자신의 환경에 맞게 수정
+ - (WSL2 우분투에서) 프로젝트 루트 디렉토리를 커맨드창이나/터미널로 연다.
  - 프로젝트 루트에서 docker-compose up 를 치면 설치와 실행 준비가 된다.
+ - 브라우저에 localhost:4000을 쳐서 첫화면 중간 즘에 그래프가 잘 출력되면 모든게 잘 설치, 실행된 것이다.
+ - 실행 : 브라우져 주소 창에 아래 입력
+    - 웹 서비스 : [http:localhost:4000](http:localhost:4000)
+    - 서버 REST API Swagger 문서(현재 일부 api만 작동테스트 가능) : [http:localhost:5000](http:localhost:5000)
+
+ ### - MS Azure에 배포해 놓은거 확인하기
+ - 웹 서비스 : [http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com](http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com)
+ - 서버 REST API Swagger 문서(현재 일부 api만 작동테스트 가능) - [http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com:5000](http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com:5000)
 
 <br><br><br><br><br><br>
 
