@@ -1,12 +1,22 @@
-import time
+# Standard library imports
+import time,datetime
+from math import radians, cos, sin, asin, sqrt
+# Third party imports
 from flask import jsonify, request
 from flask_restx import Resource
-from sqlalchemy import func
+from flask_restx.fields import Float
+from sqlalchemy import func, Numeric
+from sqlalchemy.orm import aliased
+from haversine import haversine
+
+# Local application imports
 from db_connect import db
-from models.Model import Patient, DeliverCount
-from dto.coronaDto import CovDto
+from models.Model import Patient, DeliverCount, YogiyoStore,FoodHour
+from dto.coronaDto import CovDto, RecommendStoreDto
+
 
 cov = CovDto.api
+recommendStore = RecommendStoreDto.api
 
 @cov.route("/patient", methods=["GET"])
 @cov.response(200, "Found")
@@ -83,7 +93,7 @@ class PatientDelivery(Resource):
             '''
 
             patients_q = db.session.query(Patient.id, Patient.gu ,func.sum(Patient.patient_count).label('patient_count'), func.date_format(Patient.date,'%Y-%m').label('date')).filter(Patient.date >= startdate, Patient.date <= enddate).group_by(func.date_format(Patient.date,'%Y-%m').label('date')).all()
-            deliveries_q = db.session.query(DeliverCount.id, DeliverCount.gu,DeliverCount.dong,func.sum(DeliverCount.deliver_count).label('deliver_count'),DeliverCount.date.label('date')).filter(DeliverCount.date >= startdate, DeliverCount.date <= enddate).group_by(func.date_format(DeliverCount.date,'%Y-%m')).all()
+            deliveries_q = db.session.query(DeliverCount.id, DeliverCount.gu,DeliverCount.dong,func.sum(DeliverCount.deliver_count).label('deliver_count'),func.date_format(DeliverCount.date,'%Y-%m').label('date')).filter(DeliverCount.date >= startdate, DeliverCount.date <= enddate).group_by(func.date_format(DeliverCount.date,'%Y-%m')).all()
 
             end = time.time()
             print(end-start)
@@ -101,7 +111,51 @@ class PatientDelivery(Resource):
         #return jsonify( dict(data = dict(patients=patients, deliveries=deliveries)) )
         res = {'patients':patients_q,'deliveries':deliveries_q}
         return res
+
+
+
+storeParser = recommendStore.parser()
+storeParser.add_argument('lat', type=float, help='위도', location='args')
+storeParser.add_argument('lng', type=float, help='경도', location='args')
+@recommendStore.route("/recommend-store", methods=["GET"])
+@recommendStore.doc(parser=storeParser)
+@recommendStore.response(200, "Found")
+@recommendStore.response(404, "Not found")
+@recommendStore.response(500, "Internal Error")
+class RecommendStore(Resource):
+    @recommendStore.marshal_with(RecommendStoreDto.store_model, envelope="data")
+    @recommendStore.expect(storeParser)
+    def get(self):
+        '''추천 음식점 데이터 얻기'''
+      
+        args = storeParser.parse_args()
+        lat = args['lat']
+        lng = args['lng']
         
+        print(f'lat={lat}, lng={lng}')
+
+        '''
+        user_location = (lat, lng)
+        queryObject = db.session.query(YogiyoStore).all()
+        result = []
+        for i in range(0, len(queryObject)):
+          new_s = queryObject[i].as_dict().copy()
+          
+          if haversine(user_location, (float(new_s['lat']),float(new_s['lng'])), unit = 'km') <= 3:
+            result.append(new_s)
+        
+        
+        return result 
+        '''
+        nearby_store = YogiyoStore.query.filter(
+          func.acos(
+            func.sin(func.radians(lat)) * func.sin(func.radians(YogiyoStore.lat)) + 
+            func.cos(func.radians(lat)) * func.cos(func.radians(YogiyoStore.lat)) * 
+            func.cos(func.radians(YogiyoStore.lng) - (func.radians(lng)))
+            ) * 6371 <= 3).all()
+        return nearby_store
+       
+
 """
 def sumby_month(queryObject):
     
@@ -132,3 +186,16 @@ def sumby_month(queryObject):
    
     return result
 """
+
+def get_menu():
+    '''시간 별로 가장 많이 시킨 배달 음식 추천'''
+    curr_date = datetime.datetime.now()
+    curr_hour = int(curr_date.strftime("%H"))
+    new_food = db.session.query(FoodHour).filter(FoodHour.hour == curr_hour).all()
+    result = {}
+    for i in range(len(new_food)):
+        try:
+            result[new_food[i].food] += new_food[i].count
+        except:
+            result[new_food[i].food] = new_food[i].count
+    return max(result)

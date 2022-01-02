@@ -17,7 +17,7 @@ back/venv/
 # config.py
 
 .flaskenv
-.env
+# .env
 /back/config.py
 
 

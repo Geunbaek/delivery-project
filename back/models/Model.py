@@ -1,7 +1,6 @@
 from db_connect import db
 from datetime import date, datetime
 
-
 class Patient(db.Model):
     __tablename__ = "patient"
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
@@ -109,3 +108,4 @@ class YogiyoStore(db.Model):
     
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+   

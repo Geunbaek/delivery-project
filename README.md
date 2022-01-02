@@ -1,6 +1,51 @@
 # (코로나 배달 분석 웹) @삼시카페
 
-# FE 실행방법
+# 도커 컴포즈로 React, Flask, DB 한방에 설치&실행 시키기
+### (MariadDB에 테이블생성+데이터삽입, Nginx 설치&실행도 같이 됨)
+ - 사전 조건: 윈도우일때 도커+WSL2(Ubuntu 20.04)가 설치되있어야 한다.
+윈도우(10)에서 도커 설치는 WSL2 우분투에 하지말고 윈도우에 도커 설치해야 함.
+아래 링크에서 우측의 'Get Docker Desktop' 누르면 윈도우용 설치파일 다운로드 됨.
+https://hub.docker.com/editions/community/docker-ce-desktop-windows
+
+ - DB, Flask 설정 변경 시 (DB 계정/포트 정보, 그외 환경 변수 정보 ) 아래 파일 수정
+    - /back/.env.example (개발용. FLASK_ENV=development일 경우) 
+    - FLASK_ENV=production 일 경우 /back/.env 파일 사용
+ - (WSL2 우분투에서) 프로젝트 루트 디렉토리를 커맨드창이나/터미널로 연다.
+ - 프로젝트 루트에서 docker-compose up 를 치면 설치와 실행 준비가 된다.
+ - 브라우저에 localhost:4000을 쳐서 첫화면 중간 즘에 그래프가 잘 출력되면 모든게 잘 설치, 실행된 것이다.
+ - 실행 : 브라우져 주소 창에 아래 입력
+    - 웹 서비스 : [http:localhost:4000](http:localhost:4000)
+        - 웹 서비스 진입 포트 변경법 : docker-compose.yml파일 > frontend: > ports: > "4000:80"에서 4000부분을 80(운영서버)이나 3000천 등으로 변경
+    - 서버 REST API Swagger 문서(현재 일부 api만 작동테스트 가능) : [http:localhost:5000](http:localhost:5000)
+
+ ### - MS Azure에 도커로 배포해 놓은거 확인하기
+ - 웹 서비스 : [http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com](http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com)
+ - 서버 REST API Swagger 문서(현재 일부 api만 작동테스트 가능) - [http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com:5000](http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com:5000)
+
+ ### 주의 사항
+ - Flask 쪽 커밋시 주의 사항
+    - /back/requirements.txt에 사용한 패키지 추가해야 함.
+    - 꼭 필요한 것만 추가해야 이미지나 컨테이너 생성/실행시 빠르고 불필요한 충돌 없음.
+    - 불필요한 패키지가 많이 설치된 가상환경 사용시 /back/requirements.txt에 필요한 패키지만 추려내서 추가하기 번거로울 수 있으므로, 가상 환경 새로 만들고 /back/requirements.txt의 패키지들 설치하고 필요한 패키지만 pip3 freeze > requirements.txt에 새로 추가할 것 권장.
+ - CSV 파일 내용 DB에 삽입 방법
+    - csv 파일 형식을 윈도우에서 사용하는 UTF-8(BOM) 형식말고 UTF-8형식으로 주셔야 함. UTF8 형식일때 새로운 (아래) 방식으로 데이터 넣을때 첫행 date 컬럼 날짜 데이터 하나가 '0000-00-00'으로 들어감. https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=fworld&logNo=220186597821
+    - CSV파일에서 컬럼명들이 있는 첫행과 id가 있는 1열 자체를 삭제 해야 함. 아래 방식 사용해서 수정하면되지만, 원본 파일은 컬럼명이 있는게 데이터 식별에 좋으므로 원본 파일은 컬럼명 있는걸로 전달. id 열은 필요없으면 안넣고 주시면 됨.
+      - VSCode의 확장 중 'Edit csv'를 설치 > VSCode에서 해당 파일 선택 > F1 키 누름 > csv로 검색 > 'CSV: Edit csv' 선택 > 일반 텍스트 파일 처럼 열려있던 csv 파일이 엑셀 비슷하게 표 형식으로 새 탭에 열림 > 컬럼명이 있는 1행의 좌측 '1'행 번호 클릭 > 휴지통 아이콘 클릭하여 1행 공간까지 전체 삭제 > id 들이 나열된 1열의 상단 'column 1' 클릭 > 휴지통 아이콘 클릭하여 1열 공간 제체를 삭제
+    - 디비에 넣어야 할 모든 csv 파일들을(기존에 /db/data 에 있던 csv 파일들 포함) /db 폴더 아래 복사 > WSL2 우분투 터미널 상의 /db 폴더에서 'bash delAndCopyCsv.sh' 입력 후 엔터 (/db/data/ 아래 있는 모든 db 관련 데이터(DB에 이미 삽입된 데이터 포함) 삭제 후 새 csv 파일들을 /db/data/ 에 복사하는 작업을 함)
+    - 데이터를 넣을 테이블 생성
+      - /db/initdb.d/create_table.sql 에 테이블 생성용 SQL 쿼리를 작성(기 작성된 쿼리 참고)
+      - /db/initdb.d/load_data.sql 에 csv파일 안의 데이터 삽입용 한 줄짜리 아래처럼 명령문 작성
+      ```
+      LOAD DATA INFILE './seoul_patient_count.csv' INTO TABLE patient FIELDS TERMINATED BY ',' (date, gu, patient_count);
+      ```
+      - /db 에서 터미널로 bash delAndCopyCsv.sh 엔터쳐서 DB 파일들 삭제. 삭제해야 docker-compose up 입력했을때 자동으로 테이블 만들면서 데이터를 넣어줌.
+      - 프로젝트 루트에서 터미널로 docker-compose up 엔터쳤을때 db관련 파일들이 없으면 테이블들 생성되고 데이터도 삽입된 후 웹서비스 실행 됨.
+  
+
+<br><br><br><br><br><br>
+
+# 예전 코드 실행 방식
+## FE 실행방법
 1. node.js 설치
 2. front 폴더에서 npm i 명령어 실행
 3. npm start 명령어 실행
