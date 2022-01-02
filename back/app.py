@@ -4,24 +4,36 @@ from flask_restx import Api, apidoc
 from flask_cors import CORS
 from flask_migrate import Migrate
 from db_connect import db
-import config
+import os
+import dotenv
 
 migrate = Migrate()
 
 
 def create_app():
-    app = Flask(__name__)
 
     app = Flask(
         __name__, instance_relative_config=True
     )  # Flask 객체 선언, 파라미터로 어플리케이션 패키지의 이름을 넣어줌.
-    app.config.from_object(config)
-    # app.config.from_envvar('APP_CONFIG_FILE')
-    # app.config.from_pyfile("config.py")
 
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
-    app.secret_key = config.SECRET_KEY
+    if app.config['ENV'] == 'development':
+        env_file = '.env.example'
+    else: # 'production'
+        env_file = '.env'
+    dotenv.load_dotenv(env_file)
+
+    DATABASE_URI = (
+        f"mysql+pymysql://{os.environ.get('MYSQL_USER')}:{os.environ.get('MYSQL_PASSWORD')}@"
+        f"{os.environ.get('MYSQL_HOST')}:{os.environ.get('MYSQL_PORT')}"
+        f"/{os.environ.get('MYSQL_DATABASE')}?charset=utf8mb4"
+    )
+    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS')
+    app.secret_key = os.getenv('SECRET_KEY')
+    
+    # 아래 설정 확인용 코드는 2022년 1월 5일 화요일 전후 삭제 예정
+    print(f'본인이 설정한 값들 설정 잘됐는지 아래 print()에서 확인하세요')
+    print(f'DATABASE_URI = {DATABASE_URI}')
 
     CORS(app)
 
@@ -66,4 +78,4 @@ def create_app():
 
 
 if __name__ == "__main__":
-    create_app().run(host='0.0.0.0', debug=True)
+    create_app().run(host='0.0.0.0')

@@ -11,7 +11,7 @@ services:
       - ./db/conf.d:/etc/mysql/conf.d
       - ./db/data:/var/lib/mysql
       - ./db/initdb.d:/docker-entrypoint-initdb.d
-    env_file: .env
+    env_file: ./back/.env.example
     environment:
       TZ: Asia/Seoul
     networks:

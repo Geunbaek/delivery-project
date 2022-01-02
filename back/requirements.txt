@@ -8,6 +8,7 @@ Flask-Migrate==3.1.0
 flask-restx==0.5.1
 Flask-SQLAlchemy==2.5.1
 greenlet==1.1.2
+haversine==2.5.1
 importlib-metadata==4.10.0
 importlib-resources==5.4.0
 itsdangerous==2.0.1
