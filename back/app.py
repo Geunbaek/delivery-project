@@ -16,10 +16,10 @@ def create_app():
         __name__, instance_relative_config=True
     )  # Flask 객체 선언, 파라미터로 어플리케이션 패키지의 이름을 넣어줌.
 
-    if app.config['ENV'] == 'development':
-        env_file = '.env.example'
-    else: # 'production'
+    if app.config['ENV'] == 'production':
         env_file = '.env'
+    else: # 'development'
+        env_file = '.env.example'
     dotenv.load_dotenv(env_file)
 
     DATABASE_URI = (
