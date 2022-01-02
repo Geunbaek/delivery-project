@@ -1,7 +1,5 @@
 from db_connect import db
 from datetime import date, datetime
-from haversine import haversine
-from sqlalchemy import Numeric
 
 class Patient(db.Model):
     __tablename__ = "patient"
@@ -111,7 +109,4 @@ class YogiyoStore(db.Model):
     
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-    def cast_float(self,lat1,lng1):
-        
-        return haversine((lat1,lng1), (YogiyoStore.lat.cast(Numeric), YogiyoStore.lng.cast(Numeric)), unit = 'km')
+   

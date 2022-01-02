@@ -1,16 +1,17 @@
 # Standard library imports
-import time
+import time,datetime
 from math import radians, cos, sin, asin, sqrt
 # Third party imports
 from flask import jsonify, request
 from flask_restx import Resource
 from flask_restx.fields import Float
 from sqlalchemy import func, Numeric
+from sqlalchemy.orm import aliased
 from haversine import haversine
 
 # Local application imports
 from db_connect import db
-from models.Model import Patient, DeliverCount, YogiyoStore
+from models.Model import Patient, DeliverCount, YogiyoStore,FoodHour
 from dto.coronaDto import CovDto, RecommendStoreDto
 
 
@@ -133,8 +134,7 @@ class RecommendStore(Resource):
         
         print(f'lat={lat}, lng={lng}')
 
-        # 위경도 입력
-        
+        '''
         user_location = (lat, lng)
         queryObject = db.session.query(YogiyoStore).all()
         result = []
@@ -142,36 +142,20 @@ class RecommendStore(Resource):
           new_s = queryObject[i].as_dict().copy()
           
           if haversine(user_location, (float(new_s['lat']),float(new_s['lng'])), unit = 'km') <= 3:
-            print(float(new_s['lat']))
             result.append(new_s)
         
         
-        return result[:20]  
-        #print(haversine(user_location, (Float("37.3453453"),Float("127.085789171262")), unit = 'km'))
-        # 거리 계산
-        
-        #return True
-        #return db.session.query(YogiyoStore).filter( YogiyoStore.cast_float(lat,lng) <= 3 ).all()
-        #return db.session.query(YogiyoStore).filter( haversine(lat,lng,YogiyoStore.lat.cast(Numeric), YogiyoStore.lng) < 5).all()
+        return result 
+        '''
+        nearby_store = YogiyoStore.query.filter(
+          func.acos(
+            func.sin(func.radians(lat)) * func.sin(func.radians(YogiyoStore.lat)) + 
+            func.cos(func.radians(lat)) * func.cos(func.radians(YogiyoStore.lat)) * 
+            func.cos(func.radians(YogiyoStore.lng) - (func.radians(lng)))
+            ) * 6371 <= 3).all()
+        return nearby_store
+       
 
-'''
-def haversine(lat1, lng1, lat2, lng2):
-    print(f'lat1={lat1}, lat2={lat2}') 
-    """
-    Calculate the great circle distance between two points 
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians 
-    lng1, lat1, lng2, lat2 = map(radians, [lng1, lat1, lng2, lat2])
-
-    # haversine formula 
-    dlon = lng2 - lng1 
-    dlat = lat2 - lat1 
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a)) 
-    r = 6371 # Radius of earth in kilometers. Use 3956 for miles
-    return c * r        
-'''
 """
 def sumby_month(queryObject):
     
@@ -202,3 +186,16 @@ def sumby_month(queryObject):
    
     return result
 """
+
+def get_menu():
+    '''시간 별로 가장 많이 시킨 배달 음식 추천'''
+    curr_date = datetime.datetime.now()
+    curr_hour = int(curr_date.strftime("%H"))
+    new_food = db.session.query(FoodHour).filter(FoodHour.hour == curr_hour).all()
+    result = {}
+    for i in range(len(new_food)):
+        try:
+            result[new_food[i].food] += new_food[i].count
+        except:
+            result[new_food[i].food] = new_food[i].count
+    return max(result)
