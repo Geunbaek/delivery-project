@@ -1,9 +1,12 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, css, keyframes } from "styled-components";
+import reset from "styled-reset";
 import "../fonts/fonts.css";
 
 export const GlobalStyle = createGlobalStyle`
+  ${reset}
   #root {
     height: 100%;
+
   }
 
   html, body {
@@ -13,9 +16,7 @@ export const GlobalStyle = createGlobalStyle`
     word-break: keep-all;
     -ms-overflow-style: none; 
     scrollbar-width: none; 
-    h1 {
-      font-size: 28px;
-    }
+    color:white;
   }
   
   body::-webkit-scrollbar {
@@ -52,6 +53,15 @@ export const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const bgScale = keyframes`
+  from{
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.5);
+  }
+`;
+
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -60,4 +70,23 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  ${(props) =>
+    props.back &&
+    css`
+      position: relative;
+      overflow: hidden;
+      &::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        z-index: -1;
+        background: url(${props.back}) no-repeat;
+        background-size: cover;
+        transform: scale(0.5);
+        animation: ${bgScale} 1s;
+      }
+    `}
 `;

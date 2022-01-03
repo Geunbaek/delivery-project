@@ -72,21 +72,19 @@ function ResultMap({ positions, center }) {
     dispatch(getStores(userInfo.coords));
   }, []);
 
-  if (loading) return <Loading />;
-  if (error) return error;
+  // if (loading) return <Loading />;
+  // if (error) return null;
 
   return (
     <>
       <Wrapper color="#ffdeeb">
+        {!userInfo && <div>잘못된 접근 입니다.</div>}
         <Section>
-          {!userInfo && <div>잘못된 접근 입니다.</div>}
           <TextArea />
           <ExtraArea>
-            <div
-              id="map"
-              ref={ref}
-              style={{ width: "100%", height: "100%" }}
-            ></div>
+            <div id="map" ref={ref} style={{ width: "100%", height: "100%" }}>
+              {loading ? <Loading /> : error && <div>에러...</div>}
+            </div>
           </ExtraArea>
         </Section>
       </Wrapper>

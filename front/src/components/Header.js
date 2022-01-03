@@ -1,30 +1,41 @@
-import { Container, Navbar, Offcanvas, Nav } from "react-bootstrap";
+import { Container, Navbar, Nav } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const NavLink = styled(Nav.Link)`
+  font-size: 30px;
+  & + & {
+    margin-left: 20px;
+  }
+`;
 
 function Header() {
+  const history = useNavigate();
+  const onClickHandle = () => {
+    history("/survey");
+  };
   return (
-    <Navbar bg="bg-*" expand={false} fixed="top" style={{ marginTop: "30px" }}>
-      <Container fluid={false} style={{ width: "45%" }}>
-        <Navbar.Brand href="#">
-          <h1>오늘 뭐먹지?</h1>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="offcanvasNavbar" />
-        <Navbar.Offcanvas
-          id="offcanvasNavbar"
-          aria-labelledby="offcanvasNavbarLabel"
-          placement="end"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel">메뉴</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="#action2">추천</Nav.Link>
-            </Nav>
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
-      </Container>
-    </Navbar>
+    <>
+      <Navbar
+        bg="bg-*"
+        expand={false}
+        fixed="top"
+        style={{ marginTop: "30px" }}
+      >
+        <Container style={{ width: "40%" }}>
+          <Navbar.Brand href="#">
+            <h1 style={{ fontSize: "40px", color: "white" }}>오늘 뭐먹지?</h1>
+          </Navbar.Brand>
+          {/* <Navbar.Collapse id="responsive-navbar-nav"> */}
+          <Nav style={{ display: "flex", flexDirection: "row" }}>
+            <NavLink onClick={onClickHandle} style={{ color: "white" }}>
+              뭐먹지
+            </NavLink>
+          </Nav>
+          {/* </Navbar.Collapse> */}
+        </Container>
+      </Navbar>
+    </>
   );
 }
 

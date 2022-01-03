@@ -4,6 +4,33 @@ import Loading from "../../loading/Loading";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getGraphData } from "../../../modules/graphData";
+import styled from "styled-components";
+
+const Section = styled.div`
+  width: 43%;
+  height: 50%;
+  display: flex;
+  flex-direction: ${(props) => props.col && "column"};
+  justify-content: center;
+  align-items: center;
+`;
+
+const TextArea = styled.div`
+  width: 50%;
+  height: 100%;
+  display: flex;
+  font-size: 50px;
+  flex-direction: column;
+  text-align: left;
+`;
+
+const ExtraArea = styled.div`
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+`;
 
 function WhyTo({ idx }) {
   const { loading, data, error } = useSelector((state) => state.graphData);
@@ -11,7 +38,7 @@ function WhyTo({ idx }) {
   const [chartParams, setChartParams] = useState(chartData([], [], []));
 
   useEffect(() => {
-    dispatch(getGraphData("month", "2020-01-01", "2021-08-30"));
+    dispatch(getGraphData("month", "2020-01-01", "2020-12-30"));
   }, [dispatch]);
 
   useEffect(() => {
@@ -33,14 +60,17 @@ function WhyTo({ idx }) {
   // );
 
   return (
-    <>
-      <Line
-        data={chartParams.data}
-        options={chartParams.options}
-        height={500}
-        width={1000}
-      />
-    </>
+    <Section>
+      <TextArea>왜?</TextArea>
+      <ExtraArea>
+        <Line
+          data={chartParams.data}
+          options={chartParams.options}
+          height={400}
+          width={800}
+        />
+      </ExtraArea>
+    </Section>
   );
 }
 

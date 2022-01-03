@@ -98,11 +98,11 @@ function Location({ swiper }) {
     if (!data) return;
     setLocation(data.addressName);
     // console.log(swiper);
-    if (swiper && !swiper.isEnd) {
-      swiper.slideTo(swiper.activeIndex + 1);
-    } else {
-      history("/result");
-    }
+    // if (swiper && !swiper.isEnd) {
+    //   swiper.slideTo(swiper.activeIndex + 1);
+    // } else {
+    //   history("/result");
+    // }
   }, [data, swiper, history]);
 
   const onClickNowPos = () => {
@@ -131,6 +131,10 @@ function Location({ swiper }) {
     dispatch(getCoords(location));
   };
 
+  const onClickSubmit = () => {
+    history("/result");
+  };
+
   // if (loading) return <Loading />;
   // if (error) return <div>에러 ...</div>;
   // if (!data) return null;
@@ -152,6 +156,12 @@ function Location({ swiper }) {
             주소를 확인해 주세요
           </div>
         )}
+        <button
+          onClick={onClickSubmit}
+          style={{ marginTop: "20px", borderRadius: "10px" }}
+        >
+          임시제출
+        </button>
       </Section>
     </>
   );
