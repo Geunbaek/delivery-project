@@ -1,4 +1,5 @@
 # Standard library imports
+
 import time
 import datetime
 import random
@@ -145,6 +146,7 @@ class RecommendStore(Resource):
 
         # 프론트에서 넘어온 파라미터를 변수에 담음
         args = storeParser.parse_args()
+
         lat = args['lat']  # 위도
         lng = args['lng']  # 경도
         dislikefood = args['dislikefood']  # 싫어하는 음식
@@ -254,12 +256,15 @@ def get_menu():
     '''시간 별로 가장 많이 시킨 배달 음식 추천'''
     curr_date = datetime.datetime.now()
     curr_hour = int(curr_date.strftime("%H"))
+
     new_food = db.session.query(FoodHour).filter(
         FoodHour.hour == curr_hour).all()
+
     result = {}
     for i in range(len(new_food)):
         try:
             result[new_food[i].food] += new_food[i].count
         except:
             result[new_food[i].food] = new_food[i].count
+
     return max(result)

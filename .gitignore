@@ -59,3 +59,5 @@ back/venv/
 /db/seoul_deliver_count.csv
 /db/seoul_delivery_count_with_patient.csv
 /db/patient_with_deliver_month.csv
+/db/food_weather.csv
+/db/yogiyo_delivery_in_seoul.csv
