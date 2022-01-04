@@ -74,10 +74,10 @@ with open('./data_set/food_weather.csv', encoding='utf-8-sig') as data :
     for c in records:
       # print(records)
       print(c)
-      result.append([c['date'], c['day'], c['hour'], c['food'], c['count'], c['celsius(C)'], c['rain(mm)']])
+      result.append([c['date'], c['day'], c['hour'], c['food'], c['count'], c['weather']])
 
 # csv 파일 MysQL에 삽입
-cur.executemany("insert into foodhour(date, day, hour, food, count, celsius, rain) values(%s, %s,%s, %s, %s, %s, %s)", result)
+cur.executemany("insert into foodhour(date, day, hour, food, count, weather) values(%s, %s,%s, %s, %s, %s)", result)
 
 with open('./data_set/yogiyo_delivery_in_seoul.csv', encoding='utf-8-sig') as data :
     records = csv.DictReader(data)
