@@ -5,16 +5,16 @@ const GET_STORES = "stores/GET_STORES";
 const GET_STORES_SUCCESS = "stores/GET_STORES_SUCCESS";
 const GET_STORES_ERROR = "stores/GET_STORES_ERROR";
 
-export const getStores = (pos) => ({
+export const getStores = (pos, dislikefood, likefood) => ({
   type: GET_STORES,
-  payload: pos,
+  payload: { pos, dislikefood, likefood },
 });
 
 function* getStoresSaga(action) {
-  const { lat, lng } = action.payload;
+  const { pos, dislikefood, likefood } = action.payload;
 
   try {
-    const payload = yield call(getStoresAPI, { lat, lng });
+    const payload = yield call(getStoresAPI, pos, dislikefood, likefood);
     yield put({ type: GET_STORES_SUCCESS, payload });
   } catch (e) {
     yield put({ type: GET_STORES_ERROR, error: e });

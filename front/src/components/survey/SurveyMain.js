@@ -13,6 +13,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UseAnimations from "react-useanimations";
 import arrowDown from "react-useanimations/lib/arrowDown";
+import { useDispatch } from "react-redux";
+import { setPreference } from "../../modules/preference";
 
 const ScrollDisplay = styled.div`
   width: 100%;
@@ -36,12 +38,16 @@ SwiperCore.use([Pagination, Mousewheel]);
 
 function SurveyMain() {
   const history = useNavigate();
+  const dispatch = useDispatch();
   const [preferenceFood, setPreferenceFood] = useState(categories);
   const [swiper, setSwiper] = useState();
   const [isEnd, setIsEnd] = useState(false);
 
   const swiperHandle = () => {
-    if (isEnd) history("/result", { replace: true });
+    if (isEnd) {
+      dispatch(setPreference(preferenceFood));
+      history("/result", { replace: true });
+    }
   };
 
   const preferenceFoodHandle = (category, status) => {

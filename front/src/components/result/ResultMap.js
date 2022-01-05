@@ -51,6 +51,7 @@ function ResultMap({ positions, center }) {
   const ref = useRef();
   const { data: userInfo } = useSelector((state) => state.address);
   const { loading, data, error } = useSelector((state) => state.stores);
+  const { payload: preference } = useSelector((state) => state.preference);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -84,11 +85,11 @@ function ResultMap({ positions, center }) {
       const marker = makeMaker({ lat: store.lat, lng: store.lng });
       marker.setMap(map);
     });
-  }, [data]);
+  }, [data, userInfo]);
 
   useEffect(() => {
     if (!userInfo) return;
-    dispatch(getStores(userInfo.coords));
+    dispatch(getStores(userInfo.coords, preference));
   }, []);
 
   // if (loading) return <Loading />;
@@ -138,26 +139,5 @@ function ResultMap({ positions, center }) {
     </>
   );
 }
-
-ResultMap.defaultProps = {
-  center: {
-    lat: "37.365264512305174",
-    lng: "127.10676860117488",
-  },
-  positions: [
-    {
-      lat: "37.365264512305174",
-      lng: "127.10576860117488",
-    },
-    {
-      lat: "37.364264512305174",
-      lng: "127.10676860117488",
-    },
-    {
-      lat: "37.365164512305174",
-      lng: "127.10676860117488",
-    },
-  ],
-};
 
 export default ResultMap;
