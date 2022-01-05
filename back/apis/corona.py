@@ -3,11 +3,12 @@
 import time
 import datetime
 import random
+import requests
+import json
 # Third party imports
 from flask import jsonify, request
 from flask_restx import Resource
 from sqlalchemy import func, case, desc, literal_column
-
 # Local application imports
 from db_connect import db
 from models.Model import Patient, DeliverCount, YogiyoStore, FoodHour
@@ -198,7 +199,7 @@ class RecommendStore(Resource):
             # 이 점수의 반영비율을 30%라 0.3을 곱함
             sub_queries += "+ (CASE when  categories like '%"+timerank[0].food+"%' then 100 when  categories like '%" + \
                 timerank[1].food+"%' then 90 when  categories like '%" + \
-                timerank[2].food+"%' then 80	else 50 END) * 0.3"
+                timerank[2].food+"%' then 80	else 50 END) * 0.2"
 
         # 선호음식이 있을때(파라미터 넘어왔을때)
         if likefood:
@@ -208,12 +209,21 @@ class RecommendStore(Resource):
             # 들어온 파라미터를 | 기준으로 yogiyostore테이블의 카테고리에서 각각 찾아서 있으면 100점 없으면 50점
             # 이 점수의 반영비율을 40%라 0.4을 곱함
             sub_queries += "+ (CASE	when categories REGEXP ('" + \
-                likefood+"') then 100 else 50 END) * 0.4"
+                likefood+"') then 100 else 50 END) * 0.3"
+
+        weather = curr_weather()
+        if weather:
+            weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
+                FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
+            print(weatherrank)
+            sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then 100 when  categories like '%" + \
+                weatherrank[1].food+"%' then 90 when  categories like '%" + \
+                weatherrank[2].food+"%' then 80	else 50 END) * 0.2"
+        
 
         # sub_filters 와 sub_queries로 음식점 찾는 쿼리문
-        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng,
-                                           YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(100).all()
-
+        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng, YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(100).all()
+        
         # 랜덤으로 섞는 코드
         random.shuffle(recommend_store)
 
@@ -268,3 +278,45 @@ def get_menu():
             result[new_food[i].food] = new_food[i].count
 
     return max(result)
+
+def curr_weather():
+    hr = datetime.datetime.now().strftime("%H")+'00'
+    dt = datetime.datetime.now().strftime("%Y%m%d")
+
+    url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
+    params ={'serviceKey' : '7fn3iG+xpyNJCYToaIb5rZczQEJzbiT31Uyhi/A93reJb0YXU9Kb6w3NEkQdWKnWSQJ6akKLyibDDW+Tw8Riag==', 
+            'pageNo' : '1', 
+            'numOfRows' : '1000', 
+            'dataType' : 'JSON', 
+            'base_date' : dt, 
+            'base_time' : hr, 
+            'nx' : '60', 
+            'ny' : '127' 
+            }
+
+    response = requests.get(url, params=params)
+    contents = response.text
+
+    json_ob = json.loads(contents)
+
+    body = json_ob['response']['body']['items']['item']
+
+    weather = ''
+    rain = float(body[0]['obsrValue'])
+    temperature = float(body[4]['obsrValue'])
+
+    if rain == 0:
+        weather += '맑음'
+    else:
+        if rain == 1 or rain > 3:
+            weather += '비옴'
+        elif 1 < rain < 4:
+            weather += '눈옴'
+    if temperature >= 22:
+        weather += ' 더움'
+    elif 6 <= temperature < 22:
+        weather += ' 선선'
+    elif temperature < 6:
+        weather += ' 추움'
+    
+    return weather
