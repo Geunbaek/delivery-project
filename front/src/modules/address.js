@@ -1,5 +1,6 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { getAddressAPI, getCoordsAPI } from "../api/address";
+import { inSeoulCheck } from "../components/survey/sections/Location";
 
 const GET_ADDRESS = "address/GET_ADDRESS";
 const GET_ADDRESS_SUCCESS = "address/GET_ADDRESS_SUCCESS";
@@ -9,15 +10,20 @@ const GET_COORDS = "address/GET_COORDS";
 const GET_COORDS_SUCCESS = "address/GET_COORDS_SUCCESS";
 const GET_COORDS_ERROR = "address/GET_COORDS_ERROR";
 
-export const getAddress = (pos, swiper) => ({
+export const getAddress = (pos) => ({
   type: GET_ADDRESS,
   payload: pos,
+});
+
+export const getCoords = (addr, setIsInSeoul, swiper) => ({
+  type: GET_COORDS,
+  payload: addr,
+  setIsInSeoul,
   swiper,
 });
-export const getCoords = (addr) => ({ type: GET_COORDS, payload: addr });
 
 function* getAddressSaga(action) {
-  const { payload: pos, swiper } = action;
+  const { payload: pos } = action;
   try {
     const payload = yield call(getAddressAPI, pos);
     const inform = {
@@ -34,18 +40,25 @@ function* getAddressSaga(action) {
 }
 
 function* getCoordsSaga(action) {
-  const { payload: addr } = action;
+  const { payload: addr, setIsInSeoul, swiper } = action;
   try {
     const payload = yield call(getCoordsAPI, addr);
+    const { y: lat, x: lng } = payload.documents[0];
+    if (inSeoulCheck(lat, lng)) {
+      setIsInSeoul(false);
+      // throw new Error("Not in seoul");
+    }
     const inform = {
       addressName:
         payload.documents[0]?.road_address?.address_name ||
         payload.documents[0].address.address_name,
       coords: {
-        lat: payload.documents[0].y,
-        lng: payload.documents[0].x,
+        lat,
+        lng,
       },
     };
+    setIsInSeoul(true);
+    swiper.slideTo(swiper.activeIndex + 1);
     yield put({ type: GET_COORDS_SUCCESS, payload: inform });
   } catch (e) {
     yield put({ type: GET_COORDS_ERROR, error: e });

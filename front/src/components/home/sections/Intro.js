@@ -27,7 +27,7 @@ const ExtraArea = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column-reverse;
-  align-items: center;
+  align-items: flex-end;
 `;
 
 const Btn = styled.div`

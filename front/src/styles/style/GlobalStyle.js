@@ -43,6 +43,7 @@ export const GlobalStyle = createGlobalStyle`
     -ms-flex-align: center;
     -webkit-align-items: center;
     align-items: center;
+    overflow: hidden;
   }
 
   .swiper-slide img {
@@ -50,6 +51,27 @@ export const GlobalStyle = createGlobalStyle`
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .swiper-pagination {
+    /* bottom: -10px !important; */
+    color: solid black;
+    /* background-color: black; */
+    height: 100px;
+    font-size: 30px;
+    position: absolute;
+    left : 80%;
+    
+    }
+
+  .swiper-pagination-bullet{
+
+    width: 30px;
+    height: 30px;
+    /* background-color: darkorange; */
+  }
+  .swiper-pagination-bullet-active {
+    background-color: #862e9c;
+    color: rgb(255, 255, 255);
   }
 `;
 
@@ -86,7 +108,7 @@ export const Wrapper = styled.div`
         background: url(${props.back}) no-repeat;
         background-size: cover;
         transform: scale(0.5);
-        animation: ${bgScale} 1s;
+        animation: ${bgScale} 2s;
       }
     `}
 `;

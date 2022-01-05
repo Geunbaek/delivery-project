@@ -22,7 +22,8 @@ function Header() {
         fixed="top"
         style={{ marginTop: "30px" }}
       >
-        <Container style={{ width: "40%" }}>
+        <Container style={{ width: "1000px" }}>
+          {/*40%*/}
           <Navbar.Brand href="#">
             <h1 style={{ fontSize: "40px", color: "white" }}>오늘 뭐먹지?</h1>
           </Navbar.Brand>

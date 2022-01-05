@@ -5,10 +5,14 @@ const GET_STORES = "stores/GET_STORES";
 const GET_STORES_SUCCESS = "stores/GET_STORES_SUCCESS";
 const GET_STORES_ERROR = "stores/GET_STORES_ERROR";
 
-export const getStores = (pos) => ({ type: GET_STORES, payload: pos });
+export const getStores = (pos) => ({
+  type: GET_STORES,
+  payload: pos,
+});
 
 function* getStoresSaga(action) {
   const { lat, lng } = action.payload;
+
   try {
     const payload = yield call(getStoresAPI, { lat, lng });
     yield put({ type: GET_STORES_SUCCESS, payload });

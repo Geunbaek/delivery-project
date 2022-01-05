@@ -6,9 +6,8 @@ import "swiper/css/lazy";
 import styled, { css } from "styled-components";
 import UseAnimations from "react-useanimations";
 import arrowDown from "react-useanimations/lib/arrowDown";
-// import arrowUp from "react-useanimations/lib/arrowUp";
+import arrowUp from "react-useanimations/lib/arrowUp";
 import Header from "../Header";
-import { MdKeyboardArrowUp } from "react-icons/md";
 
 import Intro from "./sections/Intro";
 import WhoTo from "./sections/WhoTo";
@@ -16,16 +15,15 @@ import WhyTo from "./sections/WhyTo";
 
 import { Wrapper } from "../../styles/style/GlobalStyle";
 import bgImg from "../../assets/spaghetti.jpg";
-import bgImg2 from "../../assets/salad.jpg";
 
-const GraphSection = styled.div`
-  width: 80%;
-  height: 80%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+// const GraphSection = styled.div`
+//   width: 80%;
+//   height: 80%;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const ScrollDisplay = styled.div`
   width: 100%;
@@ -45,11 +43,6 @@ const ScrollDisplay = styled.div`
     `}
 `;
 
-const UpIcon = styled(MdKeyboardArrowUp)`
-  width: 56px;
-  height: 56px;
-`;
-
 SwiperCore.use([Mousewheel]);
 
 function Main() {
@@ -61,12 +54,14 @@ function Main() {
       {isEnd ? (
         <>
           <ScrollDisplay up>
-            <UpIcon onClick={() => swiper.slideTo(0)} />
-            {/* <UseAnimations
+            <UseAnimations
               animation={arrowUp}
               size={56}
               style={{ padding: 100 }}
-            /> */}
+              strokeColor="white"
+              key="0"
+              onClick={() => swiper.slideTo(0)}
+            />
             <div>맨위로</div>
           </ScrollDisplay>
         </>
@@ -78,6 +73,7 @@ function Main() {
               size={56}
               style={{ padding: 100 }}
               strokeColor="white"
+              key="1"
             />
             <div>Scroll</div>
           </ScrollDisplay>
@@ -107,14 +103,12 @@ function Main() {
           </Wrapper>
         </SwiperSlide>
         <SwiperSlide key="section02">
-          <Wrapper color="#9775fa">
-            <GraphSection>
-              <WhyTo />
-            </GraphSection>
+          <Wrapper color="#b197fc">
+            <WhyTo />
           </Wrapper>
         </SwiperSlide>
         <SwiperSlide key="section03">
-          <Wrapper color="#9775fa">
+          <Wrapper color="#b197fc">
             <WhoTo />
           </Wrapper>
         </SwiperSlide>
