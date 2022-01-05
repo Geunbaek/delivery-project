@@ -16,7 +16,7 @@ cov = CovDto.api
 @cov.response(404, "Not found")
 @cov.response(500, "Internal Error")
 # @corona_cnt.param("id", "해당 데이터의 ID")
-class Cov(Resource):
+class CovPatient(Resource):
     @cov.marshal_with(CovDto.patient_model, envelope="data")
     def get(self):
         '''코로나 확진자 수 데이터 얻기'''

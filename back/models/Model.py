@@ -21,6 +21,7 @@ class Patient(db.Model):
             else:
                 res[c.name] = getattr(self, c.name)
         return res
+    
 
 
 class DeliverCount(db.Model):
@@ -31,11 +32,11 @@ class DeliverCount(db.Model):
     dong = db.Column(db.String(12), nullable=False)
     deliver_count = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, date, gu, dong, delivery_count):
+    def __init__(self, date, gu, dong, deliver_count):
         self.date = date
         self.gu = gu
         self.dong = dong
-        self.delivery_count = delivery_count
+        self.deliver_count = deliver_count
 
     def as_dict(self):
         res = {}

@@ -44,7 +44,8 @@ def create_app():
 
     from apis.api import test_api, hello
     from apis.corona import cov
-    from apis.recommend import recommendStore
+    from apis.recommendStore import recommendStore
+    from apis.store import store, foodrank
 
     app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # 펼쳐짐
     app.config.SWAGGER_UI_OPERATION_ID = True
@@ -61,16 +62,20 @@ def create_app():
 
     api = Api(
         app,
-        version="2.0.3",
-        title="삼시카페 API",
-        description="팀 삼시카페의 프로젝트 API 문서입니다.",
-        contact="팀 연락처",
-        license="3o'cafe license",
-        license_url="/test-license-3o'cafe",
+        version="0.1.0",
+        title="팀 삼시카페의 코로나 배달 분석 웹 서비스",
+        description="코로나 배달 분석 웹 서비스 REST API Swagger 문서입니다.\n \
+            소스코드상에서 문서를 관리하며,\n \
+            PostMan처럼 문서상에서 직접 테스트 할 수 있습니다.",
+        contact="팀 GitLap : https://kdt-gitlab.elice.io/003-part3-deliveryservice/team3/project-template",
+        license="3팀 license",
+        license_url="https://kdt-gitlab.elice.io/003-part3-deliveryservice/team3/project-template/-/blob/master/README.md",
     )
 
-    api.add_namespace(cov)
     api.add_namespace(recommendStore)
+    api.add_namespace(store)
+    api.add_namespace(foodrank)
+    api.add_namespace(cov)
     api.add_namespace(hello)
     api.add_namespace(test_api)
 

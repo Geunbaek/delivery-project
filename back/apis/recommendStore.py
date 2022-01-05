@@ -1,12 +1,11 @@
-import time
 import datetime
+from pytz import timezone
 import random
-import requests
-import json
 # Third party imports
-from flask import jsonify, request
-from flask_restx import Resource
+from flask_restx import Resource, abort
+from requests.models import Response
 from sqlalchemy import func, case, desc, literal_column
+from apis.openApi import curr_weather
 # Local application imports
 from db_connect import db
 from models.Model import YogiyoStore, FoodHour
@@ -15,29 +14,45 @@ from dto.coronaDto import RecommendStoreDto
 recommendStore = RecommendStoreDto.api
 
 storeParser = recommendStore.parser()
-storeParser.add_argument('lat', type=float, help='위도', location='args')
-storeParser.add_argument('lng', type=float, help='경도', location='args')
+storeParser.add_argument('lat', type=float, help='위도. (예) 37.5749351791722', location='args')
+storeParser.add_argument('lng', type=float, help='경도. (예) 127.085789171262', location='args')
 storeParser.add_argument('dislikefood', type=str,
-                         help='싫어하는 음식 한식, 한식|분식', location='args')
+                         help='싫어하는 음식 종류만 파는 음식점을 제외합니다:\n \
+                         다음 음식 종류만 입력 가능합니다.\n \
+                         치킨, 한식, 한식|분식, ...', location='args')
 storeParser.add_argument('likefood', type=str,
-                         help='좋아하는 음식 한식, 중식|치킨', location='args')
-                         
+                         help='좋아하는 음식 종류에 가중치를 줍니다.\n \
+                        다음 음식 종류만 입력 가능합니다.\n \
+                        (예) 분식, 한식, 중식|치킨, ...', location='args')
+
+  
 @recommendStore.route("/recommend-store", methods=["GET"])
 @recommendStore.doc(parser=storeParser)
-@recommendStore.response(200, "Found")
-@recommendStore.response(404, "Not found")
-@recommendStore.response(500, "Internal Error")
+@recommendStore.response(200, "성공적으로 수행 됨")
+@recommendStore.response(400, "요청 정보 정확하지 않음")
+@recommendStore.response(500, "API 서버에 문제가 발생하였음")
 class RecommendStore(Resource):
     @recommendStore.marshal_with(RecommendStoreDto.store_model, envelope="data")
     @recommendStore.expect(storeParser)
     def get(self):
-        '''추천 음식점 데이터 얻기'''
+        '''추천 음식점 데이터 얻기.
+           유저의 위치, 비선호 음식종류로 필터링.
+           선호 음식종류, 음식점 평점, 현재 시간대/날씨별 배달 건수 높은 음식류 가중치 반영.
+
+           1. 음식점 리뷰 평점 점수별로 순위를 추천에 일정 비율 반영,
+           2. 유저의 위치 3km 반경 필터링,
+           3. 비선호 음식종류 필터링,
+           4. 현재 시간대에 배달 건수가 많은 음식 종류 1,2,3,하위 순위 점수로 추천에 일정 비율 반영,
+           5. 선호 음식 종류에 가중치 반영,
+           6. 현재 날씨에 많이 배달 시킨 음식 1,2,3위 점수로 추천에 일정 비율 반영,
+        '''
 
         # 프론트에서 넘어온 파라미터를 변수에 담음
         args = storeParser.parse_args()
-
-        lat = args['lat']  # 위도
-        lng = args['lng']  # 경도
+        lat = args['lat'] # 위도
+        lng = args['lng'] # 경도
+        if lat == None or lng == None:
+            abort(400, msg='요청 정보 정확하지 않음.')
         dislikefood = args['dislikefood']  # 싫어하는 음식
         likefood = args['likefood']  # 선호하는 음식
 
@@ -77,7 +92,7 @@ class RecommendStore(Resource):
         if cur_time:
             #sub_queries += "+ case([(YogiyoStore.categories.like('분식'), 100),(YogiyoStore.categories.like('치킨'), 90),(YogiyoStore.categories.like('피자'), 80)], else_=50)*0.3"
             # 현재시간 몇시인지 추출
-            curr_hour = int(datetime.datetime.now().strftime("%H"))
+            curr_hour = int(datetime.datetime.now(timezone('Asia/Seoul')).strftime("%H"))
             # FoodHour테이블에서 현재시간에 제일 많이 팔린 카테고리 1,2,3위 가져오는 쿼리문
             timerank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
                 FoodHour.hour == curr_hour).group_by(FoodHour.food).order_by(desc('total')).limit(3).all()
@@ -110,7 +125,7 @@ class RecommendStore(Resource):
         
 
         # sub_filters 와 sub_queries로 음식점 찾는 쿼리문
-        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng, YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(100).all()
+        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng, YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(50).all()
         
         # 랜덤으로 섞는 코드
         random.shuffle(recommend_store)
@@ -121,7 +136,7 @@ class RecommendStore(Resource):
 
 def get_menu():
     '''시간 별로 가장 많이 시킨 배달 음식 추천'''
-    curr_date = datetime.datetime.now()
+    curr_date = datetime.datetime.now(timezone('Asia/Seoul'))
     curr_hour = int(curr_date.strftime("%H"))
 
     new_food = db.session.query(FoodHour).filter(
@@ -135,45 +150,3 @@ def get_menu():
             result[new_food[i].food] = new_food[i].count
 
     return max(result)
-
-def curr_weather():
-    hr = datetime.datetime.now().strftime("%H")+'00'
-    dt = datetime.datetime.now().strftime("%Y%m%d")
-
-    url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
-    params ={'serviceKey' : '7fn3iG+xpyNJCYToaIb5rZczQEJzbiT31Uyhi/A93reJb0YXU9Kb6w3NEkQdWKnWSQJ6akKLyibDDW+Tw8Riag==', 
-            'pageNo' : '1', 
-            'numOfRows' : '1000', 
-            'dataType' : 'JSON', 
-            'base_date' : dt, 
-            'base_time' : hr, 
-            'nx' : '60', 
-            'ny' : '127' 
-            }
-
-    response = requests.get(url, params=params)
-    contents = response.text
-
-    json_ob = json.loads(contents)
-
-    body = json_ob['response']['body']['items']['item']
-
-    weather = ''
-    rain = float(body[0]['obsrValue'])
-    temperature = float(body[4]['obsrValue'])
-
-    if rain == 0:
-        weather += '맑음'
-    else:
-        if rain == 1 or rain > 3:
-            weather += '비옴'
-        elif 1 < rain < 4:
-            weather += '눈옴'
-    if temperature >= 22:
-        weather += ' 더움'
-    elif 6 <= temperature < 22:
-        weather += ' 선선'
-    elif temperature < 6:
-        weather += ' 추움'
-    
-    return weather

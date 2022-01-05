@@ -4,6 +4,7 @@ import xmltodict
 import json
 import sqlite3
 from datetime import datetime, timedelta
+from pytz import timezone
 
 
 def getCovidKR(end_day, start_day):
@@ -12,7 +13,7 @@ def getCovidKR(end_day, start_day):
     )
     # ServiceKey는 url decode 한 값임.
     payload = {
-        "ServiceKey": "iMe39kqluxTy3KP6YAVigWCB9bdhHwPAGlImMUU3oORl8jczJUynRswgvzkmLhLl/9hsSHvl3C9HNe3mRMWHmw==",
+        "ServiceKey": "서비스키",
         "startCreateDt": start_day,
         "endCreateDt": end_day,
     }
@@ -67,7 +68,7 @@ if __name__ == "__main__":
     createDb()
 
     # 문제 있는 날짜 설정 코드 대략 수정: 새벽에 하나의 데이터만 얻어와서 에러나서 수정
-    today = datetime.now() - timedelta(20)
+    today = datetime.now(timezone('Asia/Seoul')) - timedelta(20)
     yesterday = today - timedelta(1)
     d1 = today.strftime("%Y%m%d")
     d2 = yesterday.strftime("%Y%m%d")
