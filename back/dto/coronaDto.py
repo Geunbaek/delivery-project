@@ -5,7 +5,6 @@ from flask_restx import Namespace, fields
 class DateFormat(fields.Raw):
     def format(self, value):
         if len(str(value)) > 7:
-            print(value)
             return date.strftime(value, "%Y-%m-%d")
         else:
             return value
@@ -18,7 +17,7 @@ class CovDto:
         {
             "id": fields.Integer(readonly=True, description='아이디'),
             "gu": fields.String(readonly=True, description='지역 (구)'),
-            "date": DateFormat(),
+            "date": fields.Date,
             "patient_count": fields.Integer,
         },
     )
@@ -29,7 +28,7 @@ class CovDto:
             "id": fields.Integer,
             "gu": fields.String,
             "dong": fields.String,
-            "date": DateFormat(),
+            "date": fields.Date,
             "deliver_count": fields.Integer,
         },
     )

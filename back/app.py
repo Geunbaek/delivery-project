@@ -43,7 +43,8 @@ def create_app():
     from models import Model
 
     from apis.api import test_api, hello
-    from apis.corona import cov, recommendStore
+    from apis.corona import cov
+    from apis.recommend import recommendStore
 
     app.config.SWAGGER_UI_DOC_EXPANSION = "list"  # 펼쳐짐
     app.config.SWAGGER_UI_OPERATION_ID = True
