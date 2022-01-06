@@ -13,6 +13,7 @@ const TextArea = styled.div`
   width: 100%;
   /* height: 100%; */
   display: flex;
+  /* font-size: 100px; */
   /* flex-direction: column; */
   justify-content: center;
   margin-bottom: 50px;

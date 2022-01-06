@@ -8,14 +8,18 @@ const Section = styled.div`
   flex-direction: ${(props) => props.col && "column"};
   justify-content: center;
   align-items: center;
+  margin-bottom: 10%;
 `;
 
 const TextArea = styled.div`
   width: 50%;
   height: 100%;
   display: flex;
+  font-size: 100px;
   flex-direction: column;
+  justify-content: center;
   text-align: left;
+  align-items: center;
 `;
 
 const ExtraArea = styled.div`
@@ -23,21 +27,22 @@ const ExtraArea = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column-reverse;
-  align-items: center;
+  align-items: flex-end;
 `;
 
 const Btn = styled.div`
   /* width: 60%; */
   outline: none;
-  border: 2px solid black;
-  border-radius: 6px;
-  padding: 5px 20px;
-  font-size: 30px;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 40px;
   cursor: pointer;
   /* margin-bottom: 10rem; */
 
   &:hover {
-    background: #fff0f6;
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3);
   }
 `;
 

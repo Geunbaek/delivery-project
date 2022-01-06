@@ -22,12 +22,32 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
       ],
     },
     options: {
-      responsive: false,
+      legend: {
+        // display: false,
+        position: "bottom",
+        labels: {
+          // display: false,
+          fontColor: "#ffffff",
+          fontSize: 18,
+        },
+      },
+      // plugins: {
+      //   // data labels 플러그인
+      //   datalabels: {
+      //     display: false,
+      //   },
+      // },
+      // responsive: false,
       scales: {
         xAxes: [
           {
             gridLines: {
               color: color,
+            },
+            ticks: {
+              // 간격 설정
+              fontColor: "#ffffff",
+              fontSize: 13,
             },
           },
         ],
@@ -35,6 +55,11 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
           {
             gridLines: {
               color: color,
+            },
+            ticks: {
+              // 간격 설정
+              fontColor: color,
+              fontSize: 13,
             },
             id: "Infected Count",
             type: "linear",
@@ -44,6 +69,11 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
           {
             gridLines: {
               color: color,
+            },
+            ticks: {
+              // 간격 설정
+              fontColor: color,
+              fontSize: 13,
             },
             id: "Delivery Count",
             type: "linear",

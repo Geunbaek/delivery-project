@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Mousewheel } from "swiper";
+import SwiperCore, { Autoplay, Mousewheel } from "swiper";
 import "swiper/css";
 import "swiper/css/lazy";
 import styled, { css } from "styled-components";
@@ -14,25 +14,26 @@ import WhoTo from "./sections/WhoTo";
 import WhyTo from "./sections/WhyTo";
 
 import { Wrapper } from "../../styles/style/GlobalStyle";
+import bgImg from "../../assets/spaghetti.jpg";
 
-const GraphSection = styled.div`
-  width: 80%;
-  height: 80%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+// const GraphSection = styled.div`
+//   width: 80%;
+//   height: 80%;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const ScrollDisplay = styled.div`
-  width: 5rem;
+  width: 100%;
   height: 5rem;
+  z-index: 2;
   border-radius: 5rem;
   position: absolute;
   bottom: 3%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   font-size: 16px;
   ${(props) =>
@@ -45,10 +46,39 @@ const ScrollDisplay = styled.div`
 SwiperCore.use([Mousewheel]);
 
 function Main() {
-  const [swiper, setSwiper] = useState();
+  const [swiper, setSwiper] = useState(null);
+  const [isEnd, setIsEnd] = useState(false);
   return (
     <>
       <Header />
+      {isEnd ? (
+        <>
+          <ScrollDisplay up>
+            <UseAnimations
+              animation={arrowUp}
+              size={56}
+              style={{ padding: 100 }}
+              strokeColor="white"
+              key="0"
+              onClick={() => swiper.slideTo(0)}
+            />
+            <div>맨위로</div>
+          </ScrollDisplay>
+        </>
+      ) : (
+        <>
+          <ScrollDisplay>
+            <UseAnimations
+              animation={arrowDown}
+              size={56}
+              style={{ padding: 100 }}
+              strokeColor="white"
+              key="1"
+            />
+            <div>Scroll</div>
+          </ScrollDisplay>
+        </>
+      )}
       <Swiper
         direction={"vertical"}
         slidesPerView={1}
@@ -60,48 +90,26 @@ function Main() {
         // onSwiper={(swiper) => {
         //   setSwiper(swiper);
         // }}
-        onSlideChange={(swiper) => setSwiper(swiper)}
+        onSlideChange={(swiper) => {
+          setSwiper(swiper);
+          setIsEnd(swiper.isEnd);
+          console.log(swiper.isEnd);
+        }}
         className="mainSwiper"
       >
         <SwiperSlide key="section01">
-          <Wrapper color="#ffdeeb">
+          <Wrapper back={bgImg}>
             <Intro />
-            <ScrollDisplay>
-              <UseAnimations
-                animation={arrowDown}
-                size={56}
-                style={{ padding: 100 }}
-              />
-              <div>Scroll</div>
-            </ScrollDisplay>
           </Wrapper>
         </SwiperSlide>
         <SwiperSlide key="section02">
-          <Wrapper color="#ffdeeb">
-            <GraphSection>
-              <WhyTo />
-            </GraphSection>
-            <ScrollDisplay>
-              <UseAnimations
-                animation={arrowDown}
-                size={56}
-                style={{ padding: 100 }}
-              />
-              <div>Scroll</div>
-            </ScrollDisplay>
+          <Wrapper color="#b197fc">
+            <WhyTo />
           </Wrapper>
         </SwiperSlide>
         <SwiperSlide key="section03">
-          <Wrapper color="#ffdeeb">
+          <Wrapper color="#b197fc">
             <WhoTo />
-            <ScrollDisplay up onClick={() => swiper.slideTo(0)}>
-              <UseAnimations
-                animation={arrowUp}
-                size={56}
-                style={{ padding: 100 }}
-              />
-              <div>맨위로</div>
-            </ScrollDisplay>
           </Wrapper>
         </SwiperSlide>
       </Swiper>
