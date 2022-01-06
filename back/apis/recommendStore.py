@@ -136,19 +136,19 @@ class RecommendStore(Resource):
             sub_queries += "+ (CASE	when categories REGEXP ('" + \
                 likefood+"') then 100 else 50 END) * " + rate['like']
 
-        if curweather:
-            weather = curr_weather(lng, lat)
-            weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
-                FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
-            print(weatherrank)
-            first_score = 100
+        # if curweather:
+        #     weather = curr_weather(lng, lat)
+        #     weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
+        #         FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
+        #     print(weatherrank)
+        #     first_score = 100
 
-            if weatherrank[0].food == '치킨':
-                first_score -= 10
+        #     if weatherrank[0].food == '치킨':
+        #         first_score -= 10
 
-            sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
-                weatherrank[1].food+"%' then 90 when  categories like '%" + \
-                weatherrank[2].food+"%' then 80	else 50 END) * " + rate['cur']
+        #     sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
+        #         weatherrank[1].food+"%' then 90 when  categories like '%" + \
+        #         weatherrank[2].food+"%' then 80	else 50 END) * " + rate['cur']
 
         # sub_filters 와 sub_queries로 음식점 찾는 쿼리문
         recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng,
