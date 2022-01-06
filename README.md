@@ -85,6 +85,32 @@ cd back (back 디레토리로 이동)
 python app.py
 ```
 
+### [ 배포 방법 ] - 엘리스에서 임시 제공해준 MS Azure 가상머신에 배포하는 방법임.
+### 최초 배포
+### 전제 : ssh로 elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com 여기에 접속한 후 아래 절차 수행
+- 우분투에 도커 설치
+- git clone https://kdt-gitlab.elice.io/003-part3-deliveryservice/team3/project-template.git
+- mv project-template/ DATeam3  (폴더명 바꾸기, 필수아님)
+- sudo docker-compose -f docker-compose-ops.yml up
+- ( 처음이라 모든 이미지(특히 프론트엔드 설치시 오래걸림)와 컨테이너 설치하느라 시간 몇분 걸림
+웹 서비스 접속후 테스트 )
+- 웹서비스 접속 주소: http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com
+- 서버 REST API (Swagger) 문서 웹서비스 주소 - http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com:5000
+
+### 재배포 방법
+- (베스트 케이스일때)
+- cd ~/DATeam3
+- git pull
+- sudo docker-compose down (기존 돌아가고 있는 도커 컨테이너들 중지&삭제)
+- sudo docker-compose up --build   (이미지 다시 빌드하고 컨테이너도 다시생성한 후 우리 웹서비스 실행)
+
+<br>
+
+- (지저분한 상황 발생했을때)   
+- csv 파일 다운로드 못받거나 하면 다른 폴더에 소스 코드 git pull 받기
+- cd ~/DATeam3
+- sudo docker-compose down (기존 돌아가고 있는 도커 컨테이너들 중지&삭제)
+- sudo docker-compose -f docker-compose-ops.yml up (새로운 폴더에 소스를 다운 받았다면)
 
 <br><br><br><br><br><br>
 
