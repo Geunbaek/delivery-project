@@ -2,7 +2,7 @@ import datetime
 from pytz import timezone
 import random
 # Third party imports
-from flask_restx import Resource, abort
+from flask_restx import Resource, abort, inputs
 from requests.models import Response
 from sqlalchemy import func, case, desc, literal_column
 from apis.openApi import curr_weather
@@ -14,18 +14,22 @@ from dto.coronaDto import RecommendStoreDto
 recommendStore = RecommendStoreDto.api
 
 storeParser = recommendStore.parser()
-storeParser.add_argument('lat', type=float, help='위도. (예) 37.5749351791722', location='args')
-storeParser.add_argument('lng', type=float, help='경도. (예) 127.085789171262', location='args')
+storeParser.add_argument(
+    'lat', type=float, help='위도. (예) 37.5749351791722', location='args')
+storeParser.add_argument(
+    'lng', type=float, help='경도. (예) 127.085789171262', location='args')
 storeParser.add_argument('dislikefood', type=str,
                          help='싫어하는 음식 종류만 파는 음식점을 제외합니다:\n \
                          다음 음식 종류만 입력 가능합니다.\n \
-                         치킨, 한식, 한식|분식, ...', location='args')
+                         (예) 치킨, 한식, 한식|분식, ...', location='args')
 storeParser.add_argument('likefood', type=str,
                          help='좋아하는 음식 종류에 가중치를 줍니다.\n \
                         다음 음식 종류만 입력 가능합니다.\n \
                         (예) 분식, 한식, 중식|치킨, ...', location='args')
+storeParser.add_argument('curweather', type=inputs.boolean,
+                         help='날씨 반영 여부, True or False', location='args')
 
-  
+
 @recommendStore.route("/recommend-store", methods=["GET"])
 @recommendStore.doc(parser=storeParser)
 @recommendStore.response(200, "성공적으로 수행 됨")
@@ -49,15 +53,16 @@ class RecommendStore(Resource):
 
         # 프론트에서 넘어온 파라미터를 변수에 담음
         args = storeParser.parse_args()
-        lat = args['lat'] # 위도
-        lng = args['lng'] # 경도
+        lat = args['lat']  # 위도
+        lng = args['lng']  # 경도
         if lat == None or lng == None:
             abort(400, msg='요청 정보 정확하지 않음.')
         dislikefood = args['dislikefood']  # 싫어하는 음식
         likefood = args['likefood']  # 선호하는 음식
+        curweather = args['curweather']
 
         print(
-            f'lat={lat}, lng={lng}, dislikefood={dislikefood}, likefood={likefood}')
+            f'lat={lat}, lng={lng}, dislikefood={dislikefood}, likefood={likefood},cur_weather={curweather}')
 
         # sqlalchemy query와 filter에 들어갈 각각의 변수 선언
         sub_queries = ""
@@ -66,13 +71,21 @@ class RecommendStore(Resource):
         # 현재시간 반영여부
         cur_time = True
 
+        # 가중치
+        rate = {}
+
+        if cur_time == True & curweather == True:
+            rate = {'review': '0.3', 'like': '0.3', 'cur': '0.2'}
+        elif cur_time | curweather:
+            rate = {'review': '0.3', 'like': '0.4', 'cur': '0.3'}
+
         #review_q = "case([(YogiyoStore.review_avg >= 4.9, 100),(YogiyoStore.review_avg >= 4.7, 90),(YogiyoStore.review_avg >= 4.5, 80)], else_=50)*0.3"
 
         # 리뷰평점은 무조건 반영이라 if문에 안넣음
-        review_q = "(CASE	when review_avg >= 4.9 then 100 when review_avg >= 4.7 then 90 when review_avg >= 4.5 then 80 else 50 END) * 0.3"
+        review_q = "(CASE	when review_avg >= 4.9 then 100 when review_avg >= 4.7 then 90 when review_avg >= 4.5 then 80 else 50 END) * " + \
+            rate['review']
         # query에 들어갈 변수에 리뷰평점 쿼리문 추가
         sub_queries += review_q
-        print(sub_queries)
 
         # 3km이내 음식점으로 데이터 좁히는 쿼리문
         nearby_q = func.acos(
@@ -92,17 +105,24 @@ class RecommendStore(Resource):
         if cur_time:
             #sub_queries += "+ case([(YogiyoStore.categories.like('분식'), 100),(YogiyoStore.categories.like('치킨'), 90),(YogiyoStore.categories.like('피자'), 80)], else_=50)*0.3"
             # 현재시간 몇시인지 추출
-            curr_hour = int(datetime.datetime.now(timezone('Asia/Seoul')).strftime("%H"))
+            curr_hour = int(datetime.datetime.now(
+                timezone('Asia/Seoul')).strftime("%H"))
             # FoodHour테이블에서 현재시간에 제일 많이 팔린 카테고리 1,2,3위 가져오는 쿼리문
             timerank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
                 FoodHour.hour == curr_hour).group_by(FoodHour.food).order_by(desc('total')).limit(3).all()
             print(timerank[0].food)
+
+            first_score = 100
+
+            if timerank[0].food == '치킨':
+                first_score -= 10
+
             # query에 들어갈 변수에 현재시간에 많이 팔린 음식 점수반영하는 쿼리문 추가
             # yogiyostore카테고리에 1위 카테고리가 있으면 100점, 2위카테고리는 90점, 3위 카테고리는 80점, 그외는 50점
             # 이 점수의 반영비율을 30%라 0.3을 곱함
-            sub_queries += "+ (CASE when  categories like '%"+timerank[0].food+"%' then 100 when  categories like '%" + \
+            sub_queries += "+ (CASE when  categories like '%"+timerank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
                 timerank[1].food+"%' then 90 when  categories like '%" + \
-                timerank[2].food+"%' then 80	else 50 END) * 0.2"
+                timerank[2].food+"%' then 80	else 50 END) * " + rate['cur']
 
         # 선호음식이 있을때(파라미터 넘어왔을때)
         if likefood:
@@ -112,26 +132,30 @@ class RecommendStore(Resource):
             # 들어온 파라미터를 | 기준으로 yogiyostore테이블의 카테고리에서 각각 찾아서 있으면 100점 없으면 50점
             # 이 점수의 반영비율을 40%라 0.4을 곱함
             sub_queries += "+ (CASE	when categories REGEXP ('" + \
-                likefood+"') then 100 else 50 END) * 0.3"
+                likefood+"') then 100 else 50 END) * " + rate['like']
 
-        weather = curr_weather()
-        if weather:
+        if curweather:
+            weather = curr_weather(lng, lat)
             weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
                 FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
             print(weatherrank)
-            sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then 100 when  categories like '%" + \
+            first_score = 100
+
+            if weatherrank[0].food == '치킨':
+                first_score -= 10
+
+            sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
                 weatherrank[1].food+"%' then 90 when  categories like '%" + \
-                weatherrank[2].food+"%' then 80	else 50 END) * 0.2"
-        
+                weatherrank[2].food+"%' then 80	else 50 END) * " + rate['cur']
 
         # sub_filters 와 sub_queries로 음식점 찾는 쿼리문
-        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng, YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(50).all()
-        
+        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng,
+                                           YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(50).all()
+
         # 랜덤으로 섞는 코드
         random.shuffle(recommend_store)
 
         return recommend_store
-
 
 
 def get_menu():
