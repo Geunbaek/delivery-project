@@ -21,13 +21,15 @@ storeParser.add_argument(
 storeParser.add_argument('dislikefood', type=str,
                          help='싫어하는 음식 종류만 파는 음식점을 제외합니다:\n \
                          다음 음식 종류만 입력 가능합니다.\n \
-                         (예) 치킨, 한식, 한식|분식, ... \
-                         분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식', location='args')
+                         분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식\n \
+                         (예) 치킨, 한식, 한식|분식, ...',
+                         location='args')
 storeParser.add_argument('likefood', type=str,
                          help='좋아하는 음식 종류에 가중치를 줍니다.\n \
                         다음 음식 종류만 입력 가능합니다.\n \
-                        (예) 분식, 한식, 중식|치킨, ... \
-                        분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식', location='args')
+                        분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식\n \
+                        (예) 분식, 한식, 중식|치킨, ...',
+                        location='args')
 # storeParser.add_argument('curweather', type=inputs.boolean,
 #                          help='날씨 반영 여부, True or False', location='args')
 
