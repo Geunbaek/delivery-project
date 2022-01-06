@@ -63,10 +63,10 @@ def create_app():
     api = Api(
         app,
         version="0.1.0",
-        title="팀 삼시카페의 코로나 배달 분석 웹 서비스",
-        description="코로나 배달 분석 웹 서비스 REST API Swagger 문서입니다.\n \
-            소스코드상에서 문서를 관리하며,\n \
-            PostMan처럼 문서상에서 직접 테스트 할 수 있습니다.",
+        title="삼시카페 팀의 코로나 배달 분석 웹 서비스 REST API 문서",
+        description="코로나 배달 분석 웹 서비스 REST API(Swagger) 문서입니다.\n \
+            소스코드에서 문서를 관리하며,\n \
+            문서 상에서 PostMan처럼 직접 API를 작동시키며 테스트 할 수 있습니다.",
         contact="팀 GitLap : https://kdt-gitlab.elice.io/003-part3-deliveryservice/team3/project-template",
         license="3팀 license",
         license_url="https://kdt-gitlab.elice.io/003-part3-deliveryservice/team3/project-template/-/blob/master/README.md",

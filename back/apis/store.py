@@ -15,10 +15,6 @@ store = StoreDto.api
 storeParser = store.parser()
 storeParser.add_argument('lat', type=float, help='위도. (예) 37.5749351791722', location='args')
 storeParser.add_argument('lng', type=float, help='경도. (예) 127.085789171262', location='args')
-# storeParser.add_argument('dislikefood', type=str,
-#                          help='싫어하는 음식: (예) 치킨, 한식, 한식|분식', location='args')
-# storeParser.add_argument('likefood', type=str,
-#                          help='좋아하는 음식: (예) 분식, 한식, 중식|치킨', location='args')
 
 
 @store.route("/hourstore")
@@ -104,10 +100,10 @@ class DayWeekStore(Resource):
         day_foods.append(day_query[i].food)
     day_food_dict = {day_query[0].day: day_foods}
     day_key = day_query[0].day
-    print('음식 종류', len(day_foods), day_foods) # 시간대 2, 3위 음식종류
-    print('음식 종류', len(day_foods), day_food_dict) # 시간대 2, 3위 음식종류
+    print('음식 종류', len(day_foods), day_foods)
+    print('음식 종류', len(day_foods), day_food_dict)
 
-    # 3. 현재 시간대 잘 팔린 음식종류 3위까지만 필터링
+    # 3. 현재 요일대 잘 팔린 음식종류 4위까지만 필터링
     regex = r'' + '|'.join(day_foods[:4])
     result = res_query.filter(YogiyoStore.categories.op('regexp')(regex)).limit(20).all()
 
