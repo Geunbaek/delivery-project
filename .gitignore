@@ -9,12 +9,16 @@ back/venv/
 /back/view/__pycache__
 /.vscode
 
+/bin
+/lib64
+/venv
 
 # /config
 # config.py
 
 .flaskenv
-.env
+# .env
+/back/config.py
 
 
 /front/node_modules
@@ -38,3 +42,22 @@ back/venv/
 /front/yarn-debug.log*
 /front/yarn-error.log*
 
+# DB 도커 컨테이너가 사용하는 파일들
+/db/data/corona_web
+/db/data/mysql
+/db/data/performance_schema
+/db/data/aria_log.*
+/db/data/aria_log_control
+/db/data/ib_buffer_pool
+/db/data/ib_logfile*
+/db/data/ibdata*
+/db/data/multi-master.info
+/db/data/ibtmp*
+/db/data/tc.log
+# /db/data/
+/db/seoul_patient_count.csv
+/db/seoul_deliver_count.csv
+/db/seoul_delivery_count_with_patient.csv
+/db/patient_with_deliver_month.csv
+/db/food_weather.csv
+/db/yogiyo_delivery_in_seoul.csv
