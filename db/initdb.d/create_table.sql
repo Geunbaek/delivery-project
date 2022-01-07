@@ -39,6 +39,7 @@ CREATE TABLE foodhour (
 
 CREATE TABLE yogiyostore (
   id INTEGER AUTO_INCREMENT,
+  sid INTEGER,
   name VARCHAR(50) NOT NULL,
   categories VARCHAR(50) NOT NULL,
   review_avg FLOAT NOT NULL,
@@ -46,5 +47,6 @@ CREATE TABLE yogiyostore (
   lng VARCHAR(20) NOT NULL,
   phone VARCHAR(15) DEFAULT '-',
   address VARCHAR(100) NOT NULL,
+  logo_url VARCHAR(130),
   PRIMARY KEY (id)
 );

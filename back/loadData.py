@@ -89,10 +89,10 @@ with open('./data_set/yogiyo_delivery_in_seoul.csv', encoding='utf-8-sig') as da
       if c['phone'] == '':
           c['phone'] = '-'
       print(c)
-      result.append([c['name'], c['categories'], c['review_avg'], c['lat'], c['lng'], c['phone'], c['address']])
+      result.append([c['sid'], c['name'], c['categories'], c['review_avg'], c['lat'], c['lng'], c['phone'], c['address'], c['logo_url']])
 
 # csv 파일 MysQL에 삽입
-cur.executemany("insert into yogiyostore(name, categories, review_avg, lat, lng, phone, address) values(%s, %s,%s, %s, %s, %s, %s)", result)
+cur.executemany("insert into yogiyostore(sid, name, categories, review_avg, lat, lng, phone, address, logo_url) values(%s,%s,%s, %s,%s, %s, %s, %s, %s)", result)
 
 con.commit()
 con.close()

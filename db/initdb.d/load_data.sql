@@ -8,4 +8,4 @@ LOAD DATA INFILE './seoul_delivery_count_with_patient.csv' INTO TABLE patientdel
 
 LOAD DATA INFILE './food_weather.csv' INTO TABLE foodhour FIELDS TERMINATED BY ',' (date, day, hour, food, count, weather);
 
-LOAD DATA INFILE './yogiyo_delivery_in_seoul.csv' INTO TABLE yogiyostore FIELDS TERMINATED BY ',' (name, categories, review_avg, lat, lng, phone, address);
+LOAD DATA INFILE './yogiyo_delivery_in_seoul.csv' INTO TABLE yogiyostore FIELDS TERMINATED BY ',' (sid, name, categories, review_avg, lat, lng, phone, address, logo_url);

@@ -45,6 +45,7 @@ class RecommendStoreDto:
         "store_model",
         {
             "id": fields.Integer,
+            "sid": fields.Integer,
             "name": fields.String,
             "categories": fields.String,
             "review_avg": fields.String,
@@ -52,7 +53,8 @@ class RecommendStoreDto:
             "lng": fields.String,
             "phone": fields.String,
             "address": fields.String,
-            "score": fields.Integer
+            "logo_url": fields.String,
+            "score": fields.Integer,
         },
     )
 
@@ -62,12 +64,14 @@ class StoreDto:
         "store_model",
         {
             "id": fields.Integer,
+            "sid": fields.Integer,
             "name": fields.String,
             "categories": fields.String,
             "review_avg": fields.String,
             "lat": fields.String,
             "lng": fields.String,
             "phone": fields.String,
-            "address": fields.String
+            "address": fields.String,
+            "logo_url": fields.String,
         },
     )

@@ -21,13 +21,13 @@ storeParser.add_argument(
 storeParser.add_argument('dislikefood', type=str,
                          help='싫어하는 음식 종류만 파는 음식점을 제외합니다:\n \
                          다음 음식 종류만 입력 가능합니다.\n \
-                         분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식\n \
+                         한식|분식|중식|찜탕|치킨|피자|회|일식|패스트푸드|도시락|야식|족발/보쌈|아시안/양식|카페/디저트\n \
                          (예) 치킨, 한식, 한식|분식, ...',
                          location='args')
 storeParser.add_argument('likefood', type=str,
                          help='좋아하는 음식 종류에 가중치를 줍니다.\n \
                         다음 음식 종류만 입력 가능합니다.\n \
-                        분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식\n \
+                        한식|분식|중식|찜탕|치킨|피자|회|일식|패스트푸드|도시락|야식|족발/보쌈|아시안/양식|카페/디저트\n \
                         (예) 분식, 한식, 중식|치킨, ...',
                          location='args')
 # storeParser.add_argument('curweather', type=inputs.boolean,
@@ -149,23 +149,23 @@ class RecommendStore(Resource):
             sub_queries += "+ (CASE	when categories REGEXP ('" + \
                 likefood+"') then 100 else 50 END) * " + rate['like']
 
-        if curweather:
-            weather = curr_weather(lng, lat)
-            weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
-                FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
-            print(weatherrank)
-            first_score = 100
+        # if curweather:
+        #     weather = curr_weather(lng, lat)
+        #     weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
+        #         FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
+        #     print(weatherrank)
+        #     first_score = 100
 
-            if weatherrank[0].food == '치킨':
-                first_score -= 10
+        #     if weatherrank[0].food == '치킨':
+        #         first_score -= 10
 
-            sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
-                weatherrank[1].food+"%' then 90 when  categories like '%" + \
-                weatherrank[2].food+"%' then 80	else 50 END) * " + rate['cur']
+        #     sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
+        #         weatherrank[1].food+"%' then 90 when  categories like '%" + \
+        #         weatherrank[2].food+"%' then 80	else 50 END) * " + rate['cur']
 
         # sub_filters 와 sub_queries로 음식점 찾는 쿼리문
-        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng,
-                                           YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(50).all()
+        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.sid, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng,
+                                           YogiyoStore.phone, YogiyoStore.address, YogiyoStore.logo_url, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(50).all()
 
         # 랜덤으로 섞는 코드
         random.shuffle(recommend_store)

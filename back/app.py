@@ -32,10 +32,6 @@ def create_app():
         'SQLALCHEMY_TRACK_MODIFICATIONS')
     app.secret_key = os.getenv('SECRET_KEY')
 
-    # 아래 설정 확인용 코드는 2022년 1월 5일 화요일 전후 삭제 예정
-    print(f'본인이 설정한 값들 설정 잘됐는지 아래 print()에서 확인하세요')
-    print(f'DATABASE_URI = {DATABASE_URI}')
-
     CORS(app)
 
     # ORM

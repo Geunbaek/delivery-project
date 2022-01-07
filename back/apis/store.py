@@ -51,10 +51,10 @@ class HourStore(Resource):
     hour_foods = []
     for i in range(hour_query.count()):
         hour_foods.append(hour_query[i].food)
-    hour_food_dict = {hour_query[0].hour: hour_foods}
-    hour_key = hour_query[0].hour
-    print('음식 종류', len(hour_foods), hour_foods) # 시간대 2, 3위 음식종류
-    print('음식 종류', len(hour_foods), hour_food_dict) # 시간대 2, 3위 음식종류
+    # hour_food_dict = {hour_query[0].hour: hour_foods}
+    # hour_key = hour_query[0].hour
+    # print('음식 종류', len(hour_foods), hour_foods) # 시간대 배달건수 높은 음식종류
+    # print('음식 종류', len(hour_foods), hour_food_dict) # 시간대 배달건수 높은 음식종류 딕셔너리
 
     # 3. 현재 시간대 잘 팔린 음식종류 3위까지만 필터링
     regex = r'' + '|'.join(hour_foods[:3])
@@ -98,10 +98,6 @@ class DayWeekStore(Resource):
     day_foods = []
     for i in range(day_query.count()):
         day_foods.append(day_query[i].food)
-    day_food_dict = {day_query[0].day: day_foods}
-    day_key = day_query[0].day
-    print('음식 종류', len(day_foods), day_foods)
-    print('음식 종류', len(day_foods), day_food_dict)
 
     # 3. 현재 요일대 잘 팔린 음식종류 4위까지만 필터링
     regex = r'' + '|'.join(day_foods[:4])
