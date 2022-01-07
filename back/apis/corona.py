@@ -38,9 +38,12 @@ class Delivery(Resource):
 
 parser = cov.parser()
 # parser.add_argument('unit', type=str, help='day', location='args', default='month', required=True)
-parser.add_argument('unit', type=str, help='day, month, none', location='args')
-parser.add_argument('startdate', type=str, help='시작날짜', location='args')
-parser.add_argument('enddate', type=str, help='종료날짜', location='args')
+parser.add_argument(
+    'unit', type=str, help='day, month\n미입력시 startdate와 enddate도 사용하면 안됩니다.', location='args')
+parser.add_argument('startdate', type=str,
+                    help='시작날짜\nunit입력시 필수', location='args')
+parser.add_argument('enddate', type=str,
+                    help='종료날짜\nunit입력시 필수', location='args')
 
 
 @cov.route("/patient-delivery", methods=["GET"])
