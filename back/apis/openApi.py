@@ -55,9 +55,9 @@ def curr_weather(lat, lng):
         weather += '맑음'
     else:
         if rain == 1 or rain > 3:
-            weather += '비옴'
+            weather += '비'
         elif 1 < rain < 4:
-            weather += '눈옴'
+            weather += '눈'
     if temperature >= 22:
         weather += ' 더움'
     elif 6 <= temperature < 22:
