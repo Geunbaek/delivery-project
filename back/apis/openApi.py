@@ -13,15 +13,14 @@ def curr_weather(lat, lng):
     # 좌표 변환
     nX, nY = convert_to_grid.get_grid(lat, lng)
 
-    mnt = int(datetime.now(timezone('Asia/Seoul')).strftime("%M"))
     hr = int(datetime.now(timezone('Asia/Seoul')).strftime("%H"))
 
     # 진화님 코드
     # hr = datetime.now(timezone('Asia/Seoul')) - timedelta(minutes=40)
     # hr = hr.strftime("%H")+'00'
 
-    if mnt < 45:
-        hr -= 1
+
+    hr -= 1
     if hr < 10:
         hr = "0" + str(hr) + "00"
     else:
