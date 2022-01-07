@@ -1,0 +1,37 @@
+__pycache__
+back/venv/
+.venv
+*.pyc
+
+
+/back/__pycache__
+/back/view/__p_ycache__
+/.vscode
+
+
+.flaskenv
+.env
+/venv
+
+/front/node_modules
+/front/.pnp
+/front/.pnp.js
+
+# testing
+/front/coverage
+
+# production
+/front/build
+
+# misc
+/front/.DS_Store
+/front/.env.local
+/front/.env.development.local
+/front/.env.test.local
+/front/.env.production.local
+
+/front/npm-debug.log*
+/front/yarn-debug.log*
+/front/yarn-error.log*
+
+/migrations
