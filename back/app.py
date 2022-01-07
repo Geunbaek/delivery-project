@@ -18,7 +18,7 @@ def create_app():
 
     if app.config['ENV'] == 'production':
         env_file = '.env'
-    else: # 'development'
+    else:  # 'development'
         env_file = '.env.example'
     dotenv.load_dotenv(env_file)
 
@@ -28,9 +28,10 @@ def create_app():
         f"/{os.environ.get('MYSQL_DATABASE')}?charset=utf8mb4"
     )
     app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS')
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv(
+        'SQLALCHEMY_TRACK_MODIFICATIONS')
     app.secret_key = os.getenv('SECRET_KEY')
-    
+
     # 아래 설정 확인용 코드는 2022년 1월 5일 화요일 전후 삭제 예정
     print(f'본인이 설정한 값들 설정 잘됐는지 아래 print()에서 확인하세요')
     print(f'DATABASE_URI = {DATABASE_URI}')
@@ -76,11 +77,10 @@ def create_app():
     api.add_namespace(store)
     api.add_namespace(foodrank)
     api.add_namespace(cov)
-    api.add_namespace(hello)
-    api.add_namespace(test_api)
+    # api.add_namespace(hello)
+    # api.add_namespace(test_api)
 
     return app
-
 
 
 if __name__ == "__main__":
