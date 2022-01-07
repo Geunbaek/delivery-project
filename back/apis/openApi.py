@@ -41,7 +41,7 @@ def curr_weather(lat, lng):
               }
 
     response = requests.get(url, params=params)
-    contents = response.text
+    contents = (response.text).encode('utf-8')
 
     json_ob = json.loads(contents)
 
