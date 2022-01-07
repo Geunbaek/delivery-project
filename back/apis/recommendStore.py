@@ -29,7 +29,7 @@ storeParser.add_argument('likefood', type=str,
                         다음 음식 종류만 입력 가능합니다.\n \
                         분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식\n \
                         (예) 분식, 한식, 중식|치킨, ...',
-                        location='args')
+                         location='args')
 # storeParser.add_argument('curweather', type=inputs.boolean,
 #                          help='날씨 반영 여부, True or False', location='args')
 
@@ -63,7 +63,7 @@ class RecommendStore(Resource):
             abort(400, msg='요청 정보 정확하지 않음.')
         dislikefood = args['dislikefood']  # 싫어하는 음식
         likefood = args['likefood']  # 선호하는 음식
-        curweather = True # args['curweather']
+        curweather = True  # args['curweather']
 
         print(
             f'lat={lat}, lng={lng}, dislikefood={dislikefood}, likefood={likefood},cur_weather={curweather}')
@@ -114,7 +114,12 @@ class RecommendStore(Resource):
             # FoodHour테이블에서 현재시간에 제일 많이 팔린 카테고리 1,2,3위 가져오는 쿼리문
             timerank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
                 FoodHour.hour == curr_hour).group_by(FoodHour.food).order_by(desc('total')).limit(3).all()
-            print(timerank[0].food)
+
+            sbq = db.session.query(FoodHour.food, (func.sum(
+                FoodHour.count)/24).label('avg')).group_by(FoodHour.food).subquery()
+
+            timeraterank = db.session.query(FoodHour.food, (func.sum(FoodHour.count)/sbq.c.avg).label('rate')).join(sbq, sbq.c.food == FoodHour.food).filter(
+                FoodHour.hour == curr_hour).group_by(FoodHour.food).order_by(desc('rate')).limit(3).all()
 
             first_score = 100
 
@@ -126,7 +131,13 @@ class RecommendStore(Resource):
             # 이 점수의 반영비율을 30%라 0.3을 곱함
             sub_queries += "+ (CASE when  categories like '%"+timerank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
                 timerank[1].food+"%' then 90 when  categories like '%" + \
-                timerank[2].food+"%' then 80	else 50 END) * " + rate['cur']
+                timerank[2].food+"%' then 80	else 50 END) * " + \
+                str(float(rate['cur'])/2)
+
+            sub_queries += "+ (CASE when  categories like '%"+timeraterank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
+                timeraterank[1].food+"%' then 90 when  categories like '%" + \
+                timeraterank[2].food + \
+                "%' then 80	else 50 END) * " + str(float(rate['cur'])/2)
 
         # 선호음식이 있을때(파라미터 넘어왔을때)
         if likefood:
