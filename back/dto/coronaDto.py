@@ -45,6 +45,7 @@ class RecommendStoreDto:
         "store_model",
         {
             "id": fields.Integer,
+            "sid": fields.Integer,
             "name": fields.String,
             "categories": fields.String,
             "review_avg": fields.String,
@@ -52,9 +53,11 @@ class RecommendStoreDto:
             "lng": fields.String,
             "phone": fields.String,
             "address": fields.String,
+            "logo_url": fields.String,
             "score": fields.Integer
         },
     )
+
 
 class StoreDto:
     api = Namespace("store2", description="배달 건수 분석 정보와 연관된 음식점 정보 얻는 Apis")
@@ -62,12 +65,14 @@ class StoreDto:
         "store_model",
         {
             "id": fields.Integer,
+            "sid": fields.Integer,
             "name": fields.String,
             "categories": fields.String,
             "review_avg": fields.String,
             "lat": fields.String,
             "lng": fields.String,
             "phone": fields.String,
-            "address": fields.String
+            "address": fields.String,
+            "logo_url": fields.String
         },
     )
