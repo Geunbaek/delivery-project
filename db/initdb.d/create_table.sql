@@ -25,7 +25,6 @@ CREATE TABLE patientdelivery (
   patient_count INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
-
 CREATE TABLE foodhour (
   id INTEGER AUTO_INCREMENT,
   date date NOT NULL,
@@ -36,9 +35,9 @@ CREATE TABLE foodhour (
   weather VARCHAR(10) NOT NULL,
   PRIMARY KEY (id)
 );
-
 CREATE TABLE yogiyostore (
   id INTEGER AUTO_INCREMENT,
+  sid INTEGER,
   name VARCHAR(50) NOT NULL,
   categories VARCHAR(50) NOT NULL,
   review_avg FLOAT NOT NULL,
@@ -46,5 +45,12 @@ CREATE TABLE yogiyostore (
   lng VARCHAR(20) NOT NULL,
   phone VARCHAR(15) DEFAULT '-',
   address VARCHAR(100) NOT NULL,
+  logo_url VARCHAR(130),
+  PRIMARY KEY (id)
+);
+CREATE TABLE weatherbyhour (
+  id INTEGER AUTO_INCREMENT,
+  hour VARCHAR(3) NOT NULL UNIQUE,
+  weather VARCHAR(10),
   PRIMARY KEY (id)
 );
