@@ -20,7 +20,7 @@
 
 <사용 데이터 셋>
 - [서울시 코로나19 확진자 현황](https://data.seoul.go.kr/dataList/OA-20279/S/1/datasetView.do)
-- ['시간-지역별 배달 주문건수' 링크(엘리스 제공)](https://drive.google.com/drive/folders/1VrvdWCp6S3uoawYIjZFEWTM8f_ds8VM5)
+- ['시간-지역별 배달 주문건수' 링크](https://bdp.kt.co.kr/invoke/SOKBP2603/?goodsCode=KGUTIMEORDER)
 - ['업종-지역별 배달 주문건수' (KT 통신 빅데이터 플랫폼)](https://bdp.kt.co.kr/invoke/SOKBP2603/?goodsCode=KGUINDTORDER)
 - [기상청_단기예보 ((구)_동네예보) 조회서비스](https://www.data.go.kr/iim/api/selectAPIAcountView.do)
 - 요기요 크롤링
