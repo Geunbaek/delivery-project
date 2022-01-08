@@ -4,7 +4,7 @@ NX = 149  # X축 격자점 수
 NY = 253  # Y축 격자점 수
 
 
-def get_grid(lon, lat):
+def get_grid(lat, lon):
     # 동네예보 지도 정보
     class map:
         pass

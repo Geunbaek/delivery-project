@@ -1,4 +1,3 @@
-import datetime
 from pytz import timezone
 import random
 # Third party imports
@@ -6,9 +5,10 @@ from flask_restx import Resource, abort, inputs
 from requests.models import Response
 from sqlalchemy import func, case, desc, literal_column
 from apis.openApi import curr_weather
+from datetime import datetime, timedelta
 # Local application imports
 from db_connect import db
-from models.Model import YogiyoStore, FoodHour
+from models.Model import YogiyoStore, FoodHour, WeatherByHour
 from dto.coronaDto import RecommendStoreDto
 
 recommendStore = RecommendStoreDto.api
@@ -21,13 +21,13 @@ storeParser.add_argument(
 storeParser.add_argument('dislikefood', type=str,
                          help='싫어하는 음식 종류만 파는 음식점을 제외합니다:\n \
                          다음 음식 종류만 입력 가능합니다.\n \
-                         분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식\n \
+                         한식|분식|중식|찜탕|치킨|피자|회|일식|패스트푸드|도시락|야식|족발/보쌈|아시안/양식|카페/디저트\n \
                          (예) 치킨, 한식, 한식|분식, ...',
                          location='args')
 storeParser.add_argument('likefood', type=str,
                          help='좋아하는 음식 종류에 가중치를 줍니다.\n \
                         다음 음식 종류만 입력 가능합니다.\n \
-                        분식|야식|족발/보쌈|찜탕|치킨|카페/디저트|피자|한식|회|돈까스/일식|패스트푸드|아시안/양식|도시락|중식\n \
+                        한식|분식|중식|찜탕|치킨|피자|회|일식|패스트푸드|도시락|야식|족발/보쌈|아시안/양식|카페/디저트\n \
                         (예) 분식, 한식, 중식|치킨, ...',
                          location='args')
 # storeParser.add_argument('curweather', type=inputs.boolean,
@@ -109,7 +109,7 @@ class RecommendStore(Resource):
         if cur_time:
             #sub_queries += "+ case([(YogiyoStore.categories.like('분식'), 100),(YogiyoStore.categories.like('치킨'), 90),(YogiyoStore.categories.like('피자'), 80)], else_=50)*0.3"
             # 현재시간 몇시인지 추출
-            curr_hour = int(datetime.datetime.now(
+            curr_hour = int(datetime.now(
                 timezone('Asia/Seoul')).strftime("%H"))
             # FoodHour테이블에서 현재시간에 제일 많이 팔린 카테고리 1,2,3위 가져오는 쿼리문
             timerank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
@@ -150,32 +150,47 @@ class RecommendStore(Resource):
                 likefood+"') then 100 else 50 END) * " + rate['like']
 
         if curweather:
-            weather = curr_weather(lng, lat)
-            weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
-                FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
-            print(weatherrank)
-            first_score = 100
 
-            if weatherrank[0].food == '치킨':
-                first_score -= 10
+            try:
+                print("openAPI")
+                weather = curr_weather(lat, lng)
+            except:
+                print("from db")
+                hour = (datetime.now(timezone('Asia/Seoul')) -
+                        timedelta(hours=1)).strftime("%H")
+                weather = db.session.query(WeatherByHour.weather).filter(
+                    WeatherByHour.hour == hour).first()[0]
 
-            sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
-                weatherrank[1].food+"%' then 90 when  categories like '%" + \
-                weatherrank[2].food+"%' then 80	else 50 END) * " + rate['cur']
+            print(weather)
+
+            if (weather) and (weather != ''):
+
+                weatherrank = db.session.query(FoodHour.food, func.sum(FoodHour.count).label('total')).filter(
+                    FoodHour.weather == weather).group_by(FoodHour.food).order_by(desc('total')).all()
+                print(weatherrank)
+                first_score = 100
+
+                if weatherrank[0].food == '치킨':
+                    first_score -= 10
+
+                sub_queries += "+ (CASE when  categories like '%"+weatherrank[0].food+"%' then " + str(first_score) + " when  categories like '%" + \
+                    weatherrank[1].food+"%' then 90 when  categories like '%" + \
+                    weatherrank[2].food + \
+                    "%' then 80	else 50 END) * " + rate['cur']
 
         # sub_filters 와 sub_queries로 음식점 찾는 쿼리문
-        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng,
-                                           YogiyoStore.phone, YogiyoStore.address, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(50).all()
+        recommend_store = db.session.query(YogiyoStore.id, YogiyoStore.sid, YogiyoStore.name, YogiyoStore.categories, YogiyoStore.review_avg, YogiyoStore.lat, YogiyoStore.lng,
+                                           YogiyoStore.phone, YogiyoStore.address, YogiyoStore.logo_url, literal_column(sub_queries).label('score')).filter(*sub_filters).order_by(desc('score')).limit(50).all()
 
         # 랜덤으로 섞는 코드
         random.shuffle(recommend_store)
 
-        return recommend_store
+        return recommend_store[:10]
 
 
 def get_menu():
     '''시간 별로 가장 많이 시킨 배달 음식 추천'''
-    curr_date = datetime.datetime.now(timezone('Asia/Seoul'))
+    curr_date = datetime.now(timezone('Asia/Seoul'))
     curr_hour = int(curr_date.strftime("%H"))
 
     new_food = db.session.query(FoodHour).filter(

@@ -13,8 +13,10 @@ from apis.util import getNearStore, getFoodKindRankByHour, getFoodKindRankByDay,
 store = StoreDto.api
 
 storeParser = store.parser()
-storeParser.add_argument('lat', type=float, help='위도. (예) 37.5749351791722', location='args')
-storeParser.add_argument('lng', type=float, help='경도. (예) 127.085789171262', location='args')
+storeParser.add_argument(
+    'lat', type=float, help='위도. (예) 37.5749351791722', location='args')
+storeParser.add_argument(
+    'lng', type=float, help='경도. (예) 127.085789171262', location='args')
 
 
 @store.route("/hourstore")
@@ -23,46 +25,47 @@ storeParser.add_argument('lng', type=float, help='경도. (예) 127.085789171262
 @store.response(400, "요청 정보 정확하지 않음")
 @store.response(500, "API 서버에 문제가 발생하였음")
 class HourStore(Resource):
-  @store.marshal_with(StoreDto.store_model, envelope="data")
-  @store.expect(storeParser)
-  def get(self):
-    '''현재 시간대 배달을 많이 시킨 음식 종류를 파는 주변 음식점 정보 얻기
-       즉, 시간별 잘 팔린 음식 종류 분석 데이터와 주변 음식점 매칭
-    '''
-    args = storeParser.parse_args()
-    # 디폴트 좌표값 : 강남구
-    lat = args['lat'] if args['lat'] != None else 37.514575
-    lng = args['lng'] if args['lat'] != None else 127.04955555555556
-    if lat == None or lng == None:
-        abort(400, msg='요청 정보 정확하지 않음.')
-    
-    # 요기요 테이블 시작 [[
-    # 1. 평점으로 필터링
-    avg_review_point = 4.5
-    res_query = db.session.query(YogiyoStore).filter(YogiyoStore.review_avg >= avg_review_point)
+    @store.marshal_with(StoreDto.store_model, envelope="data")
+    @store.expect(storeParser)
+    def get(self):
+        '''현재 시간대 배달을 많이 시킨 음식 종류를 파는 주변 음식점 정보 얻기
+           즉, 시간별 잘 팔린 음식 종류 분석 데이터와 주변 음식점 매칭
+        '''
+        args = storeParser.parse_args()
+        # 디폴트 좌표값 : 강남구
+        lat = args['lat'] if args['lat'] != None else 37.514575
+        lng = args['lng'] if args['lat'] != None else 127.04955555555556
+        if lat == None or lng == None:
+            abort(400, msg='요청 정보 정확하지 않음.')
 
-    # 2. 거리 필터링
-    res_query = getNearStore(res_query, lat, lng)
-    # 요기요 테이블 끝 ]]
+        # 요기요 테이블 시작 [[
+        # 1. 평점으로 필터링
+        avg_review_point = 4.5
+        res_query = db.session.query(YogiyoStore).filter(
+            YogiyoStore.review_avg >= avg_review_point)
 
-    # FoodHour 테이블
-    # 3. 현재 시간대 잘 팔린 음식종류 순위 얻기
-    hour_query = getFoodKindRankByHour(None)
-    hour_foods = []
-    for i in range(hour_query.count()):
-        hour_foods.append(hour_query[i].food)
-    hour_food_dict = {hour_query[0].hour: hour_foods}
-    hour_key = hour_query[0].hour
-    print('음식 종류', len(hour_foods), hour_foods) # 시간대 2, 3위 음식종류
-    print('음식 종류', len(hour_foods), hour_food_dict) # 시간대 2, 3위 음식종류
+        # 2. 거리 필터링
+        res_query = getNearStore(res_query, lat, lng)
+        # 요기요 테이블 끝 ]]
 
-    # 3. 현재 시간대 잘 팔린 음식종류 3위까지만 필터링
-    regex = r'' + '|'.join(hour_foods[:3])
-    result = res_query.filter(YogiyoStore.categories.op('regexp')(regex)).limit(20).all()
+        # FoodHour 테이블
+        # 3. 현재 시간대 잘 팔린 음식종류 순위 얻기
+        hour_query = getFoodKindRankByHour(None)
+        hour_foods = []
+        for i in range(hour_query.count()):
+            hour_foods.append(hour_query[i].food)
+        # hour_food_dict = {hour_query[0].hour: hour_foods}
+        # hour_key = hour_query[0].hour
+        # print('음식 종류', len(hour_foods), hour_foods) # 시간대 2, 3위 음식종류
+        # print('음식 종류', len(hour_foods), hour_food_dict) # 시간대 2, 3위 음식종류
 
-    random.shuffle(result)
-    return result
+        # 3. 현재 시간대 잘 팔린 음식종류 3위까지만 필터링
+        regex = r'' + '|'.join(hour_foods[:3])
+        result = res_query.filter(YogiyoStore.categories.op(
+            'regexp')(regex)).limit(20).all()
 
+        random.shuffle(result)
+        return result
 
 
 @store.route("/dayweekstore")
@@ -71,44 +74,42 @@ class HourStore(Resource):
 @store.response(400, "요청 정보 정확하지 않음")
 @store.response(500, "API 서버에 문제가 발생하였음")
 class DayWeekStore(Resource):
-  @store.marshal_with(StoreDto.store_model, envelope="data")
-  @store.expect(storeParser)
-  def get(self):
-    '''현재 요일에 배달 건수 높은 음식 종류 파는 주변 음식점 정보
-       즉, 요일별 배달이 많이 된 음식 종류 분석 데이터와 주변 음식점 매칭
-    '''
-    args = storeParser.parse_args()
-    # 디폴트 좌표값 : 강남구
-    lat = args['lat'] if args['lat'] != None else 37.514575
-    lng = args['lng'] if args['lat'] != None else 127.04955555555556
-    if lat == None or lng == None:
-        abort(400, msg='요청 정보 정확하지 않음.')
-    
-    # 1. 평점으로 필터링
-    avg_review_point = 4.5
-    res_query = db.session.query(YogiyoStore).filter(YogiyoStore.review_avg >= avg_review_point)
+    @store.marshal_with(StoreDto.store_model, envelope="data")
+    @store.expect(storeParser)
+    def get(self):
+        '''현재 요일에 배달 건수 높은 음식 종류 파는 주변 음식점 정보
+           즉, 요일별 배달이 많이 된 음식 종류 분석 데이터와 주변 음식점 매칭
+        '''
+        args = storeParser.parse_args()
+        # 디폴트 좌표값 : 강남구
+        lat = args['lat'] if args['lat'] != None else 37.514575
+        lng = args['lng'] if args['lat'] != None else 127.04955555555556
+        if lat == None or lng == None:
+            abort(400, msg='요청 정보 정확하지 않음.')
 
-    # 2. 거리 필터링
-    res_query = getNearStore(res_query, lat, lng)
-    # 요기요 테이블 끝
+        # 1. 평점으로 필터링
+        avg_review_point = 4.5
+        res_query = db.session.query(YogiyoStore).filter(
+            YogiyoStore.review_avg >= avg_review_point)
 
-    # FoodHour 테이블
-    # 현재 요일 배달 건수 높은 음식 종류 쿼리 얻기
-    day_query = getFoodKindRankByDay(None)
-    day_foods = []
-    for i in range(day_query.count()):
-        day_foods.append(day_query[i].food)
-    day_food_dict = {day_query[0].day: day_foods}
-    day_key = day_query[0].day
-    print('음식 종류', len(day_foods), day_foods)
-    print('음식 종류', len(day_foods), day_food_dict)
+        # 2. 거리 필터링
+        res_query = getNearStore(res_query, lat, lng)
+        # 요기요 테이블 끝
 
-    # 3. 현재 요일대 잘 팔린 음식종류 4위까지만 필터링
-    regex = r'' + '|'.join(day_foods[:4])
-    result = res_query.filter(YogiyoStore.categories.op('regexp')(regex)).limit(20).all()
+        # FoodHour 테이블
+        # 현재 요일 배달 건수 높은 음식 종류 쿼리 얻기
+        day_query = getFoodKindRankByDay(None)
+        day_foods = []
+        for i in range(day_query.count()):
+            day_foods.append(day_query[i].food)
 
-    random.shuffle(result)
-    return result
+        # 3. 현재 요일대 잘 팔린 음식종류 4위까지만 필터링
+        regex = r'' + '|'.join(day_foods[:4])
+        result = res_query.filter(YogiyoStore.categories.op(
+            'regexp')(regex)).limit(20).all()
+
+        random.shuffle(result)
+        return result
 
 
 @store.route("/starrating-store")
@@ -117,33 +118,33 @@ class DayWeekStore(Resource):
 @store.response(400, "요청 정보 정확하지 않음")
 @store.response(500, "API 서버에 문제가 발생하였음")
 class StarRatingStore(Resource):
-  @store.marshal_with(StoreDto.store_model, envelope="data")
-  @store.expect(storeParser)
-  def get(self):
-    '''평점이 높은 주변 음식점 정보 얻기
-    '''
-    args = storeParser.parse_args()
-    # 디폴트 좌표값 : 강남구
-    lat = args['lat'] if args['lat'] != None else 37.514575
-    lng = args['lng'] if args['lat'] != None else 127.04955555555556
-    
-    # 1. 평점으로 필터링
-    avg_review_point = 4.3
-    res_query = db.session.query(YogiyoStore).filter(YogiyoStore.review_avg >= avg_review_point)
-    # 2. 거리 필터링
-    res_query = getNearStore(res_query, lat, lng)
-    # 3. Ordering
-    result = res_query.order_by(YogiyoStore.review_avg.desc()).limit(20).all()
+    @store.marshal_with(StoreDto.store_model, envelope="data")
+    @store.expect(storeParser)
+    def get(self):
+        '''평점이 높은 주변 음식점 정보 얻기
+        '''
+        args = storeParser.parse_args()
+        # 디폴트 좌표값 : 강남구
+        lat = args['lat'] if args['lat'] != None else 37.514575
+        lng = args['lng'] if args['lat'] != None else 127.04955555555556
 
-    random.shuffle(result)   
-    return result
+        # 1. 평점으로 필터링
+        avg_review_point = 4.3
+        res_query = db.session.query(YogiyoStore).filter(
+            YogiyoStore.review_avg >= avg_review_point)
+        # 2. 거리 필터링
+        res_query = getNearStore(res_query, lat, lng)
+        # 3. Ordering
+        result = res_query.order_by(
+            YogiyoStore.review_avg.desc()).limit(20).all()
 
-
-
+        random.shuffle(result)
+        return result
 
 
 '''FoodHour 테이블 분석 데이터 관려 APIs'''
 foodrank = Namespace("foodrank", description="데이터 분석 결과 리턴 APIs")
+
 
 @foodrank.route("/hourly", methods=["GET"])
 class HourFoodKindRank(Resource):
@@ -153,7 +154,7 @@ class HourFoodKindRank(Resource):
         fdict = {}
         for row in hour_query:
             fdict[row.hour] = fdict.setdefault(row.hour, [])
-            fdict[row.hour].append(row.food)
+            fdict[row.hour].append([row.food, row.cnt])
 
         return jsonify(dict(data=[fdict]))
 
@@ -166,7 +167,7 @@ class DayFoodKindRank(Resource):
         fdict = {}
         for row in day_query:
             fdict[row.day] = fdict.setdefault(row.day, [])
-            fdict[row.day].append(row.food)
+            fdict[row.day].append([row.food, row.cnt])
 
         return jsonify(dict(data=[fdict]))
 
@@ -179,6 +180,6 @@ class WeatherFoodKindRank(Resource):
         fdict = {}
         for row in weather_query:
             fdict[row.weather] = fdict.setdefault(row.weather, [])
-            fdict[row.weather].append(row.food)
+            fdict[row.weather].append([row.food, row.cnt])
 
         return jsonify(dict(data=[fdict]))
