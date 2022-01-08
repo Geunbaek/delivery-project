@@ -37,7 +37,7 @@
     - FrontEnd : React, React-Redux, Redux-saga, Chart.js, Kakaomap, styled-component, etc
     - BackEnd : python3, Flask, flask-restx, MariaDB, flask-SqlAlchemy, Docker-compose, Swagger Rest Api Doc, Open API, etc
   - 배포 환경: MS Azure VM (Ubuntu 20.04, 엘리스측 제공)
-  - 실행 환경: ![실행_구조_Docker-compose__개발](uploads/a1afabe19574e4c4cc7c9271b5d768c9/실행_구조_Docker-compose__개발.png)
+  - 실행 환경: ![실행_구조_Docker-compose__개발](/uploads/bc541e1be98afddc0bd62fb8adb7dfb7/Docker_compose_dev.png)
 
 ## 4. 프로젝트 팀원 역할 분담
 | 이름 | 담당 업무 |
