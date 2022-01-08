@@ -1,8 +1,9 @@
-import styled, { css } from "styled-components";
-import { categories } from "../../../data/categories";
-import { ReactComponent as FastFood } from "../../../assets/fastFood.svg";
-import { useState } from "react";
-import * as Btns from "./Buttons";
+import styled from "styled-components";
+import * as Btns from "./foodButtons";
+import { useSelector, useDispatch } from "react-redux";
+import { setLike } from "../../../modules/preference";
+import { useEffect, useState } from "react";
+import { Btn } from "../../etc/button";
 
 const Section = styled.div`
   width: 43%;
@@ -15,7 +16,6 @@ const Section = styled.div`
 
 const TextArea = styled.div`
   width: 100%;
-  /* height: 100%; */
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -37,29 +37,38 @@ const BtnWrapper = styled.div`
   flex-direction: column;
 `;
 
-function LikeFood({ swiperHandle, preferenceFood, preferenceFoodHandle }) {
-  // const [likeFood, setLikeFood] = useState(categories);
+function LikeFood() {
+  const [likeCount, setLikeCount] = useState(0);
+  const { categories } = useSelector((state) => state.preference);
+  const dispatch = useDispatch();
 
-  // const addLikeFood = (category) => {
-  //   setLikeFood((food) => {
-  //     return { ...food, [category]: food[category] === 0 ? 1 : 0 };
-  //   });
-  // };
+  useEffect(() => {
+    setLikeCount(
+      Object.values(categories).filter((status) => status === 1).length
+    );
+  }, [categories]);
 
+  const setLikeHandle = (btnName) => {
+    if (likeCount >= 2 && categories[btnName] === 0) {
+      alert("최대 2가지만 선택 가능합니다 !");
+      return;
+    }
+    dispatch(setLike(btnName));
+  };
   return (
     <>
       <Section col>
-        <TextArea>선호하는 음식을 선택해주세요.</TextArea>
+        <TextArea>선호하는 음식을 선택해주세요. (0 ~ 2 가지)</TextArea>
         <BtnArea>
           {Object.entries(Btns.btns).map((btnInfo, idx) => {
             const [btnName, Btn] = btnInfo;
             return (
               <BtnWrapper key={idx}>
                 <Btn
-                  $isactivated={preferenceFood[btnName]}
-                  like
-                  status={preferenceFood[btnName]}
-                  onClick={() => preferenceFoodHandle(btnName, 1)}
+                  $isactivated={categories[btnName]}
+                  like="true"
+                  status={categories[btnName]}
+                  onClick={() => setLikeHandle(btnName)}
                 />
                 <div style={{ fontSize: "20px", color: "black" }}>
                   {btnName}
@@ -68,6 +77,7 @@ function LikeFood({ swiperHandle, preferenceFood, preferenceFoodHandle }) {
             );
           })}
         </BtnArea>
+        <Btn>다음</Btn>
       </Section>
     </>
   );

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { categories } from "../../../data/categories";
-import * as Btns from "./Buttons";
-
-import { useState } from "react";
+import * as Btns from "./foodButtons";
+import { useSelector, useDispatch } from "react-redux";
+import { setDislike } from "../../../modules/preference";
+import { Btn } from "../../etc/button";
 
 const Section = styled.div`
   width: 43%;
@@ -15,7 +15,6 @@ const Section = styled.div`
 
 const TextArea = styled.div`
   width: 100%;
-  /* height: 100%; */
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -37,42 +36,23 @@ const BtnWrapper = styled.div`
   flex-direction: column;
 `;
 
-const GetPosBtn = styled.button`
-  width: 5rem;
-  height: 4rem;
-  background-color: #b197fc;
-  border-radius: 1rem;
-  margin-left: 0.5rem;
-  font-size: 1.5rem;
-  border: 2px solid black;
-  text-align: center;
-  color: white;
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-`;
-
-function DislikeFood({ swiperHandle, preferenceFood, preferenceFoodHandle }) {
-  // const [dislikeFood, setDislikeFood] = useState(categories);
-  // const addLikeFood = (category) => {
-  //   setDislikeFood((food) => {
-  //     return { ...food, [category]: !food[category] };
-  //   });
-  // };
+function DislikeFood({ swiperHandle }) {
+  const { categories } = useSelector((state) => state.preference);
+  const dispatch = useDispatch();
   return (
     <>
       <Section col>
-        <TextArea>싫어하는 음식을 선택해주세요.</TextArea>
+        <TextArea>싫어하는 음식을 선택해주세요. (필수 X)</TextArea>
         <BtnArea>
           {Object.entries(Btns.btns).map((btnInfo, idx) => {
             const [btnName, Btn] = btnInfo;
             return (
               <BtnWrapper key={idx}>
                 <Btn
-                  $isactivated={preferenceFood[btnName]}
-                  dislike
-                  status={preferenceFood[btnName]}
-                  onClick={() => preferenceFoodHandle(btnName, 2)}
+                  $isactivated={categories[btnName]}
+                  dislike="true"
+                  status={categories[btnName]}
+                  onClick={() => dispatch(setDislike(btnName))}
                 />
                 <div style={{ fontSize: "20px", color: "black" }}>
                   {btnName}
@@ -81,7 +61,7 @@ function DislikeFood({ swiperHandle, preferenceFood, preferenceFoodHandle }) {
             );
           })}
         </BtnArea>
-        <GetPosBtn onClick={swiperHandle}>다음</GetPosBtn>
+        <Btn onClick={swiperHandle}>완료</Btn>
       </Section>
     </>
   );

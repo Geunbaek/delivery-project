@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { getGraphDataAPI } from "../api/graphData";
+import { reducerUtils } from "../lib/reducerUtil";
 
 const GET_GRAPH_DATA = "graphData/GET_GRAPH_DATA";
 const GET_GRAPH_DATA_SUCCESS = "graphData/GET_GRAPH_DATA_SUCCESS";
@@ -26,7 +27,7 @@ function* getGraphDataSaga(action) {
       payload: { label, patient, deliver },
     });
   } catch (e) {
-    yield put({ type: GET_GRAPH_DATA_ERROR, payload: e });
+    yield put({ type: GET_GRAPH_DATA_ERROR, error: e });
   }
 }
 
@@ -34,32 +35,16 @@ export function* graphDataSaga() {
   yield takeEvery(GET_GRAPH_DATA, getGraphDataSaga);
 }
 
-const initialState = {
-  loading: false,
-  data: null,
-  error: null,
-};
+const initialState = reducerUtils.initial();
 
 export default function graphData(state = initialState, action) {
   switch (action.type) {
     case GET_GRAPH_DATA:
-      return {
-        loading: true,
-        data: null,
-        error: null,
-      };
+      return reducerUtils.loading();
     case GET_GRAPH_DATA_SUCCESS:
-      return {
-        loading: false,
-        data: action.payload,
-        error: null,
-      };
+      return reducerUtils.success(action.payload);
     case GET_GRAPH_DATA_ERROR:
-      return {
-        loading: false,
-        data: null,
-        error: action.payload,
-      };
+      return reducerUtils.error(action.error);
     default:
       return state;
   }

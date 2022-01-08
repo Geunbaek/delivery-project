@@ -1,14 +1,20 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { MOBILE_LAYOUT, PC_LAYOUT, TABLET_LAYOUT } from "../../../data/layout";
 
 const Section = styled.div`
   width: 43%;
-  height: 50%;
+  height: 630px;
   display: flex;
-  flex-direction: ${(props) => props.col && "column"};
   justify-content: center;
   align-items: center;
-  margin-bottom: 10%;
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    width: 60%;
+  }
 `;
 
 const TextArea = styled.div`
@@ -20,6 +26,11 @@ const TextArea = styled.div`
   justify-content: center;
   text-align: left;
   align-items: center;
+
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    font-size: 60px;
+    padding-top: 200px;
+  }
 `;
 
 const ExtraArea = styled.div`
@@ -28,17 +39,20 @@ const ExtraArea = styled.div`
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;
+
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    font-size: 60px;
+    align-items: center;
+  }
 `;
 
 const Btn = styled.div`
-  /* width: 60%; */
   outline: none;
   border: 2px solid white;
   border-radius: 10px;
   padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
-  /* margin-bottom: 10rem; */
 
   &:hover {
     transform: scale(1.05);
@@ -49,8 +63,7 @@ const Btn = styled.div`
 function Intro() {
   const history = useNavigate();
 
-  const onClick = (e) => {
-    e.preventDefault();
+  const onClick = () => {
     history("/survey");
   };
   return (

@@ -8,7 +8,7 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
           data: coronaCnt,
           fill: false,
           yAxisID: "Infected Count",
-          borderColor: "rgb(75, 192, 192)",
+          borderColor: "red",
           tension: 0.1,
         },
         {
@@ -16,37 +16,28 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
           data: deliverCnt,
           fill: false,
           yAxisID: "Delivery Count",
-          borderColor: "rgb(230, 126, 34)",
+          borderColor: "rgb(75, 192, 192)",
           tension: 0.1,
         },
       ],
     },
     options: {
       legend: {
-        // display: false,
         position: "bottom",
         labels: {
-          // display: false,
-          fontColor: "#ffffff",
+          fontColor: "black",
           fontSize: 18,
         },
       },
-      // plugins: {
-      //   // data labels 플러그인
-      //   datalabels: {
-      //     display: false,
-      //   },
-      // },
-      // responsive: false,
+
       scales: {
         xAxes: [
           {
             gridLines: {
-              color: color,
+              color: "white",
             },
             ticks: {
-              // 간격 설정
-              fontColor: "#ffffff",
+              fontColor: "black",
               fontSize: 13,
             },
           },
@@ -54,11 +45,11 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
         yAxes: [
           {
             gridLines: {
-              color: color,
+              color: "white",
             },
             ticks: {
               // 간격 설정
-              fontColor: color,
+              fontColor: "white",
               fontSize: 13,
             },
             id: "Infected Count",
@@ -68,11 +59,11 @@ export const chartData = (label, coronaCnt, deliverCnt, color) => {
           },
           {
             gridLines: {
-              color: color,
+              color: "white",
             },
             ticks: {
               // 간격 설정
-              fontColor: color,
+              fontColor: "white",
               fontSize: 13,
             },
             id: "Delivery Count",
