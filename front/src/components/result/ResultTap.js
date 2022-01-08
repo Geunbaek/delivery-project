@@ -31,6 +31,7 @@ function ResultTap({ activeBtn, setActiveBtn }) {
           <Tap
             isActive={index === activeBtn}
             onClick={() => setActiveBtn(index)}
+            key={index}
           >
             {tapName}
           </Tap>
