@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import testImg from "../../../assets/1.png";
+import ReactPlayer from "react-player/youtube";
 
 const Section = styled.div`
   width: 60%;
@@ -11,10 +11,7 @@ const Section = styled.div`
 
 const TextArea = styled.div`
   width: 100%;
-  /* height: 100%; */
   display: flex;
-  /* font-size: 100px; */
-  /* flex-direction: column; */
   justify-content: center;
   margin-bottom: 50px;
 `;
@@ -33,26 +30,20 @@ const ExtraArea = styled.div`
   }
 `;
 
-function WhoTo() {
+function WhoTo2() {
   return (
     <Section>
       <TextArea>이런 분들을 위해 만들었어요!</TextArea>
       <ExtraArea>
-        <div className="pic">
-          <img src={testImg} alt="대상예시" />
-        </div>
-        <div className="pic">
-          <img src={testImg} alt="대상예시" />
-        </div>
-        <div className="pic">
-          <img src={testImg} alt="대상예시" />
-        </div>
-        <div className="pic">
-          <img src={testImg} alt="대상예시" />
-        </div>
+        <ReactPlayer
+          url="https://youtu.be/Pyr4HUpT1tg"
+          controls
+          width={"1200px"}
+          height={"800px"}
+        />
       </ExtraArea>
     </Section>
   );
 }
 
-export default WhoTo;
+export default WhoTo2;

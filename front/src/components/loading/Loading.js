@@ -3,7 +3,7 @@ import loadingImg from "../../assets/loadingImg.gif";
 
 const LoadingWrapper = styled.div`
   width: 128px;
-  height: 160px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: center;

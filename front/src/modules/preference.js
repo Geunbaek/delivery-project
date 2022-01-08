@@ -1,19 +1,41 @@
-const SET_PRIFERENCE = "preference/SET_PRIFERENCE";
+import { categories } from "../data/categories";
 
-export const setPreference = (preference) => ({
-  type: SET_PRIFERENCE,
-  payload: preference,
+const SET_DISLIKE = "preference/SET_DISLIKE";
+const SET_LIKE = "preference/SET_LIKE";
+
+export const setDislike = (category, now) => ({
+  type: SET_DISLIKE,
+  category,
+  now,
+});
+
+export const setLike = (category, now) => ({
+  type: SET_LIKE,
+  category,
+  now,
 });
 
 const initialState = {
-  payload: null,
+  categories,
 };
 
 export default function preference(state = initialState, action) {
   switch (action.type) {
-    case SET_PRIFERENCE:
+    case SET_DISLIKE:
       return {
-        payload: action.payload,
+        categories: {
+          ...state.categories,
+          [action.category]:
+            action.now === 0 ? 2 : action.now === 2 ? 0 : action.now,
+        },
+      };
+    case SET_LIKE:
+      return {
+        categories: {
+          ...state.categories,
+          [action.category]:
+            action.now === 0 ? 1 : action.now === 1 ? 0 : action.now,
+        },
       };
     default:
       return state;

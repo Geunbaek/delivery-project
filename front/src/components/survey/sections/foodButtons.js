@@ -1,18 +1,18 @@
 import styled, { css } from "styled-components";
-import { ReactComponent as FastFood } from "../../../assets/fastFood.svg";
-import { ReactComponent as Skewer } from "../../../assets/skewer.svg";
-import { ReactComponent as Pizza } from "../../../assets/pizza.svg";
-import { ReactComponent as Cafe } from "../../../assets/cafe.svg";
-import { ReactComponent as Onigiri } from "../../../assets/onigiri.svg";
-import { ReactComponent as FriedChicken } from "../../../assets/friedChicken.svg";
-import { ReactComponent as Rice } from "../../../assets/rice.svg";
-import { ReactComponent as Steak } from "../../../assets/steak.svg";
-import { ReactComponent as Soup } from "../../../assets/soup.svg";
-import { ReactComponent as Pig } from "../../../assets/pigImg.svg";
-import { ReactComponent as Food } from "../../../assets/plate.svg";
-import { ReactComponent as LunchBox } from "../../../assets/picnic.svg";
-import { ReactComponent as Noodle } from "../../../assets/noodle.svg";
-import { ReactComponent as Fish } from "../../../assets/fish.svg";
+import { ReactComponent as FastFood } from "../../../assets/buttonImg/fastFood.svg";
+import { ReactComponent as Skewer } from "../../../assets/buttonImg/skewer.svg";
+import { ReactComponent as Pizza } from "../../../assets/buttonImg/pizza.svg";
+import { ReactComponent as Cafe } from "../../../assets/buttonImg/cafe.svg";
+import { ReactComponent as Onigiri } from "../../../assets/buttonImg/onigiri.svg";
+import { ReactComponent as FriedChicken } from "../../../assets/buttonImg/friedChicken.svg";
+import { ReactComponent as Rice } from "../../../assets/buttonImg/rice.svg";
+import { ReactComponent as Steak } from "../../../assets/buttonImg/steak.svg";
+import { ReactComponent as Soup } from "../../../assets/buttonImg/soup.svg";
+import { ReactComponent as Pig } from "../../../assets/buttonImg/pigImg.svg";
+import { ReactComponent as Food } from "../../../assets/buttonImg/plate.svg";
+import { ReactComponent as LunchBox } from "../../../assets/buttonImg/picnic.svg";
+import { ReactComponent as Noodle } from "../../../assets/buttonImg/noodle.svg";
+import { ReactComponent as Fish } from "../../../assets/buttonImg/fish.svg";
 
 const makeFoodBtn = (foodSvg) => {
   return styled(foodSvg)`

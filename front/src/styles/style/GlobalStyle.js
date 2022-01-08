@@ -87,7 +87,7 @@ const bgScale = keyframes`
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  background: ${(props) => props.color};
+  background: ${({ theme, color }) => theme.palette[color]};
   font-size: 40px;
   display: flex;
   justify-content: center;
@@ -107,6 +107,7 @@ export const Wrapper = styled.div`
         z-index: -1;
         background: url(${props.back}) no-repeat;
         background-size: cover;
+        background-position: center;
         transform: scale(0.5);
         animation: ${bgScale} 2s;
       }
