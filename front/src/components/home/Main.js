@@ -10,8 +10,6 @@ import arrowUp from "react-useanimations/lib/arrowUp";
 import Header from "./Header";
 
 import Intro from "./sections/Intro";
-import WhoTo from "./sections/WhoTo";
-import WhoTo2 from "./sections/WhoTo2";
 import WhyPage from "./sections/WhyPage";
 
 import { Wrapper } from "../../styles/style/GlobalStyle";
@@ -100,11 +98,6 @@ function Main() {
         </SwiperSlide>
         <SwiperSlide>
           <WhyPage swiper={swiper} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Wrapper color="violet">
-            <WhoTo2 />
-          </Wrapper>
         </SwiperSlide>
       </Swiper>
     </>

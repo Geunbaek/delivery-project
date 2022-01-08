@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { MOBILE_LAYOUT, PC_LAYOUT, TABLET_LAYOUT } from "../../../data/layout";
+import { MOBILE_LAYOUT, PC_LAYOUT } from "../../../data/layout";
 
 const Section = styled.div`
   width: 43%;

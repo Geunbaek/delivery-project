@@ -43,7 +43,6 @@ function ResultArea({ userInfo, type, func }) {
   const { loading, data, error } = useSelector((state) => state.stores[type]);
   const { categories: preference } = useSelector((state) => state.preference);
   const dispatch = useDispatch();
-  console.log(data);
   useEffect(() => {
     if (!userInfo || !data) return;
     const container = ref.current;

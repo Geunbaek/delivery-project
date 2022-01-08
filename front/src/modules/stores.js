@@ -92,7 +92,7 @@ export function* storesSaga() {
   yield takeEvery(GET_STORES_BY_STARS, getStoresByStarsSaga);
 }
 
-const initialState = {
+export const initialState = {
   stores: reducerUtils.initial(),
   storesByDayOfWeek: reducerUtils.initial(),
   storesByHour: reducerUtils.initial(),

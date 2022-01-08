@@ -1,5 +1,4 @@
-import styled, { keyframes } from "styled-components";
-import { css } from "styled-components";
+import styled from "styled-components";
 import rightMan from "../../../../assets/man2.png";
 import leftMan from "../../../../assets/man1.png";
 import watch from "../../../../assets/watch.png";

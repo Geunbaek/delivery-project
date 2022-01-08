@@ -68,7 +68,6 @@ function Location({ swiper, setLocation, setIsInSeoul, location }) {
       setLocation("");
       return;
     }
-    console.log(data);
     setLocation(data.addressName);
     if (!inSeoulCheck(data.coords)) {
       setIsInSeoul(false);
@@ -79,6 +78,10 @@ function Location({ swiper, setLocation, setIsInSeoul, location }) {
 
   const swiperHandle = () => {
     swiper.slideTo();
+  };
+
+  const setLocationHandle = (e) => {
+    setLocation(e.target.value);
   };
   const getNowPos = () => {
     if (!navigator.geolocation) {
@@ -104,10 +107,7 @@ function Location({ swiper, setLocation, setIsInSeoul, location }) {
     <Section>
       <TextArea>위치를 입력해주세요.</TextArea>
       <div style={{ display: "flex", height: "4rem", marginBottom: "2px" }}>
-        <LocationArea
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        <LocationArea value={location} onChange={setLocationHandle} />
         <NowPosBtn onClick={getNowPos}>현위치</NowPosBtn>
       </div>
       <Btn>다음</Btn>
