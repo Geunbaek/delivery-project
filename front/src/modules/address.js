@@ -58,7 +58,7 @@ export function* addressSaga() {
   yield takeEvery(GET_COORDS, getCoordsSaga);
 }
 
-const initialState = reducerUtils.initial();
+export const initialState = reducerUtils.initial();
 
 export default function address(state = initialState, action) {
   switch (action.type) {

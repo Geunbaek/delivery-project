@@ -31,6 +31,7 @@ const ImgArea = styled.div`
     css`
       background: url(${props.bg}) no-repeat;
       background-size: cover;
+      background-position: center;
     `}
 `;
 const TextArea = styled.div`
@@ -45,7 +46,29 @@ const StarArea = styled.div`
   justify-content: center;
 `;
 
-function ResultCard({ rank, name, categories, address, logoUrl, reviewAvg }) {
+const OrderLink = styled.a`
+  display: inline-block;
+  text-decoration: none;
+  color: white;
+  padding: 5px;
+  border: 1px solid white;
+  border-radius: 5px;
+  &:hover {
+    transform: scale(1.1);
+    color: white;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+`;
+
+function ResultCard({
+  rank,
+  name,
+  categories,
+  address,
+  logoUrl,
+  reviewAvg,
+  sid,
+}) {
   const url = logoUrl ? `https://www.yogiyo.co.kr/${logoUrl}` : "";
   return (
     <CardWapper rank={rank}>
@@ -63,6 +86,9 @@ function ResultCard({ rank, name, categories, address, logoUrl, reviewAvg }) {
         <p>{name}</p>
         <p>{categories.split(" ").join(",")}</p>
         <p>{address}</p>
+        <OrderLink href={`https://www.yogiyo.co.kr/mobile/#/${sid}/`}>
+          주문하러가기
+        </OrderLink>
       </TextArea>
     </CardWapper>
   );

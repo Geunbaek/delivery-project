@@ -9,8 +9,8 @@ const Section = styled.div`
   width: 43%;
   height: 50%;
   display: flex;
-  flex-direction: ${(props) => props.col && "column"};
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
 `;
 
@@ -19,12 +19,14 @@ const TextArea = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-bottom: 10rem;
+  font-size: ${(props) => props.size}px;
+  & p {
+    font-size: ${(props) => props.size - 10}px;
+  }
 `;
 
 const BtnArea = styled.div`
   width: 120%;
-  height: 80%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   justify-items: center;
@@ -48,17 +50,19 @@ function LikeFood() {
     );
   }, [categories]);
 
-  const setLikeHandle = (btnName) => {
+  const setLikeHandle = (btnName, now) => {
     if (likeCount >= 2 && categories[btnName] === 0) {
       alert("최대 2가지만 선택 가능합니다 !");
       return;
     }
-    dispatch(setLike(btnName));
+    dispatch(setLike(btnName, now));
   };
   return (
     <>
-      <Section col>
-        <TextArea>선호하는 음식을 선택해주세요. (0 ~ 2 가지)</TextArea>
+      <Section>
+        <TextArea size={50}>
+          선호하는 음식을 선택해주세요.(0 ~ 2 가지) <span> &#128077; </span>
+        </TextArea>
         <BtnArea>
           {Object.entries(Btns.btns).map((btnInfo, idx) => {
             const [btnName, Btn] = btnInfo;
@@ -68,7 +72,7 @@ function LikeFood() {
                   $isactivated={categories[btnName]}
                   like="true"
                   status={categories[btnName]}
-                  onClick={() => setLikeHandle(btnName)}
+                  onClick={() => setLikeHandle(btnName, categories[btnName])}
                 />
                 <div style={{ fontSize: "20px", color: "black" }}>
                   {btnName}

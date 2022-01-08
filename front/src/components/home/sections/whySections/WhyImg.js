@@ -24,6 +24,7 @@ const Left = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+
   &::before {
     content: "뭐 먹지?";
     font-size: 25px;
@@ -41,12 +42,13 @@ const Mid = styled.div`
   height: 120%;
   display: flex;
   flex-direction: column;
-
   position: relative;
+
   &::before {
     content: "1시간 후...";
     font-size: 25px;
   }
+
   &::after {
     content: "";
     width: 100%;
@@ -55,15 +57,16 @@ const Mid = styled.div`
     background-size: contain;
   }
 `;
+
 const Right = styled.div`
   width: 45%;
   height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-
   background: url("${(props) => props.bg}") no-repeat;
   background-size: contain;
+
   &::before {
     content: "...";
     font-size: 40px;

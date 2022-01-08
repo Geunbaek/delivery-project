@@ -38,26 +38,19 @@ function Header() {
     history("/");
   };
   return (
-    <>
-      <Navbar
-        bg="bg-*"
-        expand={false}
-        fixed="top"
-        style={{ marginTop: "60px" }}
-      >
-        <StyledContainer>
-          <Navbar.Brand href="#">
-            <Title onClick={linkHome}>오늘 뭐먹지?</Title>
-          </Navbar.Brand>
+    <Navbar bg="bg-*" expand={false} fixed="top" style={{ marginTop: "60px" }}>
+      <StyledContainer>
+        <Navbar.Brand href="#">
+          <Title onClick={linkHome}>삼시카페</Title>
+        </Navbar.Brand>
 
-          <Nav style={{ display: "flex", flexDirection: "row" }}>
-            <NavLink onClick={linkSurvey} style={{ color: "white" }}>
-              뭐먹지
-            </NavLink>
-          </Nav>
-        </StyledContainer>
-      </Navbar>
-    </>
+        <Nav style={{ display: "flex", flexDirection: "row" }}>
+          <NavLink onClick={linkSurvey} style={{ color: "white" }}>
+            뭐먹지
+          </NavLink>
+        </Nav>
+      </StyledContainer>
+    </Navbar>
   );
 }
 

@@ -72,16 +72,18 @@ function ResultArea({ userInfo, type, func }) {
     );
     // main.setMap(map);
 
-    data.forEach((store) => {
+    data.forEach((store, index) => {
       const marker = makeMaker({ lat: store.lat, lng: store.lng }, map);
 
-      const iwContent = `<div style="padding:5px;font-size:15px;color:black">${store.name}</div>`;
-      const iwPosition = new kakao.maps.LatLng(store.lat, store.lng);
-      const infowindow = new kakao.maps.InfoWindow({
-        position: iwPosition,
-        content: iwContent,
-      });
-      infowindow.open(map, marker);
+      // const iwContent = `<div style="font-size:15px;color:black;width:inherit;text-align:center;background:red">${store.name}</div>`;
+      // const iwPosition = new kakao.maps.LatLng(store.lat, store.lng);
+      // const infowindow = new kakao.maps.InfoWindow({
+      //   position: iwPosition,
+      //   content: iwContent,
+      // });
+
+      // infowindow.open(map, marker);
+
       // kakao.maps.event.addListener(marker, "mouseover", function () {
       //   infowindow.open(map, marker);
       // });
@@ -89,37 +91,29 @@ function ResultArea({ userInfo, type, func }) {
       // kakao.maps.event.addListener(marker, "mouseout", function () {
       //   infowindow.close();
       // });
-      marker.setMap(map);
 
-      // const overlay = new kakao.maps.CustomOverlay();
+      marker.setMap(map);
 
       // const closeOverlay = () => {
       //   overlay.setMap(null);
       // };
 
       // const closeBtn = document.createElement("div");
-      // const content = document.createElement("div");
-
-      // closeBtn.innerHTML = `<div class="close" onClick="${() =>
-      //   closeOverlay()}"title="닫기" id="close"/>`;
-      // content.innerHTML =
-      //   '<div class="wrap" style="color:black;font-size:20px;background:white;">' +
-      //   '    <div class="info">' +
-      //   '        <div class="title">' +
-      //   `            ${store.name}` +
-      //   closeBtn.innerText +
-      //   "        </div>" +
-      //   '        <div class="body">' +
-      //   '            <div class="img">' +
-      //   '                <img src="https://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
-      //   "           </div>" +
-      //   '            <div class="desc">' +
-      //   `                <div class="ellipsis">${store.address}</div>` +
-      //   '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' +
-      //   "            </div>" +
-      //   "        </div>" +
-      //   "    </div>" +
-      //   "</div>";
+      const content =
+        `<div class="customoverlay${index}" style="font-size:20px;background:black;">` +
+        `  <a href="https://www.yogiyo.co.kr/mobile/#/${store.sid}/" target="_blank" style="display:inline-block;text-decoration:none;color:white;padding:5px;">` +
+        `    <span class="title">${store.name}</span>` +
+        "  </a>" +
+        "</div>";
+      const position = new kakao.maps.LatLng(store.lat, store.lng);
+      const overlay = new kakao.maps.CustomOverlay({
+        content: content,
+        position: position,
+        map: map,
+        clickable: true,
+        yAnchor: 2.3,
+        zIndex: 1,
+      });
       // overlay.setContent(content);
       // overlay.setPosition(new kakao.maps.LatLng(store.lat, store.lng));
 
@@ -128,9 +122,19 @@ function ResultArea({ userInfo, type, func }) {
       //   closeOverlay();
       // });
 
-      // kakao.maps.event.addListener(marker, "click", function () {
-      //   overlay.setMap(map);
-      // });
+      kakao.maps.event.addListener(marker, "mouseover", function () {
+        overlay.setZIndex(3);
+      });
+      kakao.maps.event.addListener(marker, "mouseout", function () {
+        overlay.setZIndex(1);
+      });
+      // document
+      //   .querySelector(`.customoverlay${index}`)
+      //   .addEventListener("mouseover", (e) => {
+      //     console.log(e.target);
+      //     console.log(e.target.parentNode);
+      //     e.target.parentNode.style.zIndex = "9999999";
+      //   });
     });
   }, [data, userInfo]);
 
@@ -159,6 +163,7 @@ function ResultArea({ userInfo, type, func }) {
                 address={storeInfo.address}
                 logoUrl={storeInfo.logo_url}
                 reviewAvg={storeInfo.review_avg}
+                sid={storeInfo.sid}
                 key={index}
               />
             );

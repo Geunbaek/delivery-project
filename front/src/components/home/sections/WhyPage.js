@@ -6,10 +6,20 @@ import WhyImg from "./whySections/WhyImg";
 import WhyText from "./whySections/WhyText";
 
 import "swiper/css/effect-fade";
+import { useEffect, useState } from "react";
 
 SwiperCore.use([Mousewheel, Pagination, EffectFade]);
 
-function WhyPage({ swiper: outerSwiper }) {
+function WhyPage({ swiper: outerSwiper, isEnd, setIsEnd }) {
+  const [innerSwiper, setInnerSwiper] = useState();
+
+  useEffect(() => {
+    if (!innerSwiper) return;
+    if (!isEnd) {
+      innerSwiper.slideTo(0);
+    }
+  }, [isEnd, innerSwiper]);
+
   const wheelHandle = (e, num) => {
     if (e.nativeEvent.wheelDelta > 0 || e.nativeEvent.detail < 0) {
       if (num === 0) {
@@ -37,9 +47,18 @@ function WhyPage({ swiper: outerSwiper }) {
           return '<span class="' + className + '">' + "</span>";
         },
       }}
+      onSwiper={(swiper) => {
+        setInnerSwiper(swiper);
+      }}
       onSlideChange={(swiper) => {
+        setInnerSwiper(swiper);
         if (!swiper.isBeginning && !swiper.isEnd) {
           outerSwiper.disable();
+        }
+        if (swiper.isEnd) {
+          setIsEnd(true);
+        } else {
+          setIsEnd(false);
         }
       }}
       className="mainSwiper"

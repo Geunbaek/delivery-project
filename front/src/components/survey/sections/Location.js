@@ -22,7 +22,10 @@ const TextArea = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-bottom: 10rem;
+  font-size: ${(props) => props.size}px;
+  & p {
+    font-size: ${(props) => props.size - 10}px;
+  }
 `;
 
 const NowPosBtn = styled.button`
@@ -105,9 +108,18 @@ function Location({ swiper, setLocation, setIsInSeoul, location }) {
 
   return (
     <Section>
-      <TextArea>위치를 입력해주세요.</TextArea>
+      <TextArea size={50}>
+        위치를 입력해주세요.
+        <br />
+        <p>(서울시 지역만 입력 가능합니다.)</p>
+      </TextArea>
+
       <div style={{ display: "flex", height: "4rem", marginBottom: "2px" }}>
-        <LocationArea value={location} onChange={setLocationHandle} />
+        <LocationArea
+          value={location}
+          onChange={setLocationHandle}
+          placeholder="ex) 강남구 강남대로"
+        />
         <NowPosBtn onClick={getNowPos}>현위치</NowPosBtn>
       </div>
       <Btn>다음</Btn>

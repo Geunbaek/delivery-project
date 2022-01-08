@@ -58,7 +58,10 @@ function Main() {
             style={{ padding: 100 }}
             strokeColor="white"
             key="arrowUp"
-            onClick={() => swiper.slideTo(0)}
+            onClick={() => {
+              swiper.slideTo(0);
+              setIsEnd(false);
+            }}
           />
           <div style={{ textAlign: "center" }}>맨위로</div>
         </ScrollDisplay>
@@ -86,8 +89,8 @@ function Main() {
           setSwiper(swiper);
         }}
         onSlideChange={(swiper) => {
+          console.log(swiper);
           setSwiper(swiper);
-          setIsEnd(swiper.isEnd);
         }}
         className="mainSwiper"
       >
@@ -97,7 +100,7 @@ function Main() {
           </Wrapper>
         </SwiperSlide>
         <SwiperSlide>
-          <WhyPage swiper={swiper} />
+          <WhyPage swiper={swiper} isEnd={isEnd} setIsEnd={setIsEnd} />
         </SwiperSlide>
       </Swiper>
     </>

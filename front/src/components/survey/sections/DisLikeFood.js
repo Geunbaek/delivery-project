@@ -8,8 +8,8 @@ const Section = styled.div`
   width: 43%;
   height: 50%;
   display: flex;
-  flex-direction: ${(props) => props.col && "column"};
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
 `;
 
@@ -18,12 +18,15 @@ const TextArea = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-bottom: 10rem;
+  font-size: ${(props) => props.size}px;
+  & p {
+    font-size: ${(props) => props.size - 10}px;
+  }
 `;
 
 const BtnArea = styled.div`
   width: 120%;
-  height: 80%;
+
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   justify-items: center;
@@ -41,8 +44,10 @@ function DislikeFood({ swiperHandle }) {
   const dispatch = useDispatch();
   return (
     <>
-      <Section col>
-        <TextArea>싫어하는 음식을 선택해주세요. (필수 X)</TextArea>
+      <Section>
+        <TextArea size={50}>
+          싫어하는 음식을 선택해주세요. (필수 X)<span> &#128078; </span>
+        </TextArea>
         <BtnArea>
           {Object.entries(Btns.btns).map((btnInfo, idx) => {
             const [btnName, Btn] = btnInfo;
@@ -52,7 +57,9 @@ function DislikeFood({ swiperHandle }) {
                   $isactivated={categories[btnName]}
                   dislike="true"
                   status={categories[btnName]}
-                  onClick={() => dispatch(setDislike(btnName))}
+                  onClick={() =>
+                    dispatch(setDislike(btnName, categories[btnName]))
+                  }
                 />
                 <div style={{ fontSize: "20px", color: "black" }}>
                   {btnName}

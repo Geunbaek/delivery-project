@@ -39,7 +39,7 @@ const ExtraArea = styled.div`
   }
 `;
 
-function WhyTo() {
+function WhyTo({ theme }) {
   const { loading, data, error } = useSelector((state) => state.graphData);
   const dispatch = useDispatch();
   const [chartParams, setChartParams] = useState(chartData([], [], []));
