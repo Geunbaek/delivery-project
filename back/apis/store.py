@@ -129,7 +129,7 @@ class StarRatingStore(Resource):
         lng = args['lng'] if args['lat'] != None else 127.04955555555556
 
         # 1. 평점으로 필터링
-        avg_review_point = 4.3
+        avg_review_point = 4.5
         res_query = db.session.query(YogiyoStore).filter(
             YogiyoStore.review_avg >= avg_review_point)
         # 2. 거리 필터링
