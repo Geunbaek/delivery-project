@@ -154,7 +154,7 @@ class HourFoodKindRank(Resource):
         fdict = {}
         for row in hour_query:
             fdict[row.hour] = fdict.setdefault(row.hour, [])
-            fdict[row.hour].append(row.food)
+            fdict[row.hour].append([row.food, row.cnt])
 
         return jsonify(dict(data=[fdict]))
 
@@ -167,7 +167,7 @@ class DayFoodKindRank(Resource):
         fdict = {}
         for row in day_query:
             fdict[row.day] = fdict.setdefault(row.day, [])
-            fdict[row.day].append(row.food)
+            fdict[row.day].append([row.food, row.cnt])
 
         return jsonify(dict(data=[fdict]))
 
@@ -180,6 +180,6 @@ class WeatherFoodKindRank(Resource):
         fdict = {}
         for row in weather_query:
             fdict[row.weather] = fdict.setdefault(row.weather, [])
-            fdict[row.weather].append(row.food)
+            fdict[row.weather].append([row.food, row.cnt])
 
         return jsonify(dict(data=[fdict]))
