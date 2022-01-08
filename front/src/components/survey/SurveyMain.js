@@ -5,16 +5,17 @@ import styled, { css } from "styled-components";
 import Location from "./sections/Location";
 import LikeFood from "./sections/LikeFood";
 import DislikeFood from "./sections/DisLikeFood";
-import { categories } from "../../data/categories";
 
 import "swiper/css/pagination";
+
 import { Wrapper } from "../../styles/style/GlobalStyle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UseAnimations from "react-useanimations";
 import arrowDown from "react-useanimations/lib/arrowDown";
-import { useDispatch } from "react-redux";
-import { setPreference } from "../../modules/preference";
+import { useDispatch, useSelector } from "react-redux";
+import { getCoords } from "../../modules/address";
+import { storeReset } from "../../modules";
 
 const ScrollDisplay = styled.div`
   width: 100%;
@@ -38,30 +39,30 @@ SwiperCore.use([Pagination, Mousewheel]);
 
 function SurveyMain() {
   const history = useNavigate();
+  const { data } = useSelector((state) => state.address);
   const dispatch = useDispatch();
-  const [preferenceFood, setPreferenceFood] = useState(categories);
   const [swiper, setSwiper] = useState();
   const [isEnd, setIsEnd] = useState(false);
+  const [location, setLocation] = useState("");
+  const [isInSeoul, setIsInSeoul] = useState(false);
+
+  useEffect(() => {
+    dispatch(storeReset());
+  }, []);
 
   const swiperHandle = () => {
     if (isEnd) {
-      dispatch(setPreference(preferenceFood));
+      if (!data) {
+        alert("주소를 입력해주세요");
+        swiper.slideTo(0);
+        return;
+      } else if (!isInSeoul) {
+        alert("서울 지역만 입력 가능합니다.!");
+        swiper.slideTo(0);
+        return;
+      }
       history("/result", { replace: true });
     }
-  };
-
-  const preferenceFoodHandle = (category, status) => {
-    setPreferenceFood((food) => {
-      return {
-        ...food,
-        [category]:
-          food[category] === status
-            ? 0
-            : food[category] === 0
-            ? status
-            : food[category],
-      };
-    });
   };
 
   return (
@@ -94,34 +95,33 @@ function SurveyMain() {
         lazy={true}
         onSwiper={(swiper) => setSwiper(swiper)}
         onSlideChange={(swiper) => {
+          if (swiper.previousIndex === 0) {
+            dispatch(getCoords(location));
+          }
           setSwiper(swiper);
           setIsEnd(swiper.isEnd);
         }}
         className="mainSwiper"
       >
-        <SwiperSlide key="section01">
-          <Wrapper color="#b197fc">
-            <Location swiper={swiper} swiperHandle={swiperHandle} />
-          </Wrapper>
-        </SwiperSlide>
-        <SwiperSlide key="section02">
-          <Wrapper color="#b197fc">
-            <LikeFood
+        <SwiperSlide>
+          <Wrapper color="violet">
+            <Location
               swiper={swiper}
               swiperHandle={swiperHandle}
-              preferenceFood={preferenceFood}
-              preferenceFoodHandle={preferenceFoodHandle}
+              setLocation={setLocation}
+              setIsInSeoul={setIsInSeoul}
+              location={location}
             />
           </Wrapper>
         </SwiperSlide>
-        <SwiperSlide key="section03">
-          <Wrapper color="#b197fc">
-            <DislikeFood
-              swiper={swiper}
-              swiperHandle={swiperHandle}
-              preferenceFood={preferenceFood}
-              preferenceFoodHandle={preferenceFoodHandle}
-            />
+        <SwiperSlide>
+          <Wrapper color="violet">
+            <LikeFood swiper={swiper} swiperHandle={swiperHandle} />
+          </Wrapper>
+        </SwiperSlide>
+        <SwiperSlide>
+          <Wrapper color="violet">
+            <DislikeFood swiper={swiper} swiperHandle={swiperHandle} />
           </Wrapper>
         </SwiperSlide>
       </Swiper>

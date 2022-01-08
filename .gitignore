@@ -61,3 +61,5 @@ back/venv/
 /db/patient_with_deliver_month.csv
 /db/food_weather.csv
 /db/yogiyo_delivery_in_seoul.csv
+
+**/.devcontainer

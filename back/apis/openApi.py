@@ -13,14 +13,15 @@ def curr_weather(lat, lng):
     # 좌표 변환
     nX, nY = convert_to_grid.get_grid(lat, lng)
 
-    hr = int(datetime.now(timezone('Asia/Seoul')).strftime("%H"))
+    # hr = int(datetime.now(timezone('Asia/Seoul')).strftime("%H"))
+    hr = int((datetime.now(timezone('Asia/Seoul')) -
+              timedelta(hours=1)).strftime("%H"))
 
     # 진화님 코드
     # hr = datetime.now(timezone('Asia/Seoul')) - timedelta(minutes=40)
     # hr = hr.strftime("%H")+'00'
 
-
-    hr -= 1
+    # hr -= 1
     if hr < 10:
         hr = "0" + str(hr) + "00"
     else:
@@ -28,6 +29,10 @@ def curr_weather(lat, lng):
     '''여기까지 추가부분'''
 
     dt = datetime.now(timezone('Asia/Seoul')).strftime("%Y%m%d")
+
+    if hr == '2300':
+        dt = (datetime.now(timezone('Asia/Seoul')) -
+              timedelta(days=1)).strftime("%Y%m%d")
 
     url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
     params = {'serviceKey': '7fn3iG+xpyNJCYToaIb5rZczQEJzbiT31Uyhi/A93reJb0YXU9Kb6w3NEkQdWKnWSQJ6akKLyibDDW+Tw8Riag==',
@@ -40,7 +45,8 @@ def curr_weather(lat, lng):
               'ny': f'{nY}'
               }
 
-    response = requests.get(url, params=params)
+    response = requests.get(url, params=params, timeout=3)
+
     contents = (response.text).encode('utf-8')
 
     json_ob = json.loads(contents)
