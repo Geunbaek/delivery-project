@@ -83,7 +83,7 @@ function Main() {
         spaceBetween={0}
         mousewheel={true}
         speed={1000}
-        touchRatio={0}
+        // touchRatio={0}
         lazy={true}
         onSwiper={(swiper) => {
           setSwiper(swiper);

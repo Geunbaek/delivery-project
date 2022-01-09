@@ -38,7 +38,7 @@ function WhyPage({ swiper: outerSwiper, isEnd, setIsEnd }) {
       spaceBetween={0}
       mousewheel={true}
       speed={1000}
-      touchRatio={0}
+      // touchRatio={0}
       lazy={true}
       effect="fade"
       pagination={{
@@ -57,6 +57,7 @@ function WhyPage({ swiper: outerSwiper, isEnd, setIsEnd }) {
         }
         if (swiper.isEnd) {
           setIsEnd(true);
+          outerSwiper.enable();
         } else {
           setIsEnd(false);
         }
@@ -74,7 +75,7 @@ function WhyPage({ swiper: outerSwiper, isEnd, setIsEnd }) {
         </Wrapper>
       </SwiperSlide>
       <SwiperSlide>
-        <Wrapper color="violet" onWheel={(e) => wheelHandle(e, 1)}>
+        <Wrapper color="violet">
           <WhyText />
         </Wrapper>
       </SwiperSlide>
