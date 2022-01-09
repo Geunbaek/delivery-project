@@ -108,6 +108,7 @@ export const barData = (label, data) => {
       ],
     },
     option: {
+      responsive: true,
       legend: {
         display: false,
       },

@@ -60,7 +60,6 @@ const ExtraArea = styled.div`
 
   & .graph {
     width: 600px;
-
     background-color: white;
     border-radius: 10px;
 

@@ -5,12 +5,13 @@ import styled from "styled-components";
 import BarChart from "./BarChart";
 
 const BtnArea = styled.div`
-  width: 30%;
-  height: 39vh;
+  width: 100%;
+  /* height: 39vh; */
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  margin-right: 20px;
+  /* flex-direction: column; */
+  justify-content: center;
+  /* flex-wrap: wrap; */
+  margin-bottom: 20px;
 `;
 
 const Btn = styled.button`

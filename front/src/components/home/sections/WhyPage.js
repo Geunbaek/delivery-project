@@ -38,7 +38,7 @@ function WhyPage({ swiper: outerSwiper, isEnd, setIsEnd }) {
       spaceBetween={0}
       mousewheel={true}
       speed={1000}
-      // touchRatio={0}
+      touchRatio={0}
       lazy={true}
       effect="fade"
       pagination={{
