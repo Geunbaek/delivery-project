@@ -16,9 +16,10 @@ import arrowDown from "react-useanimations/lib/arrowDown";
 import { useDispatch, useSelector } from "react-redux";
 import { getCoords } from "../../modules/address";
 import { storeReset } from "../../modules";
+import { MOBILE_LAYOUT } from "../../data/layout";
 
 const ScrollDisplay = styled.div`
-  width: 100%;
+  width: 56px;
   height: 5rem;
   z-index: 2;
   border-radius: 5rem;
@@ -27,12 +28,19 @@ const ScrollDisplay = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  left: 50%;
+  right: 50%;
   font-size: 16px;
   ${(props) =>
     props.up &&
     css`
       cursor: pointer;
     `}
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    justify-content: center;
+    align-items: stretch;
+    left: 0;
+  }
 `;
 
 SwiperCore.use([Pagination, Mousewheel]);
@@ -76,7 +84,7 @@ function SurveyMain() {
             strokeColor="white"
             key="1"
           />
-          <div>Scroll</div>
+          <div style={{ textAlign: "center" }}>Scroll</div>
         </ScrollDisplay>
       )}
       <Swiper
@@ -91,7 +99,7 @@ function SurveyMain() {
           },
         }}
         speed={1000}
-        touchRatio={0}
+        touchRatio={0.5}
         lazy={true}
         onSwiper={(swiper) => setSwiper(swiper)}
         onSlideChange={(swiper) => {

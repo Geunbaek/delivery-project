@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAddress } from "../../../modules/address";
 import { Btn } from "../../etc/button";
+import { MOBILE_LAYOUT, PC_LAYOUT, TABLET_LAYOUT } from "../../../data/layout";
 
 const LocationArea = styled.input`
   height: 4rem;
@@ -15,6 +16,13 @@ const LocationArea = styled.input`
   &:focus {
     outline: none;
   }
+  @media screen and (max-width: ${TABLET_LAYOUT}px) {
+    width: 35rem;
+  }
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 15rem;
+    font-size: 28px;
+  }
 `;
 
 const TextArea = styled.div`
@@ -25,6 +33,12 @@ const TextArea = styled.div`
   font-size: ${(props) => props.size}px;
   & p {
     font-size: ${(props) => props.size - 10}px;
+  }
+  @media screen and (max-width: ${TABLET_LAYOUT}px) {
+    width: 34rem;
+  }
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 80%;
   }
 `;
 
@@ -49,11 +63,13 @@ const Section = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 100%;
+  }
 `;
 
 export const inSeoulCheck = ({ lat, lng }) => {
   [lat, lng] = [parseFloat(lat), parseFloat(lng)];
-  console.log(lat, lng);
   return (
     lat >= 37.413294 &&
     lat <= 37.715133 &&
@@ -80,7 +96,7 @@ function Location({ swiper, setLocation, setIsInSeoul, location }) {
   }, [data, setLocation, setIsInSeoul]);
 
   const swiperHandle = () => {
-    swiper.slideTo();
+    swiper.slideTo(1);
   };
 
   const setLocationHandle = (e) => {
@@ -122,7 +138,7 @@ function Location({ swiper, setLocation, setIsInSeoul, location }) {
         />
         <NowPosBtn onClick={getNowPos}>현위치</NowPosBtn>
       </div>
-      <Btn>다음</Btn>
+      <Btn onClick={swiperHandle}>다음</Btn>
     </Section>
   );
 }
