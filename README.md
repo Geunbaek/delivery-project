@@ -1,3 +1,5 @@
+<img src="https://img.shields.io/badge/Pandas-E34F26?style=for-the-badge&logo=Pandas&logoColor=white"> <img src="https://img.shields.io/badge/React-00F?style=for-the-badge&logo=React&logoColor=blue"> <img src="https://img.shields.io/badge/Flask-000?style=for-the-badge&logo=Flask&logoColor=white"> <img alt="NGINX" src="https://img.shields.io/badge/NGINX-009639.svg?&amp;style=for-the-badge&amp;logo=NGINX&amp;logoColor=white" class="js-lazy-loaded qa-js-lazy-loaded" loading="lazy"> <img alt="MariaDB" src="https://img.shields.io/badge/Maria%20DB-1F305F.svg?&amp;style=for-the-badge&amp;logo=MariaDB&amp;logoColor=white" class="js-lazy-loaded qa-js-lazy-loaded" loading="lazy"> <img alt="Docker" src="https://img.shields.io/badge/Docker-ffff00.svg?&amp;style=for-the-badge&amp;logo=Docker&amp;logoColor=gray" class="js-lazy-loaded qa-js-lazy-loaded" loading="lazy">
+
 # 코로나 배달 분석 웹 서비스@삼시카페팀
 
 ### - 코로나 시대 증가한  배달 수요에따라 배달 음식 점을 추천해주는 웹 서비스.   
@@ -6,7 +8,7 @@
 <br>
 
 ## 0. 웹 서비스 구현 결과 화면
-![SamsiCafe](/uploads/b648c768317e7a15781329d72cc1f00d/SamsiCafe.gif)
+![SamsiCafe](/uploads/84a397cfc7af13cf2f5f244d5e980dee/SamsiCafe.gif)
 ## 1. 프로젝트 소개
 
 코로나 확진자 수와 배달 건수가 유사하게 증가함을 분석해서 배달 수요가 증가했음을 파악.   
@@ -35,7 +37,7 @@
 ## 3. 프로젝트 구성도
 
   - 기술 스택
-    - 데이터 분석 : Numpy, Matplotlib, Pandas, Google Colab, 크롤링, Open API, etc
+    - 데이터 분석 : Numpy, Pandas, Matplotlib, Seaborn, Google Colab, 크롤링, Open API, etc
     - FrontEnd : React, React-Redux, Redux-saga, Chart.js, Kakaomap, styled-component, etc
     - BackEnd : python3, Flask, flask-restx, MariaDB, flask-SqlAlchemy, Docker-compose, Swagger Rest Api Doc, Open API, etc
   - 배포 환경: MS Azure VM (Ubuntu 20.04, 엘리스측 제공)
