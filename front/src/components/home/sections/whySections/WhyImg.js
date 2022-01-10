@@ -9,6 +9,10 @@ const Section = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: 780px) {
+    width: 80%;
+    height: 60%;
+  }
 `;
 
 const ImgWrapper = styled.div`
@@ -16,6 +20,11 @@ const ImgWrapper = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
+  @media screen and (max-width: 780px) {
+    flex-direction: column;
+    /* display: block;
+    height: 180px; */
+  }
 `;
 
 const Left = styled.div`
@@ -30,11 +39,18 @@ const Left = styled.div`
     font-size: 25px;
     position: absolute;
     right: 40px;
+    @media screen and (max-width: 780px) {
+      width: 100%;
+    }
   }
 
   background: url("${(props) => props.bg}") no-repeat;
   background-size: contain;
   position: relative;
+
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
 `;
 
 const Mid = styled.div`
@@ -47,6 +63,9 @@ const Mid = styled.div`
   &::before {
     content: "1시간 후...";
     font-size: 25px;
+    @media screen and (max-width: 780px) {
+      font-size: 17px;
+    }
   }
 
   &::after {
@@ -55,6 +74,10 @@ const Mid = styled.div`
     height: 100%;
     background: url("${(props) => props.bg}") no-repeat;
     background-size: contain;
+  }
+
+  @media screen and (max-width: 780px) {
+    height: 50%;
   }
 `;
 
@@ -73,11 +96,22 @@ const Right = styled.div`
     position: absolute;
     left: 120px;
   }
+  @media screen and (max-width: 780px) {
+    width: 100%;
+    background-position-x: center;
+  }
 `;
 
 const TextArea = styled.div`
   width: 100%;
   text-align: center;
+  @media screen and (max-width: 780px) {
+    font-size: 6vw;
+  }
+`;
+
+const SpanArea1 = styled.span`
+  color: #7970ff;
 `;
 
 function WhyImg() {
@@ -88,7 +122,9 @@ function WhyImg() {
         <Mid bg={watch} />
         <Right bg={rightMan} />
       </ImgWrapper>
-      <TextArea>배달을 시키고 싶지만 선택이 어려운 사람들...</TextArea>
+      <TextArea>
+        배달을 시키고 싶지만 <SpanArea1>선택이 어려운</SpanArea1> 사람들...
+      </TextArea>
     </Section>
   );
 }

@@ -7,20 +7,33 @@ import styled from "styled-components";
 import ResultCard from "./ResultCard";
 import centerMarker from "../../assets/centerMarker.png";
 import Loading from "../loading/Loading";
+import {
+  MOBILE_LAYOUT,
+  PC_LAYOUT,
+  SMALL_MOBILE_LAYOUT,
+} from "../../data/layout";
 
 const TextArea = styled.div`
-  width: 50%;
+  width: 80%;
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   justify-items: center;
-
   border: 5px solid white;
   overflow: scroll;
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: ${640}px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const ExtraArea = styled.div`
-  width: 50%;
+  width: 80%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -70,35 +83,11 @@ function ResultArea({ userInfo, type, func }) {
       map,
       markerImage
     );
-    // main.setMap(map);
 
     data.forEach((store, index) => {
       const marker = makeMaker({ lat: store.lat, lng: store.lng }, map);
 
-      // const iwContent = `<div style="font-size:15px;color:black;width:inherit;text-align:center;background:red">${store.name}</div>`;
-      // const iwPosition = new kakao.maps.LatLng(store.lat, store.lng);
-      // const infowindow = new kakao.maps.InfoWindow({
-      //   position: iwPosition,
-      //   content: iwContent,
-      // });
-
-      // infowindow.open(map, marker);
-
-      // kakao.maps.event.addListener(marker, "mouseover", function () {
-      //   infowindow.open(map, marker);
-      // });
-
-      // kakao.maps.event.addListener(marker, "mouseout", function () {
-      //   infowindow.close();
-      // });
-
       marker.setMap(map);
-
-      // const closeOverlay = () => {
-      //   overlay.setMap(null);
-      // };
-
-      // const closeBtn = document.createElement("div");
       const content =
         `<div class="customoverlay${index}" style="font-size:20px;background:black;">` +
         `  <a href="https://www.yogiyo.co.kr/mobile/#/${store.sid}/" target="_blank" style="display:inline-block;text-decoration:none;color:white;padding:5px;">` +
@@ -114,13 +103,6 @@ function ResultArea({ userInfo, type, func }) {
         yAnchor: 2.3,
         zIndex: 1,
       });
-      // overlay.setContent(content);
-      // overlay.setPosition(new kakao.maps.LatLng(store.lat, store.lng));
-
-      // content.addEventListener("click", (e) => {
-      //   e.preventDefault();
-      //   closeOverlay();
-      // });
 
       kakao.maps.event.addListener(marker, "mouseover", function () {
         overlay.setZIndex(3);
@@ -128,13 +110,6 @@ function ResultArea({ userInfo, type, func }) {
       kakao.maps.event.addListener(marker, "mouseout", function () {
         overlay.setZIndex(1);
       });
-      // document
-      //   .querySelector(`.customoverlay${index}`)
-      //   .addEventListener("mouseover", (e) => {
-      //     console.log(e.target);
-      //     console.log(e.target.parentNode);
-      //     e.target.parentNode.style.zIndex = "9999999";
-      //   });
     });
   }, [data, userInfo]);
 

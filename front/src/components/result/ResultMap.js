@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Wrapper } from "../../styles/style/GlobalStyle";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
@@ -7,14 +6,24 @@ import ResultTap from "./ResultTap";
 import ResultArea from "./ResultArea";
 import { type, typeFunc, typeInfo } from "../../data/resultData";
 import { useNavigate } from "react-router-dom";
+import { Wrapper } from "../../styles/style/GlobalStyle";
 import { Btn } from "../etc/button";
+import {
+  SMALL_MOBILE_LAYOUT,
+  MOBILE_LAYOUT,
+  TABLET_LAYOUT,
+  PC_LAYOUT,
+} from "../../data/layout";
 
 const Section = styled.div`
-  width: 60%;
+  width: 80%;
   display: flex;
   flex-direction: ${(props) => props.col && "column"};
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 100%;
+  }
 `;
 
 const TotalResultArea = styled.div`
@@ -24,6 +33,10 @@ const TotalResultArea = styled.div`
   margin-bottom: 5%;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    flex-direction: column-reverse;
+    height: 60vh;
+  }
 `;
 
 const BtnWrapper = styled.div`
@@ -31,6 +44,11 @@ const BtnWrapper = styled.div`
   div + div {
     margin-left: 2rem;
   }
+`;
+
+const ResultTitle = styled.div`
+  font-size: 65px;
+  margin-bottom: 5%;
 `;
 
 function ResultMap() {
@@ -56,8 +74,12 @@ function ResultMap() {
     <>
       <Wrapper color="violet">
         <Section col>
-          <div style={{ fontSize: "100px", marginBottom: "5%" }}>결과</div>
-          <ResultTap activeBtn={activeBtn} setActiveBtn={setActiveBtn} />
+          <ResultTitle>결과</ResultTitle>
+          <ResultTap
+            activeBtn={activeBtn}
+            setActiveBtn={setActiveBtn}
+            key={activeBtn}
+          />
           <TotalResultArea>
             <ResultArea
               userInfo={userInfo}

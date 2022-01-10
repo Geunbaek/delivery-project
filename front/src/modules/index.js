@@ -32,9 +32,10 @@ function rootReducer(state, action) {
         error: null,
       },
       graphData: {
-        loading: false,
-        data: null,
-        error: null,
+        deliveryGraphData: { loading: false, data: null, error: null },
+        // dayOfWeekGraphData: reducerUtils.initial(),
+        hourGraphData: { loading: false, data: null, error: null },
+        weatherGraphData: { loading: false, data: null, error: null },
       },
       stores: {
         stores: { loading: false, data: null, error: null },

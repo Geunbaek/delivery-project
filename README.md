@@ -5,7 +5,9 @@
 ### < [프로젝트 설치와 실행, 배포 방법 링크](InstallAndRun.md) >
 <br>
 
-## 1. 프로젝트 소개와 목표
+## 0. 웹 서비스 구현 결과 화면
+![SamsiCafe](/uploads/b648c768317e7a15781329d72cc1f00d/SamsiCafe.gif)
+## 1. 프로젝트 소개
 
 코로나 확진자 수와 배달 건수가 유사하게 증가함을 분석해서 배달 수요가 증가했음을 파악.   
 그에 따라 배달 음식 점을 추천하되 사용자 선택 피로를 줄여주기 위해   
@@ -37,7 +39,8 @@
     - FrontEnd : React, React-Redux, Redux-saga, Chart.js, Kakaomap, styled-component, etc
     - BackEnd : python3, Flask, flask-restx, MariaDB, flask-SqlAlchemy, Docker-compose, Swagger Rest Api Doc, Open API, etc
   - 배포 환경: MS Azure VM (Ubuntu 20.04, 엘리스측 제공)
-  - 실행 환경: ![실행_구조_Docker-compose__개발](/uploads/bc541e1be98afddc0bd62fb8adb7dfb7/Docker_compose_dev.png)
+  - 실행 환경: 
+  ![Docker_compose_dev](/uploads/947aab1424cc6e92fdf92e8b8b3f3669/Docker_compose_dev.png)
 
 ## 4. 프로젝트 팀원 역할 분담
 | 이름 | 담당 업무 |

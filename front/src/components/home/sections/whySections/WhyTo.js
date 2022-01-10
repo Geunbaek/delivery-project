@@ -5,22 +5,41 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getGraphData } from "../../../../modules/graphData";
 import styled from "styled-components";
+import { MOBILE_LAYOUT, PC_LAYOUT } from "../../../../data/layout";
 
 const Section = styled.div`
   width: 43%;
   height: 60%;
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    height: auto;
+    display: block;
+    width: 63%;
+  }
+
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 90%;
+  }
 `;
 
 const TextArea = styled.div`
   width: 50%;
   height: 100%;
-  font-size: 100px;
+  font-size: 60px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   text-align: left;
+
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    display: block;
+  }
+
+  @media screen and (max-width: 980px) {
+    font-size: 40px;
+  }
 `;
 
 const ExtraArea = styled.div`
@@ -31,16 +50,33 @@ const ExtraArea = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
 
-  & .graph {
-    width: 800px;
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    display: block;
+  }
 
+  @media screen and (max-width: 980px) {
+    width: 100%;
+  }
+
+  & .graph {
+    width: 600px;
     background-color: white;
     border-radius: 10px;
+
+    @media screen and (max-width: 980px) {
+      width: 100%;
+    }
   }
 `;
 
-function WhyTo({ theme }) {
-  const { loading, data, error } = useSelector((state) => state.graphData);
+const SpanArea1 = styled.span`
+  color: #70f8ff;
+`;
+
+function WhyTo() {
+  const { loading, data, error } = useSelector(
+    (state) => state.graphData.deliveryGraphData
+  );
   const dispatch = useDispatch();
   const [chartParams, setChartParams] = useState(chartData([], [], []));
 
@@ -64,8 +100,8 @@ function WhyTo({ theme }) {
       <TextArea>
         코로나로
         <br />
-        배달수도
-        <br /> 증가하는데 ...
+        <SpanArea1>배달 이용</SpanArea1>
+        늘어나는데 ...
       </TextArea>
       <ExtraArea>
         <div className="graph">

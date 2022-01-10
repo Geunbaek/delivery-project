@@ -99,7 +99,7 @@ export const btns = {
   피자: PizzaBtn,
   한식: KoreanFoodBtn,
   회: RawFoodBtn,
-  "돈까스/일식": JapaneseFood,
+  일식: JapaneseFood,
   패스트푸드: FastFoodBtn,
   "아시안/양식": WesternFoodBtn,
   도시락: LunchBoxBtn,

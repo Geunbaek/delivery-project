@@ -4,6 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLike } from "../../../modules/preference";
 import { useEffect, useState } from "react";
 import { Btn } from "../../etc/button";
+import {
+  MOBILE_LAYOUT,
+  PC_LAYOUT,
+  SMALL_MOBILE_LAYOUT,
+  TABLET_LAYOUT,
+} from "../../../data/layout";
 
 const Section = styled.div`
   width: 43%;
@@ -12,6 +18,15 @@ const Section = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    width: 60%;
+  }
+  @media screen and (max-width: ${TABLET_LAYOUT}px) {
+    width: 80%;
+  }
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 100%;
+  }
 `;
 
 const TextArea = styled.div`
@@ -20,7 +35,8 @@ const TextArea = styled.div`
   flex-direction: column;
   text-align: center;
   font-size: ${(props) => props.size}px;
-  & p {
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    width: 100%;
     font-size: ${(props) => props.size - 10}px;
   }
 `;
@@ -30,6 +46,10 @@ const BtnArea = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   justify-items: center;
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    width: 80%;
+    font-size: ${(props) => props.size - 10}px;
+  }
 `;
 
 const BtnWrapper = styled.div`
@@ -37,9 +57,36 @@ const BtnWrapper = styled.div`
   height: 130px;
   display: flex;
   flex-direction: column;
+  & div {
+    font-size: 20px;
+    color: black;
+  }
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    width: 80px;
+    height: 105px;
+  }
+  @media screen and (max-width: ${TABLET_LAYOUT}px) {
+    width: 60px;
+    height: 85px;
+    & div {
+      font-size: 15px;
+    }
+  }
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 40px;
+    height: 85px;
+    & div {
+      font-size: 13px;
+    }
+  }
+  @media screen and (max-width: ${SMALL_MOBILE_LAYOUT}px) {
+    & div {
+      font-size: 10px;
+    }
+  }
 `;
 
-function LikeFood() {
+function LikeFood({ swiper }) {
   const [likeCount, setLikeCount] = useState(0);
   const { categories } = useSelector((state) => state.preference);
   const dispatch = useDispatch();
@@ -74,14 +121,12 @@ function LikeFood() {
                   status={categories[btnName]}
                   onClick={() => setLikeHandle(btnName, categories[btnName])}
                 />
-                <div style={{ fontSize: "20px", color: "black" }}>
-                  {btnName}
-                </div>
+                <div>{btnName}</div>
               </BtnWrapper>
             );
           })}
         </BtnArea>
-        <Btn>다음</Btn>
+        <Btn onClick={() => swiper.slideTo(2)}>다음</Btn>
       </Section>
     </>
   );
