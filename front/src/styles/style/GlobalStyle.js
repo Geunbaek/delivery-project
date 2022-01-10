@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle, css, keyframes } from "styled-components";
 import reset from "styled-reset";
+import { PC_LAYOUT } from "../../data/layout";
 import "../fonts/fonts.css";
 
 export const GlobalStyle = createGlobalStyle`
@@ -53,15 +54,15 @@ export const GlobalStyle = createGlobalStyle`
     object-fit: cover;
   }
   .swiper-pagination {
-    /* bottom: -10px !important; */
     color: solid black;
-    /* background-color: black; */
     height: 100px;
     font-size: 30px;
     position: absolute;
-    left : 80%;
-    
+    left : 80%; 
+    @media screen and (max-width: 1400px) {
+      left : 90%; 
     }
+  }
 
   .swiper-pagination-bullet{
 

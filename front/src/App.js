@@ -4,7 +4,7 @@ import ResultMap from "./components/result/ResultMap";
 import { GlobalStyle } from "./styles/style/GlobalStyle";
 import SurveyMain from "./components/survey/SurveyMain";
 import { ThemeProvider } from "styled-components";
-import { palette } from "./styles/style/palette";
+import AnalysisMain from "./components/analysis/AnalysisMain";
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
       >
         <GlobalStyle />
         <Routes>
+          <Route path="/analysis" element={<AnalysisMain />} />
           <Route path="/result" element={<ResultMap />} />
           <Route path="/survey" element={<SurveyMain />} />
           <Route path="/" element={<Main />} />

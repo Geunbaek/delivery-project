@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import StarRatings from "react-star-ratings";
+import { MOBILE_LAYOUT, PC_LAYOUT } from "../../data/layout";
 
 const CardWapper = styled.div`
   width: 18rem;
@@ -18,6 +19,18 @@ const CardWapper = styled.div`
     top: 0;
     left: 0;
   }
+  @media screen and (max-width: 1600px) {
+    width: 14rem;
+    height: 16rem;
+  }
+  @media screen and (max-width: ${PC_LAYOUT}px) {
+    width: 18rem;
+    height: 21rem;
+  }
+  @media screen and (max-width: ${MOBILE_LAYOUT}px) {
+    width: 14rem;
+    height: 16rem;
+  }
 `;
 
 const ImgArea = styled.div`
@@ -26,6 +39,7 @@ const ImgArea = styled.div`
   border-radius: 3.7rem;
   background-color: white;
   margin: 10px;
+  cursor: pointer;
   ${(props) =>
     props.bg &&
     css`
@@ -33,11 +47,20 @@ const ImgArea = styled.div`
       background-size: cover;
       background-position: center;
     `}
+  @media screen and (max-width: 1600px) {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 2.5rem;
+    margin: 5px;
+  }
 `;
 const TextArea = styled.div`
   width: 100%;
   font-size: 22px;
   text-align: center;
+  @media screen and (max-width: 1600px) {
+    font-size: 18px;
+  }
 `;
 
 const StarArea = styled.div`
@@ -70,13 +93,19 @@ function ResultCard({
   sid,
 }) {
   const url = logoUrl ? `https://www.yogiyo.co.kr/${logoUrl}` : "";
+  const linkHandle = (link) => {
+    window.open(link);
+  };
   return (
     <CardWapper rank={rank}>
-      <ImgArea bg={url} />
+      <ImgArea
+        bg={url}
+        onClick={() => linkHandle(`https://www.yogiyo.co.kr/mobile/#/${sid}/`)}
+      />
       <StarArea>
         <StarRatings
           rating={parseFloat(reviewAvg)}
-          starDimension="40px"
+          starDimension="30px"
           starSpacing="0"
           starRatedColor="#ffe066"
           starEmptyColor="white"
@@ -86,7 +115,11 @@ function ResultCard({
         <p>{name}</p>
         <p>{categories.split(" ").join(",")}</p>
         <p>{address}</p>
-        <OrderLink href={`https://www.yogiyo.co.kr/mobile/#/${sid}/`}>
+        <OrderLink
+          href={`https://www.yogiyo.co.kr/mobile/#/${sid}/`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           주문하러가기
         </OrderLink>
       </TextArea>

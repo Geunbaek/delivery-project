@@ -11,7 +11,6 @@ const Section = styled.div`
   @media screen and (max-width: ${MOBILE_LAYOUT}px) {
     flex-direction: column;
   }
-
   @media screen and (max-width: ${PC_LAYOUT}px) {
     width: 60%;
   }
@@ -21,15 +20,15 @@ const TextArea = styled.div`
   width: 50%;
   height: 100%;
   display: flex;
-  font-size: 100px;
+  font-size: 70px;
   flex-direction: column;
   justify-content: center;
   text-align: left;
   align-items: center;
 
   @media screen and (max-width: ${MOBILE_LAYOUT}px) {
-    font-size: 60px;
-    padding-top: 200px;
+    font-size: 65px;
+    padding-top: 130px;
   }
 `;
 
