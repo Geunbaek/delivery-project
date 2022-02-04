@@ -8,7 +8,8 @@
 <br>
 
 ## 0. 웹 서비스 구현 결과 화면
-![SamsiCafe](/uploads/84a397cfc7af13cf2f5f244d5e980dee/SamsiCafe.gif)
+[삼시카페 링크](https://elice-second-project-team3.netlify.app/)
+![SamsiCafe](https://kdt-gitlab.elice.io/003-part3-deliveryservice/team3/project-template/uploads/84a397cfc7af13cf2f5f244d5e980dee/SamsiCafe.gif)
 ## 1. 프로젝트 소개
 
 코로나 확진자 수와 배달 건수가 유사하게 증가함을 분석해서 배달 수요가 증가했음을 파악.   

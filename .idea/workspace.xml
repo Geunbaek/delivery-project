@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f1c728f4-ef7a-4f4a-ba6b-6e54c3230678" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/.env" beforeDir="false" afterPath="$PROJECT_DIR$/front/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/front/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/data/chartData.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/data/chartData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/api/graphData.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/graphData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/api/stores.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/stores.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/home/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/home/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/survey/SurveyMain.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/survey/SurveyMain.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/front/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/heroku.yml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +34,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test/project-template" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\workspace\elice\second-proj\heroku\delivery-project\back" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

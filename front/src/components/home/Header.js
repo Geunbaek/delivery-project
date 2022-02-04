@@ -50,9 +50,7 @@ function Header() {
     history("/");
   };
   const linkApiDocs = () => {
-    window.open(
-      "http://elice-kdt-3rd-team-03.koreacentral.cloudapp.azure.com:5000/"
-    );
+    window.open(`${process.env.REACT_APP_BASE_URL}`);
   };
   const linkAnalysis = () => {
     history("/analysis");

@@ -99,7 +99,7 @@ function SurveyMain() {
           },
         }}
         speed={1000}
-        touchRatio={0.5}
+        touchRatio={0}
         lazy={true}
         onSwiper={(swiper) => setSwiper(swiper)}
         onSlideChange={(swiper) => {
